@@ -1,0 +1,561 @@
+.door-loader {
+  --lock-red: #ff2f2f;
+  --lock-green: #29ff8a;
+  --lock-color: var(--lock-red);
+  --steel-hi: #4a545e;
+  --steel-mid: #262c33;
+  --steel-lo: #0b0d10;
+  --rivet-hole: rgba(0, 0, 0, 0.55);
+  --rivet-glint: rgba(255, 255, 255, 0.07);
+  --rust-1: rgba(20, 28, 34, 0.35);
+  --rust-2: rgba(10, 14, 18, 0.3);
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+  animation: boot-flicker 0.6s ease-out;
+}
+
+.door-loader.phase-unlock,
+.door-loader.phase-open {
+  --lock-color: var(--lock-green);
+}
+
+.door-frame {
+  position: absolute;
+  inset: 0;
+  perspective: 1800px;
+}
+
+.phase-unlock .door-frame {
+  animation: door-shake 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+.door-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 1;
+  background-color: var(--steel-mid);
+  background-image:
+    var(--noise),
+    radial-gradient(circle at 15% 22%, var(--rust-1) 0%, transparent 32%),
+    radial-gradient(circle at 78% 64%, var(--rust-2) 0%, transparent 28%),
+    radial-gradient(circle at 40% 88%, var(--rust-1) 0%, transparent 24%),
+    radial-gradient(circle at 6px 6px, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.45) 0 2px,
+      transparent 2px 150px
+    ),
+    linear-gradient(180deg, var(--steel-hi) 0%, var(--steel-mid) 45%, var(--steel-lo) 100%);
+  background-blend-mode: overlay, normal, normal, normal, normal, normal, normal;
+  background-size:
+    120px 120px,
+    auto,
+    auto,
+    auto,
+    50px 50px,
+    auto,
+    auto;
+  box-shadow:
+    inset 0 0 140px rgba(0, 0, 0, 0.85),
+    inset 0 0 3px rgba(0, 0, 0, 0.6);
+  transition: transform 2.4s cubic-bezier(0.83, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* heavy beveled frame plates riveted to the panel edge */
+.door-panel::before {
+  content: '';
+  position: absolute;
+  inset: 30px;
+  border: 3px solid rgba(0, 0, 0, 0.55);
+  outline: 1px solid rgba(120, 100, 80, 0.08);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.3),
+    inset 0 -8px 16px rgba(0, 0, 0, 0.65);
+  pointer-events: none;
+}
+
+.door-panel.left {
+  left: 0;
+  transform-origin: left center;
+}
+
+.door-panel.right {
+  right: 0;
+  transform-origin: right center;
+}
+
+/* angled structural seam running across the plate, like a chamfered joint */
+.door-crease {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: 38%;
+  height: 46px;
+  z-index: 1;
+  background: linear-gradient(
+    170deg,
+    transparent calc(50% - 2px),
+    rgba(180, 195, 205, 0.35) calc(50% - 1px),
+    rgba(180, 195, 205, 0.5) 50%,
+    rgba(0, 0, 0, 0.5) calc(50% + 1px),
+    transparent calc(50% + 3px)
+  );
+  transform: rotate(-7deg);
+  pointer-events: none;
+}
+
+/* louvered vent grilles */
+.door-vent {
+  position: absolute;
+  width: 96px;
+  height: 26px;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.28);
+  background-image: repeating-linear-gradient(
+    58deg,
+    rgba(210, 222, 230, 0.4) 0 3px,
+    transparent 3px 11px
+  );
+  box-shadow:
+    inset 0 2px 3px rgba(0, 0, 0, 0.6),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.door-vent.v1 {
+  left: 22%;
+  top: 30%;
+}
+
+.door-vent.v2 {
+  left: 46%;
+  top: 30%;
+}
+
+.door-panel.right .door-vent.v1 {
+  left: auto;
+  right: 22%;
+}
+
+.door-panel.right .door-vent.v2 {
+  left: auto;
+  right: 46%;
+}
+
+/* recessed hatch / access screen, cut corners like a bulkhead panel */
+.door-hatch {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 14%;
+  height: 34%;
+  z-index: 1;
+  clip-path: polygon(
+    18px 0,
+    100% 0,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    0 100%,
+    0 18px
+  );
+  background: linear-gradient(160deg, #0d1216 0%, #020304 70%);
+  box-shadow:
+    inset 0 0 24px rgba(0, 0, 0, 0.85),
+    inset 0 2px 4px rgba(0, 0, 0, 0.8),
+    0 1px 0 rgba(180, 195, 205, 0.12);
+  pointer-events: none;
+}
+
+/* hazard seam plating along the inner edge of each panel */
+.door-panel.left::after,
+.door-panel.right::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 16px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #d9a400 0 8px,
+    #171717 8px 16px
+  );
+  box-shadow:
+    0 0 18px 3px rgba(0, 0, 0, 0.6),
+    inset 0 0 6px rgba(0, 0, 0, 0.5);
+  animation: seam-pulse 2.4s ease-in-out infinite;
+}
+
+.door-panel.left::after {
+  right: 0;
+}
+
+.door-panel.right::after {
+  left: 0;
+}
+
+.phase-open .door-panel.left {
+  transform: translateX(-100%);
+}
+
+.phase-open .door-panel.right {
+  transform: translateX(100%);
+}
+
+/* central locking bar — physically retracts before the panels slide */
+.door-bolt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 130px;
+  height: 34px;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(circle at 14px 17px, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
+    radial-gradient(circle at 116px 17px, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
+    linear-gradient(180deg, var(--steel-hi) 0%, var(--steel-lo) 100%);
+  border-radius: 3px;
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.6),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.75),
+    0 0 20px rgba(0, 0, 0, 0.8);
+  transition: opacity 0.3s ease 1.6s;
+}
+
+.phase-unlock .door-bolt {
+  animation: bolt-retract 0.55s cubic-bezier(0.6, 0, 0.35, 1) forwards;
+}
+
+.phase-open .door-bolt {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.door-scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 140px;
+  z-index: 2;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(111, 227, 255, 0.1),
+    transparent
+  );
+  mix-blend-mode: screen;
+  animation: scanline-sweep 3.2s linear infinite;
+}
+
+.phase-open .door-scanline,
+.phase-unlock .door-scanline {
+  animation-play-state: paused;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.door-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  opacity: 1;
+  transition: opacity 0.5s ease 0.15s;
+}
+
+.phase-open .door-hud {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* mirrors the right door panel's box and motion exactly, so the lock
+   iris rides along with it instead of fading in place */
+.lock-ring-anchor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 50%;
+  z-index: 4;
+  transition: transform 2.4s cubic-bezier(0.83, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.phase-open .lock-ring-anchor {
+  transform: translateX(100%);
+}
+
+.hud-corner {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border: 2px solid rgba(180, 200, 210, 0.7);
+  filter: drop-shadow(0 0 4px rgba(140, 180, 200, 0.4));
+}
+
+.hud-corner.tl {
+  top: 28px;
+  left: 28px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.hud-corner.tr {
+  top: 28px;
+  right: 28px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.hud-corner.bl {
+  bottom: 28px;
+  left: 28px;
+  border-right: none;
+  border-top: none;
+}
+
+.hud-corner.br {
+  bottom: 28px;
+  right: 28px;
+  border-left: none;
+  border-top: none;
+}
+
+/* mechanical lock iris — sweeps red while scanning, snaps green on unlock */
+.lock-ring {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(-50%, -50%);
+  width: 116px;
+  height: 116px;
+}
+
+/* toothed outer collar, like a hand-wheel or gear rim bolted around the iris */
+.lock-ring::before {
+  content: '';
+  position: absolute;
+  inset: -11px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    var(--steel-lo) 0deg 9deg,
+    var(--steel-hi) 9deg 18deg
+  );
+  -webkit-mask-image: radial-gradient(
+    circle,
+    transparent 0 57px,
+    black 58px 66px,
+    transparent 67px 69px
+  );
+  mask-image: radial-gradient(
+    circle,
+    transparent 0 57px,
+    black 58px 66px,
+    transparent 67px 69px
+  );
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+}
+
+.lock-ring-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    var(--noise),
+    radial-gradient(circle at 50% 9%, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
+    radial-gradient(circle at 87% 28%, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
+    radial-gradient(circle at 87% 72%, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
+    radial-gradient(circle at 50% 91%, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
+    radial-gradient(circle at 13% 72%, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
+    radial-gradient(circle at 13% 28%, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
+    linear-gradient(180deg, var(--steel-hi), var(--steel-lo));
+  background-blend-mode: overlay, normal, normal, normal, normal, normal, normal, normal;
+  background-size: 55px 55px, auto, auto, auto, auto, auto, auto, auto;
+  box-shadow:
+    inset 0 0 0 6px var(--steel-lo),
+    inset 0 0 0 7px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 9px var(--steel-hi),
+    inset 0 0 0 10px rgba(0, 0, 0, 0.55),
+    inset 0 -8px 12px rgba(0, 0, 0, 0.75),
+    0 0 22px rgba(0, 0, 0, 0.6),
+    0 0 16px 1px var(--lock-color);
+  transition: box-shadow 0.35s ease;
+}
+
+.lock-needle-wrap {
+  position: absolute;
+  inset: 0;
+  animation-name: needle-rotate;
+  animation-timing-function: steps(11, end);
+  animation-fill-mode: forwards;
+}
+
+.lock-needle {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  width: 6px;
+  height: 38%;
+  border-radius: 3px;
+  background: var(--lock-color);
+  box-shadow: 0 0 10px 1px var(--lock-color);
+  transform: translateX(-50%);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lock-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--lock-color);
+  box-shadow:
+    0 0 0 3px var(--steel-lo),
+    0 0 0 4px rgba(0, 0, 0, 0.7),
+    0 0 0 6px var(--steel-hi),
+    0 0 0 7px rgba(0, 0, 0, 0.5),
+    inset 0 1px 2px rgba(0, 0, 0, 0.5),
+    0 0 14px 2px var(--lock-color);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.phase-unlock .lock-core {
+  animation: lock-pulse 0.5s ease-out;
+}
+
+.door-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: #eaf9ff;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.phase-unlock .door-flash {
+  animation: door-flash 0.45s ease-out forwards;
+}
+
+@keyframes boot-flicker {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  16% {
+    opacity: 0.25;
+  }
+  24% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.5;
+  }
+  38% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes seam-pulse {
+  0%,
+  100% {
+    filter: brightness(0.8);
+  }
+  50% {
+    filter: brightness(1.25);
+  }
+}
+
+@keyframes scanline-sweep {
+  0% {
+    transform: translateY(-140px);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes needle-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes lock-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  40% {
+    transform: translate(-50%, -50%) scale(1.6);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes bolt-retract {
+  0% {
+    transform: translate(-50%, -50%) scaleX(1);
+  }
+  35% {
+    transform: translate(-50%, -50%) scaleX(1.08);
+  }
+  100% {
+    transform: translate(-50%, -50%) scaleX(0);
+    opacity: 0;
+  }
+}
+
+@keyframes door-shake {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  15% {
+    transform: translate(-5px, 2px);
+  }
+  30% {
+    transform: translate(5px, -3px);
+  }
+  45% {
+    transform: translate(-4px, 3px);
+  }
+  60% {
+    transform: translate(4px, -2px);
+  }
+  75% {
+    transform: translate(-2px, 1px);
+  }
+  90% {
+    transform: translate(2px, -1px);
+  }
+}
+
+@keyframes door-flash {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+  }
+}

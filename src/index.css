@@ -1,0 +1,58 @@
+:root {
+  --void: #050607;
+  --panel-hi: #3a4750;
+  --panel-mid: #1e262c;
+  --panel-lo: #0a0d10;
+  --text: #c3cdd2;
+  --text-h: #f2f6f8;
+  --text-dim: #7c8890;
+  --neon: #46d6ff;
+  --neon-soft: #9fecff;
+  --moss: #92c23e;
+  --moss-dark: #4a6b1e;
+  --border: rgba(70, 214, 255, 0.16);
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'Share Tech Mono', ui-monospace, Consolas, monospace;
+  --display: 'Orbitron', var(--sans);
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: dark;
+  color: var(--text);
+  background: var(--void);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--void);
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+p {
+  margin: 0;
+}
+
+code {
+  font-family: var(--mono);
+}
