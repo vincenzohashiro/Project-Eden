@@ -177,6 +177,136 @@
   border-top: none;
 }
 
+/* ---------- terminal HUD backdrops (server / shop) ---------- */
+
+.term-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: #030000;
+}
+
+.term-photo {
+  position: absolute;
+  inset: 0;
+  background-image: var(--shop-url);
+  background-size: cover;
+  background-position: center 40%;
+  opacity: 0.55;
+  filter: saturate(1.1) brightness(1.05);
+}
+
+.term-grid {
+  position: absolute;
+  inset: 0;
+}
+
+.term-emblem {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 60%;
+  max-width: 560px;
+  height: auto;
+}
+
+.term-status {
+  position: absolute;
+  left: 28px;
+  bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.term-status-label {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.term-blip {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  transform: rotate(45deg);
+}
+
+.term-blip.b1 {
+  top: 18%;
+  left: 12%;
+}
+
+.term-blip.b2 {
+  top: 62%;
+  right: 15%;
+}
+
+.term-blip.b3 {
+  bottom: 20%;
+  left: 30%;
+}
+
+/* -- shop variant: red -- */
+
+.shop-bg {
+  background: #030000;
+}
+
+.shop-bg .term-emblem {
+  color: rgba(255, 59, 59, 0.16);
+}
+
+.shop-bg .site-corner {
+  border-color: rgba(255, 59, 59, 0.35);
+}
+
+.shop-bg .term-status-value {
+  color: #ff3b3b;
+  font-weight: 700;
+}
+
+.shop-bg .term-status-id {
+  color: rgba(255, 59, 59, 0.55);
+}
+
+/* -- server variant: green -- */
+
+.server-bg {
+  background: #000500;
+}
+
+.server-bg .term-grid {
+  background-image:
+    repeating-linear-gradient(90deg, rgba(146, 194, 62, 0.18) 0 1px, transparent 1px 34px),
+    repeating-linear-gradient(0deg, rgba(146, 194, 62, 0.18) 0 1px, transparent 1px 34px);
+}
+
+.server-bg .term-emblem {
+  color: rgba(146, 194, 62, 0.16);
+}
+
+.server-bg .term-blip {
+  border: 1px solid rgba(146, 194, 62, 0.4);
+}
+
+.server-bg .site-corner {
+  border-color: rgba(146, 194, 62, 0.35);
+}
+
+.server-bg .term-status-value {
+  color: var(--moss);
+  font-weight: 700;
+}
+
+.server-bg .term-status-id {
+  color: rgba(146, 194, 62, 0.55);
+}
+
 /* ---------- city backdrop ---------- */
 
 .city {
@@ -194,6 +324,7 @@
   background-size: cover;
   background-position: center 38%;
   filter: saturate(1.2) brightness(1.06) contrast(1.05);
+  opacity: 0.5;
 }
 
 .city-glow {
@@ -700,6 +831,164 @@
   97%,
   97.5% {
     opacity: 1;
+  }
+}
+
+/* ---------- single-image glitch frame (reused by any standalone logo image) ---------- */
+
+.glitch-frame {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 420px;
+  animation: media-float 5s ease-in-out infinite;
+}
+
+.glitch-base {
+  display: block;
+  width: 100%;
+  height: auto;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 30px rgba(255, 59, 59, 0.25));
+  animation: sp-glitch-jitter 5s infinite;
+}
+
+.glitch-frame::before,
+.glitch-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--glitch-url);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.glitch-frame::before {
+  background-color: rgba(70, 214, 255, 0.75);
+  background-blend-mode: color;
+  animation: sp-glitch-cyan 5s steps(1, end) infinite;
+}
+
+.glitch-frame::after {
+  background-color: rgba(255, 40, 90, 0.85);
+  background-blend-mode: color;
+  animation: sp-glitch-red 5s steps(1, end) infinite;
+}
+
+@keyframes media-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes sp-glitch-jitter {
+  0%,
+  96%,
+  100% {
+    transform: translate(0, 0);
+    filter: drop-shadow(0 0 30px rgba(255, 59, 59, 0.25));
+  }
+  96.5% {
+    transform: translate(-8px, 3px);
+    filter: drop-shadow(0 0 30px rgba(255, 59, 59, 0.25)) contrast(2) saturate(1.6);
+  }
+  97% {
+    transform: translate(7px, -4px);
+    filter: drop-shadow(0 0 30px rgba(255, 59, 59, 0.25)) contrast(1.5);
+  }
+  97.5% {
+    transform: translate(-6px, 2px);
+    filter: drop-shadow(0 0 30px rgba(255, 59, 59, 0.25)) contrast(2.2) hue-rotate(16deg);
+  }
+  98% {
+    transform: translate(5px, -2px);
+    filter: drop-shadow(0 0 30px rgba(255, 59, 59, 0.25)) contrast(1.7);
+  }
+  98.5% {
+    transform: translate(-3px, 1px);
+    filter: drop-shadow(0 0 30px rgba(255, 59, 59, 0.25)) contrast(1.9);
+  }
+  99% {
+    transform: translate(0, 0);
+    filter: drop-shadow(0 0 30px rgba(255, 59, 59, 0.25));
+  }
+}
+
+@keyframes sp-glitch-cyan {
+  0%,
+  96%,
+  100% {
+    opacity: 0;
+  }
+  96.5% {
+    opacity: 0.9;
+    clip-path: inset(6% 0 76% 0);
+    transform: translateX(-12px);
+  }
+  97% {
+    opacity: 0.85;
+    clip-path: inset(58% 0 16% 0);
+    transform: translateX(10px);
+  }
+  97.5% {
+    opacity: 0.9;
+    clip-path: inset(30% 0 50% 0);
+    transform: translateX(-10px);
+  }
+  98.5% {
+    opacity: 0.5;
+    clip-path: inset(42% 0 38% 0);
+    transform: translateX(6px);
+  }
+  99% {
+    opacity: 0;
+  }
+}
+
+@keyframes sp-glitch-red {
+  0%,
+  96%,
+  100% {
+    opacity: 0;
+  }
+  96.5% {
+    opacity: 0.9;
+    clip-path: inset(42% 0 32% 0);
+    transform: translateX(12px);
+  }
+  97% {
+    opacity: 0.85;
+    clip-path: inset(10% 0 68% 0);
+    transform: translateX(-10px);
+  }
+  97.5% {
+    opacity: 0.9;
+    clip-path: inset(66% 0 10% 0);
+    transform: translateX(11px);
+  }
+  98.5% {
+    opacity: 0.5;
+    clip-path: inset(50% 0 28% 0);
+    transform: translateX(-6px);
+  }
+  99% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch-frame,
+  .glitch-base,
+  .glitch-frame::before,
+  .glitch-frame::after {
+    animation: none;
   }
 }
 

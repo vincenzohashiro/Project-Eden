@@ -1,15 +1,25 @@
 import HeroPanel from '../components/HeroPanel'
-import GlitchLogo from '../components/GlitchLogo'
+import specializedLogo from '../assets/SpecializedRed.png'
 import { PRODUCTS } from '../data/products'
+import './ModelShopPage.css'
 
 function ModelShopPage() {
   return (
-    <>
+    <div className="shop-page">
       <header className="hero">
         <HeroPanel>
           <span className="eyebrow">MINECRAFT CUSTOM MODEL SHOP</span>
           <h1>
-            <GlitchLogo />
+            <span
+              className="glitch-frame"
+              style={{ '--glitch-url': `url(${specializedLogo})` }}
+            >
+              <img
+                src={specializedLogo}
+                alt="Project Eden Specialized"
+                className="glitch-base"
+              />
+            </span>
           </h1>
           <p className="tagline">
             Bring the exact models from Project Eden into your own world. Store
@@ -28,7 +38,7 @@ function ModelShopPage() {
           </div>
         ))}
       </section>
-    </>
+    </div>
   )
 }
 

@@ -1,5 +1,6 @@
 import HeroPanel from '../components/HeroPanel'
 import GlitchLogo from '../components/GlitchLogo'
+import './MinecraftServerPage.css'
 
 const FEATURES = [
   {
@@ -21,7 +22,7 @@ const FEATURES = [
 
 function MinecraftServerPage() {
   return (
-    <>
+    <div className="server-page">
       <header className="hero">
         <HeroPanel>
           <span className="eyebrow">MINECRAFT SURVIVAL SERVER</span>
@@ -60,7 +61,7 @@ function MinecraftServerPage() {
           </div>
         ))}
       </section>
-    </>
+    </div>
   )
 }
 

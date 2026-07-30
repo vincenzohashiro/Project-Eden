@@ -1,4 +1,4 @@
-import cityImg from '../assets/8-bit-graphics-pixels-scene-with-city-night.jpg'
+import cityImg from '../assets/360_F_705636748_af4V5ljPnQoZZads77zlxhdeyyBXFVLD.jpg'
 
 function CityBackdrop() {
   return (
