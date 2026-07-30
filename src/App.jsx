@@ -11,6 +11,7 @@ import MinecraftServerPage from './pages/MinecraftServerPage'
 import ModelShopPage from './pages/ModelShopPage'
 import LoginPage from './pages/LoginPage'
 import ProfilePage from './pages/ProfilePage'
+import ComingSoonPage from './pages/ComingSoonPage'
 import './App.css'
 
 const BACKDROPS = {
@@ -40,6 +41,46 @@ function AnimatedRoutes() {
           <Route path="/shop" element={<ModelShopPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route
+            path="/portfolio"
+            element={
+              <ComingSoonPage
+                eyebrow="PORTFOLIO"
+                title="COMING SOON"
+                body="A gallery of finished commissions and server builds is on the way."
+              />
+            }
+          />
+          <Route
+            path="/pricing"
+            element={
+              <ComingSoonPage
+                eyebrow="PRICING"
+                title="COMING SOON"
+                body="Commission and rank pricing details are being finalized."
+              />
+            }
+          />
+          <Route
+            path="/reviews"
+            element={
+              <ComingSoonPage
+                eyebrow="REVIEWS"
+                title="COMING SOON"
+                body="Player and client reviews will be collected here soon."
+              />
+            }
+          />
+          <Route
+            path="/qa"
+            element={
+              <ComingSoonPage
+                eyebrow="Q&A"
+                title="COMING SOON"
+                body="Frequently asked questions are being written up."
+              />
+            }
+          />
         </Routes>
       </div>
     </>

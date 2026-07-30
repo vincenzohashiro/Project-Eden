@@ -1,0 +1,13 @@
+.coming-soon-title {
+  font-size: clamp(28px, 5vw, 40px);
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.coming-soon-hint {
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+}
