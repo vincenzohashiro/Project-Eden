@@ -1,0 +1,134 @@
+.profile-page {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100svh - var(--nav-height));
+  padding: 48px 24px;
+}
+
+.profile-loading {
+  font-family: var(--mono);
+}
+
+.profile-loading .eyebrow {
+  letter-spacing: 4px;
+}
+
+.profile-card {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  padding: 44px 40px;
+  clip-path: var(--panel-clip);
+  background-color: #000002;
+  background-image: var(--noise);
+  background-blend-mode: overlay;
+  background-size: 160px 160px;
+  border: 1px solid rgba(70, 214, 255, 0.55);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 26px rgba(70, 214, 255, 0.2), inset 0 0 60px rgba(0, 0, 0, 0.55);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.profile-avatar {
+  flex-shrink: 0;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(70, 214, 255, 0.12);
+  border: 2px solid rgba(70, 214, 255, 0.55);
+  box-shadow: 0 0 18px rgba(70, 214, 255, 0.35);
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-avatar span {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--neon);
+}
+
+.profile-identity {
+  flex: 1;
+  min-width: 160px;
+}
+
+.profile-identity h1 {
+  font-size: clamp(20px, 3.6vw, 28px);
+  letter-spacing: 1px;
+  margin: 0 0 6px;
+}
+
+.profile-discord-tag {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.profile-signout {
+  padding: 10px 20px;
+  font-size: 12px;
+  align-self: center;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(70, 214, 255, 0.2);
+}
+
+.profile-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid rgba(70, 214, 255, 0.2);
+  background: rgba(70, 214, 255, 0.05);
+}
+
+.profile-stat-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.profile-stat-value {
+  font-family: var(--display);
+  font-size: 16px;
+  color: var(--text-h);
+}
+
+.profile-stat-linked {
+  color: var(--moss);
+}
+
+@media (max-width: 560px) {
+  .profile-card {
+    padding: 32px 24px;
+  }
+
+  .profile-signout {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,38 @@
+.login-title {
+  font-size: clamp(28px, 5vw, 40px);
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.btn-discord {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  padding: 14px 28px;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-h);
+  cursor: pointer;
+  border: 1px solid #5865f2;
+  background: rgba(88, 101, 242, 0.14);
+  box-shadow: 0 0 12px rgba(88, 101, 242, 0.35);
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  transition: box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.btn-discord:hover {
+  background: rgba(88, 101, 242, 0.24);
+  box-shadow: 0 0 22px rgba(88, 101, 242, 0.6);
+}
+
+.login-hint {
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+}
