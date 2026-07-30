@@ -199,14 +199,16 @@ function LandingPage() {
           <Link to="/shop" className="explore-card">
             <span className="explore-card-icon">◇</span>
             <h3>Featured Models</h3>
-            <div className="explore-thumb-row">
-              <span className="avatar a1">
-                <span className="avatar-online" aria-hidden="true" />
-              </span>
-              <span className="avatar a2" />
-              <span className="avatar a3" />
-              <span className="avatar a4" />
-              <span className="avatar more">+12</span>
+            <div className="explore-card-body">
+              <div className="explore-thumb-row">
+                <span className="avatar a1">
+                  <span className="avatar-online" aria-hidden="true" />
+                </span>
+                <span className="avatar a2" />
+                <span className="avatar a3" />
+                <span className="avatar a4" />
+                <span className="avatar more">+12</span>
+              </div>
             </div>
             <span className="landing-cta">View All Models &rarr;</span>
           </Link>
@@ -214,29 +216,35 @@ function LandingPage() {
           <Link to="/server" className="explore-card">
             <span className="explore-card-icon">◇</span>
             <h3>Server Features</h3>
-            <span className="shot-placeholder explore-thumb">
-              <ShotIcon />
-              <em>Image</em>
-            </span>
+            <div className="explore-card-body">
+              <span className="shot-placeholder explore-thumb">
+                <ShotIcon />
+                <em>Image</em>
+              </span>
+            </div>
             <span className="landing-cta">Discover More &rarr;</span>
           </Link>
 
           <Link to="/reviews" className="explore-card">
             <span className="explore-card-icon">&ldquo;</span>
             <h3>Customer Reviews</h3>
-            <p className="explore-card-lines">
-              What players and clients are saying about Project Eden.
-            </p>
-            <span className="explore-stars">★★★★★</span>
+            <div className="explore-card-body">
+              <p className="explore-card-lines">
+                What players and clients are saying about Project Eden.
+              </p>
+              <span className="explore-stars">★★★★★</span>
+            </div>
             <span className="landing-cta">Read More &rarr;</span>
           </Link>
 
           <Link to="/qa" className="explore-card">
             <span className="explore-card-icon">?</span>
             <h3>Frequently Asked Questions</h3>
-            <p className="explore-card-lines">
-              Common questions about the server and the shop.
-            </p>
+            <div className="explore-card-body">
+              <p className="explore-card-lines">
+                Common questions about the server and the shop.
+              </p>
+            </div>
             <span className="landing-cta">View FAQ &rarr;</span>
           </Link>
         </div>
