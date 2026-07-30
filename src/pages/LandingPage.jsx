@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Reveal from '../components/Reveal'
 import specializedLogo from '../assets/SpecializedRed.png'
 import { PRODUCTS } from '../data/products'
+import { fetchDiscordStatus } from '../lib/discordStatus'
 import './LandingPage.css'
 
 function ShotIcon() {
@@ -14,39 +16,235 @@ function ShotIcon() {
   )
 }
 
+function CubeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+      <path d="M12 2 20 6.5V17.5L12 22 4 17.5V6.5Z" />
+      <path d="M12 2v20" />
+      <path d="M4 6.5 12 11l8-4.5" />
+    </svg>
+  )
+}
+
 function LandingPage() {
+  const [status, setStatus] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchDiscordStatus().then((data) => {
+      if (!cancelled) setStatus(data)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const isLive = status?.memberCount != null && status?.presenceCount != null
+  const online = status?.online ?? true
+
   return (
     <>
-      {/* section 1: hero */}
-      <section className="landing-hero">
-        <span className="hero-corner tl" aria-hidden="true" />
-        <span className="hero-corner br" aria-hidden="true" />
+      {/* first screen: hero + explore, fit together in one viewport */}
+      <div className="landing-fold">
+      {/* section 1: hero — Eden Specialized / Minecraft Server, two separate panels */}
+      <section className="eden-hero">
+        <Reveal direction="left" className="eden-hero-panel eden-hero-specialized">
+          <div className="eden-hero-sp-body">
+            <div className="eden-hero-sp-left">
+              <span className="eden-hero-sp-eyebrow">Project</span>
+              <h2 className="eden-hero-sp-logo">Eden</h2>
+              <span className="eden-hero-sp-sub">Specialized</span>
+              <span className="eden-hero-accent-line" aria-hidden="true" />
 
-        <Reveal className="landing-hero-inner">
-          <div className="hero-float">
-            <span className="thruster-flame" aria-hidden="true" />
-            <span className="thruster-glow" aria-hidden="true" />
+              <div className="eden-hero-sp-row">
+                <p className="eden-hero-description">
+                  Premium custom Minecraft models — player skins, mob
+                  reworks, and builds crafted to spec for your world.
+                </p>
 
-            <span className="landing-readout">
-              SIGNAL LOCKED · TWO NETWORKS DETECTED
-            </span>
-            <span className="eyebrow">PROJECT EDEN</span>
-            <h1 className="landing-title">
-              Two Worlds.
-              <br />
-              One Connection.
-            </h1>
-            <p className="landing-lede">
-              A custom Minecraft server and the model shop that builds it —
-              one universe of custom content, two ways to experience it.
-            </p>
-            <span className="scroll-cue">Scroll to explore ↓</span>
+                <div className="eden-hero-sp-actions">
+                  <span className="eden-hero-tick" aria-hidden="true" />
+                  <Link to="/shop" className="btn btn-sp eden-hero-btn-sm">
+                    Browse Store
+                  </Link>
+                  <a href="#discord" className="btn btn-sp-outline eden-hero-btn-sm">
+                    How to Order
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="eden-hero-sp-right">
+              <div className="eden-hero-sp-images">
+                <span className="eden-hero-3d-tile">
+                  <ShotIcon />
+                  <em>3D Image</em>
+                </span>
+                <span className="eden-hero-3d-tile">
+                  <ShotIcon />
+                  <em>3D Image</em>
+                </span>
+                <span className="eden-hero-3d-tile">
+                  <ShotIcon />
+                  <em>3D Image</em>
+                </span>
+                <span className="eden-hero-3d-tile">
+                  <ShotIcon />
+                  <em>3D Image</em>
+                </span>
+              </div>
+            </div>
           </div>
+
+          <div className="eden-hero-tagbar">
+            <Link to="/shop">Custom Models</Link>
+            <span className="tag-sep">|</span>
+            <Link to="/shop">Resource Pack</Link>
+            <span className="tag-sep">|</span>
+            <a href="#discord">Fast Delivery</a>
+          </div>
+        </Reveal>
+
+        <Reveal direction="right" delay={120} className="eden-hero-panel eden-hero-server">
+          <div className="eden-hero-srv-body">
+            <div className="eden-hero-srv-left">
+              <div className="eden-hero-srv-heading">
+                <span className="eden-hero-srv-eyebrow">Project</span>
+                <h2 className="eden-hero-srv-logo">Eden</h2>
+                <span className="eden-hero-srv-sub">Server</span>
+              </div>
+
+              <div className="eden-hero-actions">
+                <a href="#discord" className="btn btn-primary eden-hero-btn-sm">
+                  Join Server
+                </a>
+                <Link to="/server" className="btn btn-ghost eden-hero-btn-sm">
+                  View Features
+                </Link>
+              </div>
+
+              <div className="eden-hero-lines">
+                <span>
+                  <span className={`status-dot${online ? '' : ' offline'}`} /> Server Stats
+                </span>
+                <span>{isLive ? `${status.presenceCount} Online Players` : 'Online Players'}</span>
+              </div>
+            </div>
+
+            <div className="eden-hero-srv-middle">
+              <div className="eden-hero-3d-model">
+                <span className="eden-hero-3d-spin">
+                  <CubeIcon />
+                </span>
+                <em>3D Rotating Model</em>
+              </div>
+            </div>
+
+            <div className="eden-hero-srv-right">
+              <div className="eden-hero-srv-status">
+                <span className="srv-box-title">Server Status</span>
+
+                <div className="srv-stat">
+                  <span className="srv-stat-value">
+                    <span className={`status-dot${online ? '' : ' offline'}`} />
+                    {online ? 'Online' : 'Offline'}
+                  </span>
+                  <span className="srv-stat-label">Status</span>
+                </div>
+
+                <div className="srv-stat">
+                  <span className="srv-stat-value">{isLive ? status.presenceCount : 0}/100</span>
+                  <span className="srv-stat-label">Players Online</span>
+                </div>
+
+                <div className="srv-stat">
+                  <span className="srv-stat-value">1.21.11 Fabric</span>
+                  <span className="srv-stat-label">Version Build</span>
+                </div>
+
+                <div className="srv-stat">
+                  <span className="srv-stat-value">Babylon</span>
+                  <span className="srv-stat-label">World</span>
+                </div>
+              </div>
+
+              <div className="eden-hero-srv-features">
+                <span className="srv-box-title">Server Features</span>
+                <ul className="srv-feature-list">
+                  <li>Realtime Economy</li>
+                  <li>Quests</li>
+                  <li>Shops</li>
+                  <li>Bosses</li>
+                  <li>Parkour</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <span className="eden-hero-thruster left" aria-hidden="true">
+            <span className="eden-hero-thruster-flame" />
+            <span className="eden-hero-thruster-glow" />
+          </span>
+          <span className="eden-hero-thruster right" aria-hidden="true">
+            <span className="eden-hero-thruster-flame" />
+            <span className="eden-hero-thruster-glow" />
+          </span>
         </Reveal>
       </section>
 
+      {/* section 1b: explore eden */}
+      <Reveal as="section" direction="up" className="explore-section">
+        <span className="eyebrow explore-eyebrow">EXPLORE EDEN</span>
+        <div className="explore-grid">
+          <Link to="/shop" className="explore-card">
+            <span className="explore-card-icon">◇</span>
+            <h3>Featured Models</h3>
+            <div className="explore-thumb-row">
+              <span className="avatar a1">
+                <span className="avatar-online" aria-hidden="true" />
+              </span>
+              <span className="avatar a2" />
+              <span className="avatar a3" />
+              <span className="avatar a4" />
+              <span className="avatar more">+12</span>
+            </div>
+            <span className="landing-cta">View All Models &rarr;</span>
+          </Link>
+
+          <Link to="/server" className="explore-card">
+            <span className="explore-card-icon">◇</span>
+            <h3>Server Features</h3>
+            <span className="shot-placeholder explore-thumb">
+              <ShotIcon />
+              <em>Image</em>
+            </span>
+            <span className="landing-cta">Discover More &rarr;</span>
+          </Link>
+
+          <Link to="/reviews" className="explore-card">
+            <span className="explore-card-icon">&ldquo;</span>
+            <h3>Customer Reviews</h3>
+            <p className="explore-card-lines">
+              What players and clients are saying about Project Eden.
+            </p>
+            <span className="explore-stars">★★★★★</span>
+            <span className="landing-cta">Read More &rarr;</span>
+          </Link>
+
+          <Link to="/qa" className="explore-card">
+            <span className="explore-card-icon">?</span>
+            <h3>Frequently Asked Questions</h3>
+            <p className="explore-card-lines">
+              Common questions about the server and the shop.
+            </p>
+            <span className="landing-cta">View FAQ &rarr;</span>
+          </Link>
+        </div>
+      </Reveal>
+      </div>
+
       {/* section 2: showcase */}
-      <section className="showcase">
+      <section className="showcase" id="showcase">
         <div className="specialized-split">
           <Reveal direction="left" className="specialized-media">
             <span
