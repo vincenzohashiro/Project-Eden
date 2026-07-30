@@ -772,14 +772,14 @@
   background: rgba(3, 4, 5, 0.8);
   border: 1px solid rgba(70, 214, 255, 0.35);
   backdrop-filter: blur(4px);
-  margin-top: 30px;
 }
 
 .explore-grid {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-rows: 1fr;
+  gap: 14px;
   width: 100%;
   max-width: 1400px;
   min-height: 0;
@@ -790,10 +790,11 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 6px;
   height: 100%;
-  padding: 24px 26px;
+  min-height: 0;
+  padding: 14px 18px;
   text-decoration: none;
   color: var(--text);
   clip-path: var(--panel-clip-alt);
@@ -813,13 +814,17 @@
 
 .explore-card-icon {
   flex-shrink: 0;
-  font-size: 24px;
+  font-size: 18px;
   color: var(--neon);
 }
 
 .explore-card h3 {
+  display: flex;
+  align-items: flex-start;
+  min-height: 34px;
   font-family: var(--display);
-  font-size: 18px;
+  font-size: 15px;
+  line-height: 130%;
   letter-spacing: 0.5px;
   color: var(--text-h);
   margin: 0;
@@ -827,12 +832,24 @@
 
 .explore-card .landing-cta {
   flex-shrink: 0;
+  font-size: 12px;
+}
+
+.explore-card-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  overflow: hidden;
 }
 
 .explore-card-lines {
   color: var(--text-dim);
-  font-size: 13px;
-  line-height: 150%;
+  font-size: 12px;
+  line-height: 145%;
   margin: 0;
 }
 
@@ -842,9 +859,9 @@
 }
 
 .explore-thumb-row .avatar {
-  width: 32px;
-  height: 32px;
-  margin-left: -10px;
+  width: 26px;
+  height: 26px;
+  margin-left: -8px;
 }
 
 .explore-thumb-row .avatar:first-child {
@@ -852,19 +869,19 @@
 }
 
 .explore-thumb-row .avatar.more {
-  min-width: 36px;
-  height: 32px;
-  padding: 0 8px;
-  font-size: 10px;
+  min-width: 30px;
+  height: 26px;
+  padding: 0 6px;
+  font-size: 9px;
 }
 
 .explore-thumb {
-  height: 100px;
+  height: 56px;
   width: 100%;
 }
 
 .explore-stars {
-  font-size: 15px;
+  font-size: 13px;
   letter-spacing: 2px;
   color: var(--neon-soft);
 }

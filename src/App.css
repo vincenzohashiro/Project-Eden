@@ -379,8 +379,8 @@
   background-image: var(--city-url);
   background-size: cover;
   background-position: center 38%;
-  filter: saturate(1.2) brightness(1.06) contrast(1.05);
-  opacity: 0.5;
+  filter: saturate(1.2) brightness(0.55) contrast(1.05);
+  opacity: 0.3;
 }
 
 .city-glow {
