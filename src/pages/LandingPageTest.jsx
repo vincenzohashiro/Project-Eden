@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import logoImg from '../assets/ProjectEden2.png'
 import cityImg from '../assets/360_F_705636748_af4V5ljPnQoZZads77zlxhdeyyBXFVLD.jpg'
+import pokeFrameGif from '../assets/PokeFrame.gif'
+import zenithSwordGif from '../assets/zenith_sword_terarria.gif'
 import { fetchDiscordStatus } from '../lib/discordStatus'
 import './LandingPageTest.css'
 
@@ -191,14 +193,16 @@ function LandingPageTest() {
             </div>
 
             <div className="lt-panel-art lt-art-customs">
-              <div className="lt-art-glow" aria-hidden="true" />
-              <div className="lt-art-cluster">
-                <span className="lt-art-icon i1"><SwordIcon /></span>
-                <span className="lt-art-icon i2"><GunIcon /></span>
-                <span className="lt-art-icon i3"><GolemIcon /></span>
-                <span className="lt-art-icon i4"><PickaxeIcon /></span>
+              <div className="lt-art-models">
+                <div className="lt-art-model">
+                  <img src={pokeFrameGif} alt="Poke Ball display frame custom model" />
+                  <em>Poke Ball Frame</em>
+                </div>
+                <div className="lt-art-model">
+                  <img src={zenithSwordGif} alt="Zenith sword custom model" />
+                  <em>Zenith Sword</em>
+                </div>
               </div>
-              <em>Model Preview</em>
             </div>
           </div>
         </div>
