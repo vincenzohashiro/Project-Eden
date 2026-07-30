@@ -6,6 +6,7 @@ import SiteFooter from './components/SiteFooter'
 import CityBackdrop from './components/CityBackdrop'
 import ServerBackdrop from './components/ServerBackdrop'
 import ShopBackdrop from './components/ShopBackdrop'
+import LandingPageTest from './pages/LandingPageTest'
 import LandingPage from './pages/LandingPage'
 import MinecraftServerPage from './pages/MinecraftServerPage'
 import ModelShopPage from './pages/ModelShopPage'
@@ -36,7 +37,7 @@ function AnimatedRoutes() {
       <Backdrop />
       <div className="page-transition" key={location.pathname}>
         <Routes location={location}>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/landing-old" element={<LandingPage />} />
           <Route path="/server" element={<MinecraftServerPage />} />
           <Route path="/shop" element={<ModelShopPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -87,15 +88,32 @@ function AnimatedRoutes() {
   )
 }
 
+function AppChrome() {
+  const location = useLocation()
+
+  // home page owns its own nav/footer/backdrop — no shared chrome here
+  if (location.pathname === '/') {
+    return (
+      <Routes location={location}>
+        <Route path="/" element={<LandingPageTest />} />
+      </Routes>
+    )
+  }
+
+  return (
+    <div className="site">
+      <SiteNav />
+      <AnimatedRoutes />
+      <SiteFooter />
+    </div>
+  )
+}
+
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div className="site">
-          <SiteNav />
-          <AnimatedRoutes />
-          <SiteFooter />
-        </div>
+        <AppChrome />
       </BrowserRouter>
     </AuthProvider>
   )
