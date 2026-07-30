@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
 import HeroPanel from '../components/HeroPanel'
 import GlitchLogo from '../components/GlitchLogo'
+import { fetchDiscordStatus } from '../lib/discordStatus'
 import './MinecraftServerPage.css'
 
 const FEATURES = [
@@ -21,6 +23,21 @@ const FEATURES = [
 ]
 
 function MinecraftServerPage() {
+  const [status, setStatus] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchDiscordStatus().then((data) => {
+      if (!cancelled) setStatus(data)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const isLive = status?.memberCount != null && status?.presenceCount != null
+  const online = status?.online ?? true
+
   return (
     <div className="server-page">
       <header className="hero">
@@ -34,10 +51,14 @@ function MinecraftServerPage() {
           </p>
 
           <div className="server-status">
-            <span className="status-dot" />
-            <span className="status-label">ONLINE</span>
+            <span className={`status-dot${online ? '' : ' offline'}`} />
+            <span className="status-label">{online ? 'ONLINE' : 'OFFLINE'}</span>
             <span className="status-sep">/</span>
-            <span className="status-players">128 / 200 players</span>
+            <span className="status-players">
+              {isLive
+                ? `${status.presenceCount} online · ${status.memberCount} members`
+                : '128 / 200 players'}
+            </span>
           </div>
 
           <div className="hero-actions">

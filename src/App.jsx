@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
 import SiteNav from './components/SiteNav'
 import SiteFooter from './components/SiteFooter'
 import CityBackdrop from './components/CityBackdrop'
@@ -8,6 +9,8 @@ import ShopBackdrop from './components/ShopBackdrop'
 import LandingPage from './pages/LandingPage'
 import MinecraftServerPage from './pages/MinecraftServerPage'
 import ModelShopPage from './pages/ModelShopPage'
+import LoginPage from './pages/LoginPage'
+import ProfilePage from './pages/ProfilePage'
 import './App.css'
 
 const BACKDROPS = {
@@ -35,6 +38,8 @@ function AnimatedRoutes() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/server" element={<MinecraftServerPage />} />
           <Route path="/shop" element={<ModelShopPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </div>
     </>
@@ -43,13 +48,15 @@ function AnimatedRoutes() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="site">
-        <SiteNav />
-        <AnimatedRoutes />
-        <SiteFooter />
-      </div>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <div className="site">
+          <SiteNav />
+          <AnimatedRoutes />
+          <SiteFooter />
+        </div>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 

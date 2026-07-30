@@ -121,6 +121,30 @@
   text-shadow: 0 0 8px rgba(70, 214, 255, 0.5);
 }
 
+.site-nav-account {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+}
+
+.site-nav-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(70, 214, 255, 0.4);
+}
+
+.site-nav-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(70, 214, 255, 0.14);
+  color: var(--neon);
+  font-family: var(--display);
+  font-size: 11px;
+}
+
 @media (max-width: 640px) {
   .site-nav {
     padding: 0 16px;
@@ -1015,6 +1039,11 @@
   border-radius: 50%;
   background: var(--moss);
   box-shadow: 0 0 8px 2px var(--moss);
+}
+
+.status-dot.offline {
+  background: #ff3b3b;
+  box-shadow: 0 0 8px 2px #ff3b3b;
 }
 
 .status-label {
