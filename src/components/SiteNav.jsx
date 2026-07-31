@@ -1,7 +1,12 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import logoImg from '../assets/ProjectEden2.png'
+import { useAuth } from '../context/AuthContext'
+
+const DISCORD_INVITE_URL = 'https://discord.gg/mEhgkyUxTF'
 
 function SiteNav() {
+  const { user } = useAuth()
+
   return (
     <nav className="site-nav">
       <NavLink to="/" end className="site-nav-brand">
@@ -26,11 +31,28 @@ function SiteNav() {
         <NavLink to="/pricing" className={({ isActive }) => (isActive ? 'active' : undefined)}>
           Pricing
         </NavLink>
-        <a href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer">Discord</a>
+        <a href={DISCORD_INVITE_URL} target="_blank" rel="noopener noreferrer">Discord</a>
       </div>
-      <a href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer" className="site-nav-join">
-        Join Discord
-      </a>
+      <div className="site-nav-actions">
+        <span className={`site-nav-status ${user ? 'is-ok' : 'is-error'}`}>
+          <span className="site-nav-status-dot" />
+          Status: {user ? 'Connected' : 'Error'}
+        </span>
+        {user ? (
+          <a
+            href={DISCORD_INVITE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="site-nav-join"
+          >
+            Join Discord
+          </a>
+        ) : (
+          <Link to="/login" className="site-nav-join">
+            Sign In
+          </Link>
+        )}
+      </div>
     </nav>
   )
 }

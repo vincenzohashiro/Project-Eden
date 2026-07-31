@@ -29,6 +29,18 @@
   box-shadow: 0 0 22px rgba(88, 101, 242, 0.6);
 }
 
+.btn-discord:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.login-error {
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: #ff8a8a;
+}
+
 .login-hint {
   margin-top: 12px;
   font-family: var(--mono);
