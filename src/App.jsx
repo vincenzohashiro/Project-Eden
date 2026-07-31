@@ -27,14 +27,15 @@ function AnimatedRoutes() {
     window.scrollTo(0, 0)
   }, [location.pathname])
 
-  const Backdrop = BACKDROPS[location.pathname] ?? CityBackdrop
+  const hasBackdropEntry = location.pathname in BACKDROPS
+  const Backdrop = hasBackdropEntry ? BACKDROPS[location.pathname] : CityBackdrop
 
   return (
     <>
       {/* rendered as a sibling of .page-transition, not inside it — that
           element's mount animation uses filter, which would otherwise break
           position:fixed on the backdrop (creates a new containing block) */}
-      <Backdrop />
+      {Backdrop && <Backdrop />}
       <div className="page-transition" key={location.pathname}>
         <Routes location={location}>
           <Route path="/landing-old" element={<LandingPage />} />
