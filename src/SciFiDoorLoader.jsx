@@ -47,6 +47,15 @@ function SciFiDoorLoader({ children }) {
               <span className="door-hatch" />
             </div>
             <div className="door-bolt" />
+            <div className="air-jet left" />
+            <div className="air-jet right" />
+            <div className="door-vapor">
+              <span className="vapor-puff p1" />
+              <span className="vapor-puff p2" />
+              <span className="vapor-puff p3" />
+              <span className="vapor-puff p4" />
+              <span className="vapor-puff p5" />
+            </div>
             <div className="door-scanline" />
             <div className="door-hud">
               <span className="hud-corner tl" />

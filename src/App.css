@@ -67,6 +67,123 @@
   background-attachment: fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed;
 }
 
+/* ---------- route transition ---------- */
+
+.route-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  overflow: hidden;
+  pointer-events: none;
+  animation: route-flicker 0.52s steps(1, end);
+}
+
+.route-glitch-slice {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgba(70, 214, 255, 0.45);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: route-slice-jump 0.48s steps(1, end) both;
+}
+
+.route-glitch-slice.s1 {
+  top: 6%;
+  height: 7%;
+}
+
+.route-glitch-slice.s2 {
+  top: 27%;
+  height: 4%;
+  background: rgba(255, 59, 59, 0.4);
+  animation-delay: 0.04s;
+}
+
+.route-glitch-slice.s3 {
+  top: 54%;
+  height: 9%;
+  animation-delay: 0.09s;
+}
+
+.route-glitch-slice.s4 {
+  top: 79%;
+  height: 5%;
+  background: rgba(255, 59, 59, 0.4);
+  animation-delay: 0.05s;
+}
+
+@keyframes route-slice-jump {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  4% {
+    opacity: 0.9;
+    transform: translateX(-32px);
+  }
+  9% {
+    opacity: 0.9;
+    transform: translateX(26px);
+  }
+  14% {
+    opacity: 0.7;
+    transform: translateX(-14px);
+  }
+  20% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.route-glitch-noise {
+  position: absolute;
+  inset: -20%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0;
+  mix-blend-mode: overlay;
+  animation: route-noise-flash 0.48s steps(1, end);
+}
+
+@keyframes route-noise-flash {
+  0% {
+    opacity: 0;
+  }
+  4% {
+    opacity: 0.5;
+  }
+  10% {
+    opacity: 0.15;
+  }
+  16% {
+    opacity: 0.4;
+  }
+  22% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes route-flicker {
+  0% {
+    background: rgba(70, 214, 255, 0.1);
+  }
+  6% {
+    background: rgba(70, 214, 255, 0.22);
+  }
+  10% {
+    background: transparent;
+  }
+  100% {
+    background: transparent;
+  }
+}
+
 /* ---------- nav ---------- */
 
 .site-nav {
@@ -1328,12 +1445,14 @@
     0 var(--footer-cut)
   );
 
+  position: relative;
+  z-index: 1;
   margin-top: auto;
   display: flex;
   flex-direction: column;
   padding: 64px 40px 24px;
   border-top: 1px solid rgba(70, 214, 255, 0.16);
-  background: rgba(70, 214, 255, 0.02);
+  background: var(--void);
 }
 
 .site-footer-top {

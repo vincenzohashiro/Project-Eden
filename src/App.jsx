@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import SiteNav from './components/SiteNav'
 import SiteFooter from './components/SiteFooter'
+import RouteTransition from './components/RouteTransition'
 import CityBackdrop from './components/CityBackdrop'
 import ServerBackdrop from './components/ServerBackdrop'
 import ShopBackdrop from './components/ShopBackdrop'
@@ -114,6 +115,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <RouteTransition />
         <AppChrome />
       </BrowserRouter>
     </AuthProvider>

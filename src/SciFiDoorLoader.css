@@ -2,13 +2,15 @@
   --lock-red: #ff2f2f;
   --lock-green: #29ff8a;
   --lock-color: var(--lock-red);
-  --steel-hi: #4a545e;
-  --steel-mid: #262c33;
-  --steel-lo: #0b0d10;
-  --rivet-hole: rgba(0, 0, 0, 0.55);
-  --rivet-glint: rgba(255, 255, 255, 0.07);
-  --rust-1: rgba(20, 28, 34, 0.35);
-  --rust-2: rgba(10, 14, 18, 0.3);
+  --steel-hi: #333b42;
+  --steel-mid: #14181d;
+  --steel-lo: #050607;
+  --rivet-hole: rgba(0, 0, 0, 0.65);
+  --rivet-glint: rgba(255, 255, 255, 0.05);
+  --rust-1: rgba(20, 28, 34, 0.45);
+  --rust-2: rgba(8, 11, 14, 0.4);
+  --grime-1: rgba(40, 38, 30, 0.22);
+  --grime-2: rgba(0, 0, 0, 0.4);
   --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
 
   position: fixed;
@@ -16,6 +18,28 @@
   z-index: 9999;
   overflow: hidden;
   animation: boot-flicker 0.6s ease-out;
+}
+
+/* full-bleed vignette + grain so the flat gradients read as a lit, shot
+   scene instead of a clean vector illustration — fades out once the
+   doors start sliding so it doesn't darken the revealed page content */
+.door-loader::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  background:
+    var(--noise),
+    radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.75) 100%);
+  background-blend-mode: overlay, normal;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.door-loader.phase-open::before {
+  opacity: 0;
 }
 
 .door-loader.phase-unlock,
@@ -174,7 +198,8 @@
   pointer-events: none;
 }
 
-/* hazard seam plating along the inner edge of each panel */
+/* hazard seam plating along the inner edge of each panel — old, grimy
+   caution tape rather than a fresh clean-printed stripe */
 .door-panel.left::after,
 .door-panel.right::after {
   content: '';
@@ -182,11 +207,14 @@
   top: 0;
   bottom: 0;
   width: 16px;
-  background: repeating-linear-gradient(
-    -45deg,
-    #d9a400 0 8px,
-    #171717 8px 16px
-  );
+  background-image:
+    var(--noise),
+    linear-gradient(180deg, transparent 0 8%, var(--grime-2) 9% 11%, transparent 12% 30%,
+      var(--grime-1) 31% 34%, transparent 35% 61%, var(--grime-2) 62% 65%, transparent 66% 100%),
+    repeating-linear-gradient(-45deg, #a3841f 0 8px, #171512 8px 16px);
+  background-blend-mode: overlay, normal, normal;
+  background-size: 60px 60px, auto, auto;
+  filter: saturate(0.55) brightness(0.82) contrast(1.05);
   box-shadow:
     0 0 18px 3px rgba(0, 0, 0, 0.6),
     inset 0 0 6px rgba(0, 0, 0, 0.5);
@@ -237,6 +265,148 @@
 .phase-open .door-bolt {
   opacity: 0;
   transition: opacity 0.2s ease;
+}
+
+/* lateral hiss — pressurized air venting sideways along the seam the
+   instant the bolt lets go */
+.air-jet {
+  position: absolute;
+  top: 50%;
+  width: 90px;
+  height: 3px;
+  z-index: 3;
+  transform: translateY(-50%) scaleX(0);
+  filter: blur(1px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.air-jet.left {
+  right: 50%;
+  transform-origin: right center;
+  background: linear-gradient(270deg, rgba(210, 235, 245, 0.85), transparent);
+}
+
+.air-jet.right {
+  left: 50%;
+  transform-origin: left center;
+  background: linear-gradient(90deg, rgba(210, 235, 245, 0.85), transparent);
+}
+
+.phase-unlock .air-jet {
+  animation: air-hiss 0.6s ease-out 0.05s forwards;
+}
+
+@keyframes air-hiss {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) scaleX(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50%) scaleX(1);
+  }
+}
+
+/* vapor bleeding out of the depressurizing seam once the door unlocks */
+.door-vapor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.vapor-puff {
+  position: absolute;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(220, 235, 240, 0.5) 0%,
+    rgba(200, 220, 230, 0.16) 45%,
+    transparent 72%
+  );
+  filter: blur(6px);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.4);
+  mix-blend-mode: screen;
+}
+
+.vapor-puff.p1 {
+  top: 18%;
+  --drift: -30px;
+}
+
+.vapor-puff.p2 {
+  top: 34%;
+  --drift: 45px;
+}
+
+.vapor-puff.p3 {
+  top: 50%;
+  --drift: -50px;
+}
+
+.vapor-puff.p4 {
+  top: 66%;
+  --drift: 35px;
+}
+
+.vapor-puff.p5 {
+  top: 82%;
+  --drift: -25px;
+}
+
+.phase-unlock .vapor-puff,
+.phase-open .vapor-puff {
+  animation: vapor-rise 2.2s ease-out forwards;
+}
+
+.phase-unlock .vapor-puff.p1,
+.phase-open .vapor-puff.p1 {
+  animation-delay: 0s;
+}
+
+.phase-unlock .vapor-puff.p2,
+.phase-open .vapor-puff.p2 {
+  animation-delay: 0.15s;
+}
+
+.phase-unlock .vapor-puff.p3,
+.phase-open .vapor-puff.p3 {
+  animation-delay: 0.05s;
+}
+
+.phase-unlock .vapor-puff.p4,
+.phase-open .vapor-puff.p4 {
+  animation-delay: 0.25s;
+}
+
+.phase-unlock .vapor-puff.p5,
+.phase-open .vapor-puff.p5 {
+  animation-delay: 0.1s;
+}
+
+@keyframes vapor-rise {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  15% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--drift, 40px)), calc(-50% - 80px)) scale(1.9);
+  }
 }
 
 .door-scanline {
@@ -473,10 +643,10 @@
 @keyframes seam-pulse {
   0%,
   100% {
-    filter: brightness(0.8);
+    filter: saturate(0.55) brightness(0.7) contrast(1.05);
   }
   50% {
-    filter: brightness(1.25);
+    filter: saturate(0.55) brightness(1.02) contrast(1.05);
   }
 }
 
