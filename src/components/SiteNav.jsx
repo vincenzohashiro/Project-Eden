@@ -1,23 +1,27 @@
 import { NavLink } from 'react-router-dom'
+import logoImg from '../assets/ProjectEden2.png'
 
 function SiteNav() {
   return (
     <nav className="site-nav">
       <NavLink to="/" end className="site-nav-brand">
-        PROJECT EDEN
+        <span className="site-nav-brand-ring">
+          <img src={logoImg} alt="" className="site-nav-brand-logo" />
+        </span>
+        <span className="site-nav-brand-text">
+          <span className="site-nav-brand-title">PROJECT EDEN</span>
+          <span className="site-nav-brand-sub">プロジェクト・エデン</span>
+        </span>
       </NavLink>
       <div className="site-nav-links">
         <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : undefined)}>
           Home
         </NavLink>
         <NavLink to="/shop" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-          Customs
+          Models
         </NavLink>
         <NavLink to="/server" className={({ isActive }) => (isActive ? 'active' : undefined)}>
           Server
-        </NavLink>
-        <NavLink to="/portfolio" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-          Portfolio
         </NavLink>
         <NavLink to="/pricing" className={({ isActive }) => (isActive ? 'active' : undefined)}>
           Pricing

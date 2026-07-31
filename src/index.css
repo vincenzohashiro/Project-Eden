@@ -9,6 +9,7 @@ html {
 }
 
 :root {
+  --nav-height: 64px;
   --void: #050607;
   --panel-hi: #3a4750;
   --panel-mid: #1e262c;
@@ -57,6 +58,21 @@ h2 {
   font-family: var(--display);
   font-weight: 700;
   color: var(--text-h);
+}
+
+/* UI chrome shouldn't look like editable text — leave real copy (p, span
+   labels) selectable, but don't show a text-input cursor over nav links,
+   buttons, and headings. */
+a,
+button,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 p {
