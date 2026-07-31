@@ -4,8 +4,10 @@ import logoImg from '../assets/ProjectEden2.png'
 import cityImg from '../assets/360_F_705636748_af4V5ljPnQoZZads77zlxhdeyyBXFVLD.jpg'
 import pokeFrameGif from '../assets/PokeFrame.gif'
 import zenithSwordGif from '../assets/zenith_sword_terarria.gif'
+import smasherSkin from '../assets/smasher.png'
 import { fetchDiscordStatus } from '../lib/discordStatus'
 import SiteNav from '../components/SiteNav'
+import SkinViewer3D from '../components/SkinViewer3D'
 import './LandingPageTest.css'
 
 const CartIcon = () => (
@@ -209,12 +211,9 @@ function LandingPageTest() {
               </div>
             </div>
 
-            <div
-              className="lt-panel-art lt-art-smp"
-              style={{ '--city-url': `url(${cityImg})` }}
-            >
-              <div className="lt-art-photo" />
-              <div className="lt-art-tint" />
+            <div className="lt-panel-art lt-art-smp">
+              <SkinViewer3D texture={smasherSkin} className="lt-art-skin" />
+              <div className="lt-art-glow" />
               <em>In-Game</em>
             </div>
 

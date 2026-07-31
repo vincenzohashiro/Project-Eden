@@ -461,21 +461,16 @@
   border: 1px solid rgba(146, 194, 62, 0.3);
 }
 
-.lt-art-photo {
+.lt-art-skin {
   position: absolute;
   inset: 0;
-  background-image: var(--city-url);
-  background-size: cover;
-  background-position: center 40%;
-  filter: saturate(1.1) brightness(0.7);
 }
 
-.lt-art-tint {
+.lt-art-glow {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(10, 20, 4, 0.15), rgba(4, 10, 2, 0.78)),
-    radial-gradient(circle at 30% 20%, rgba(146, 194, 62, 0.3), transparent 60%);
-  mix-blend-mode: multiply;
+  background: radial-gradient(circle at 50% 30%, rgba(146, 194, 62, 0.16), transparent 65%);
+  pointer-events: none;
 }
 
 .lt-art-smp em {
