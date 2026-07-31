@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import logoImg from '../assets/ProjectEden2.png'
 import cityImg from '../assets/360_F_705636748_af4V5ljPnQoZZads77zlxhdeyyBXFVLD.jpg'
 import pokeFrameGif from '../assets/PokeFrame.gif'
 import zenithSwordGif from '../assets/zenith_sword_terarria.gif'
 import smasherSkin from '../assets/smasher.png'
 import { fetchDiscordStatus } from '../lib/discordStatus'
 import SiteNav from '../components/SiteNav'
+import SiteFooter from '../components/SiteFooter'
 import SkinViewer3D from '../components/SkinViewer3D'
 import './LandingPageTest.css'
 
@@ -99,10 +99,6 @@ const SMP_FEATURES = [
   ['bosses', 'Custom Bosses'],
   ['shops', 'Player Shops'],
   ['community', 'Active Community'],
-]
-
-const WAVE_HEIGHTS = [
-  6, 10, 16, 22, 14, 8, 18, 26, 12, 20, 30, 16, 10, 22, 28, 14, 8, 18, 24, 12,
 ]
 
 function LandingPageTest() {
@@ -316,29 +312,7 @@ function LandingPageTest() {
         </div>
       </section>
 
-      <footer className="lt-footer">
-        <span className="lt-footer-copy">
-          Project Eden &copy; {new Date().getFullYear()}
-          <br />
-          All Rights Reserved
-        </span>
-
-        <div className="lt-waveform">
-          <span className="lt-wave-bars">
-            {WAVE_HEIGHTS.map((h, i) => (
-              <span key={i} className="lt-wave-bar" style={{ '--h': `${h}px` }} />
-            ))}
-          </span>
-          <span className="lt-wave-icon"><img src={logoImg} alt="" /></span>
-          <span className="lt-wave-bars">
-            {WAVE_HEIGHTS.slice().reverse().map((h, i) => (
-              <span key={i} className="lt-wave-bar" style={{ '--h': `${h}px` }} />
-            ))}
-          </span>
-        </div>
-
-        <span className="lt-footer-note">Made With &hearts; For The Community</span>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }
