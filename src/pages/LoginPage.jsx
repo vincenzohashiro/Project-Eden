@@ -1,7 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HeroPanel from '../components/HeroPanel'
 import { useAuth } from '../context/AuthContext'
+import { supabase } from '../lib/supabase'
 import './LoginPage.css'
 
 const DiscordIcon = () => (
@@ -13,10 +14,29 @@ const DiscordIcon = () => (
 function LoginPage() {
   const { user, loading, loginWithDiscord } = useAuth()
   const navigate = useNavigate()
+  const [error, setError] = useState(null)
+  const [pending, setPending] = useState(false)
 
   useEffect(() => {
     if (!loading && user) navigate('/profile')
   }, [loading, user, navigate])
+
+  const handleDiscordLogin = async () => {
+    if (!supabase) {
+      setError('Sign-in isn\'t configured yet (missing Supabase environment variables).')
+      return
+    }
+
+    setError(null)
+    setPending(true)
+    const { error: authError } = await loginWithDiscord('/profile')
+    if (authError) {
+      console.error('Discord sign-in failed:', authError)
+      setError(authError.message || 'Discord sign-in failed. Please try again.')
+      setPending(false)
+    }
+    // on success the browser navigates away to Discord, so no need to reset pending
+  }
 
   return (
     <div className="login-page">
@@ -29,10 +49,17 @@ function LoginPage() {
             and sync your identity across the server and shop.
           </p>
 
-          <button type="button" className="btn-discord" onClick={() => loginWithDiscord('/profile')}>
+          <button
+            type="button"
+            className="btn-discord"
+            onClick={handleDiscordLogin}
+            disabled={pending}
+          >
             <DiscordIcon />
-            Continue with Discord
+            {pending ? 'Redirecting…' : 'Continue with Discord'}
           </button>
+
+          {error && <p className="login-error">{error}</p>}
 
           <p className="login-hint">You'll be redirected to Discord to authorize.</p>
         </HeroPanel>
