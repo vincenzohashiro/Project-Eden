@@ -67,7 +67,7 @@ function LandingPage() {
                   <Link to="/shop" className="btn btn-sp eden-hero-btn-sm">
                     Browse Store
                   </Link>
-                  <a href="#discord" className="btn btn-sp-outline eden-hero-btn-sm">
+                  <a href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer" className="btn btn-sp-outline eden-hero-btn-sm">
                     How to Order
                   </a>
                 </div>
@@ -101,7 +101,7 @@ function LandingPage() {
             <span className="tag-sep">|</span>
             <Link to="/shop">Resource Pack</Link>
             <span className="tag-sep">|</span>
-            <a href="#discord">Fast Delivery</a>
+            <a href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer">Fast Delivery</a>
           </div>
         </Reveal>
 
@@ -115,7 +115,7 @@ function LandingPage() {
               </div>
 
               <div className="eden-hero-actions">
-                <a href="#discord" className="btn btn-primary eden-hero-btn-sm">
+                <a href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer" className="btn btn-primary eden-hero-btn-sm">
                   Join Server
                 </a>
                 <Link to="/server" className="btn btn-ghost eden-hero-btn-sm">
@@ -274,7 +274,7 @@ function LandingPage() {
               reworks, and structures built to spec for creators who need
               something the catalog doesn't cover yet.
             </p>
-            <a className="btn btn-sp" href="#discord">
+            <a className="btn btn-sp" href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer">
               Request a commission
             </a>
           </Reveal>
@@ -412,7 +412,7 @@ function LandingPage() {
             </span>
           </div>
 
-          <a className="btn btn-ghost btn-lg" href="#discord">
+          <a className="btn btn-ghost btn-lg" href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer">
             Join Discord
           </a>
         </div>
