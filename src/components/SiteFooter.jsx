@@ -81,7 +81,7 @@ function SiteFooter() {
               <p className="site-footer-tagline">
                 Two worlds, One connection. A shop and A Server in one website.
               </p>
-              <a href="#discord" className="site-footer-social" aria-label="Discord">
+              <a href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer" className="site-footer-social" aria-label="Discord">
                 <DiscordIcon />
               </a>
             </div>
@@ -103,7 +103,7 @@ function SiteFooter() {
                   Community
                 </span>
                 <span className="site-footer-col-underline" />
-                <a href="#discord">Discord Server</a>
+                <a href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer">Discord Server</a>
                 <Link to="/server">Server</Link>
               </div>
 

@@ -196,7 +196,7 @@ function LandingPageTest() {
               </p>
 
               <div className="lt-actions">
-                <a href="#discord" className="lt-btn lt-btn-fill lt-green">
+                <a href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer" className="lt-btn lt-btn-fill lt-green">
                   <ArrowIcon />
                   Join Server
                 </a>

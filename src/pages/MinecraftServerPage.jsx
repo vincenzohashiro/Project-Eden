@@ -66,7 +66,7 @@ function MinecraftServerPage() {
               <span className="ip">play.projecteden.net</span>
               <span className="btn-hint">Click to copy</span>
             </button>
-            <a className="btn btn-ghost" href="#discord">
+            <a className="btn btn-ghost" href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer">
               Join Discord
             </a>
           </div>

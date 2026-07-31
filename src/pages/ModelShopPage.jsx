@@ -499,7 +499,7 @@ function ModelShopPage() {
               come to life?
             </h3>
           </div>
-          <a href="#discord" className="shop-cta-btn">
+          <a href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer" className="shop-cta-btn">
             <span>Start a Project</span>
             <em>&#8656; Now! &#8658;</em>
           </a>

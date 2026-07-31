@@ -26,9 +26,9 @@ function SiteNav() {
         <NavLink to="/pricing" className={({ isActive }) => (isActive ? 'active' : undefined)}>
           Pricing
         </NavLink>
-        <a href="#discord">Discord</a>
+        <a href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer">Discord</a>
       </div>
-      <a href="#discord" className="site-nav-join">
+      <a href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer" className="site-nav-join">
         Join Discord
       </a>
     </nav>
