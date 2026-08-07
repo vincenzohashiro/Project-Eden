@@ -22,6 +22,7 @@
   display: flex;
   flex-direction: column;
   padding-top: var(--nav-height);
+  overflow-x: hidden;
   background: var(--void);
   color: var(--text);
   font-family: var(--sans);
@@ -297,7 +298,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  min-height: 0;
+  min-height: 280px;
   border-radius: 14px;
   overflow: hidden;
 }
@@ -788,5 +789,33 @@
 @media (max-width: 520px) {
   .lt-explore-grid {
     grid-template-columns: 1fr;
+  }
+
+  .lt-hero {
+    padding: 14px;
+  }
+
+  .lt-panel {
+    padding: 20px 18px 18px;
+  }
+
+  .lt-panel-art {
+    min-height: 220px;
+  }
+
+  .lt-actions {
+    max-width: none;
+  }
+
+  .lt-status-block {
+    flex-basis: 100%;
+  }
+
+  .lt-thruster.left {
+    left: 24px;
+  }
+
+  .lt-thruster.right {
+    right: 24px;
   }
 }
