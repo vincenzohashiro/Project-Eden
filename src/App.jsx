@@ -13,12 +13,14 @@ import MinecraftServerPage from './pages/MinecraftServerPage'
 import ModelShopPage from './pages/ModelShopPage'
 import LoginPage from './pages/LoginPage'
 import ProfilePage from './pages/ProfilePage'
+import EdenEnginePage from './pages/EdenEnginePage'
 import ComingSoonPage from './pages/ComingSoonPage'
 import './App.css'
 
 const BACKDROPS = {
   '/server': ServerBackdrop,
   '/shop': ShopBackdrop,
+  '/EdenEngine': ServerBackdrop,
 }
 
 function AnimatedRoutes() {
@@ -44,6 +46,7 @@ function AnimatedRoutes() {
           <Route path="/shop" element={<ModelShopPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/EdenEngine" element={<EdenEnginePage />} />
           <Route
             path="/portfolio"
             element={

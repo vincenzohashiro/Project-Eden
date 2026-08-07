@@ -1,0 +1,21 @@
+[Unit]
+Description=Project Eden Minecraft Panel API
+After=network.target
+
+[Service]
+Type=simple
+User=panel
+Group=panel
+WorkingDirectory=/opt/mc-panel/panel-server
+EnvironmentFile=/opt/mc-panel/panel-server/.env
+ExecStart=/usr/bin/node dist/index.js
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=strict
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=mc-panel-api
+
+[Install]
+WantedBy=multi-user.target
