@@ -6,7 +6,9 @@ import EdenDatabasesPanel from '../components/EdenDatabasesPanel'
 import EdenFilesPanel from '../components/EdenFilesPanel'
 import EdenNetworkPanel from '../components/EdenNetworkPanel'
 import EdenOverviewPanel from '../components/EdenOverviewPanel'
+import EdenPlayersPanel from '../components/EdenPlayersPanel'
 import EdenSchedulesPanel from '../components/EdenSchedulesPanel'
+import EdenSettingsPanel from '../components/EdenSettingsPanel'
 import EdenSidebar from '../components/EdenSidebar'
 import EdenStartupPanel from '../components/EdenStartupPanel'
 import EdenStatCard from '../components/EdenStatCard'
@@ -25,6 +27,19 @@ import {
 import './EdenEnginePage.css'
 
 const STATS_HISTORY_LIMIT = 30
+
+// Pterodactyl's CPU limit is a percentage of one core (100 = 1 core, 0 =
+// unlimited) — not the CPU's brand/model, which the Client API doesn't expose.
+function formatCpuLimit(cpuLimitPercent) {
+  if (!cpuLimitPercent) return 'Unlimited'
+  const cores = cpuLimitPercent / 100
+  return `of ${cores} core${cores === 1 ? '' : 's'}`
+}
+
+function cpuPercentOfLimit(stats) {
+  if (!stats.cpuLimitPercent) return stats.cpuPercent
+  return (stats.cpuPercent / stats.cpuLimitPercent) * 100
+}
 
 function EdenEnginePage() {
   const { user, profile, loading } = useAuth()
@@ -128,7 +143,8 @@ function EdenEnginePage() {
               <EdenStatCard
                 label="CPU"
                 value={stats ? `${stats.cpuPercent.toFixed(0)}%` : '—'}
-                percent={stats?.cpuPercent}
+                subValue={stats ? formatCpuLimit(stats.cpuLimitPercent) : null}
+                percent={stats ? cpuPercentOfLimit(stats) : null}
               />
               <EdenStatCard
                 label="Memory"
@@ -161,7 +177,8 @@ function EdenEnginePage() {
               large
               label="CPU"
               value={stats ? `${stats.cpuPercent.toFixed(0)}%` : '—'}
-              percent={stats?.cpuPercent}
+              subValue={stats ? formatCpuLimit(stats.cpuLimitPercent) : null}
+              percent={stats ? cpuPercentOfLimit(stats) : null}
               history={statsHistory.map((s) => s.cpuPercent)}
             />
             <EdenStatCard
@@ -189,12 +206,14 @@ function EdenEnginePage() {
           </div>
         )}
 
+        {activeTab === 'players' && <EdenPlayersPanel />}
         {activeTab === 'databases' && <EdenDatabasesPanel />}
         {activeTab === 'schedules' && <EdenSchedulesPanel />}
         {activeTab === 'backups' && <EdenBackupsPanel />}
         {activeTab === 'network' && <EdenNetworkPanel />}
         {activeTab === 'startup' && <EdenStartupPanel />}
         {activeTab === 'subusers' && <EdenSubusersPanel />}
+        {activeTab === 'settings' && <EdenSettingsPanel />}
         {activeTab === 'files' && <EdenFilesPanel />}
       </div>
     </div>

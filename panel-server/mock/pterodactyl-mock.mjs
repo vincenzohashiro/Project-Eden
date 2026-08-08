@@ -23,6 +23,9 @@ let state = 'offline' // starting | running | stopping | offline
 let startedAt = null
 let rxBytes = 1_000_000
 let txBytes = 500_000
+let serverName = 'Project Eden'
+let serverDescription = 'The main Project Eden Minecraft server.'
+let reinstalling = false
 
 function json(res, code, body) {
   res.writeHead(code, { 'Content-Type': 'application/json' })
@@ -165,6 +168,7 @@ const server = createServer(async (req, res) => {
       attributes: {
         current_state: state,
         is_suspended: false,
+        is_installing: reinstalling,
         resources: {
           memory_bytes: state === 'running' ? 1_200_000_000 + Math.random() * 500_000_000 : 0,
           cpu_absolute: state === 'running' ? Math.random() * 40 : 0,
@@ -185,7 +189,39 @@ const server = createServer(async (req, res) => {
   }
 
   if (p === PREFIX && method === 'GET') {
-    return json(res, 200, { attributes: { limits: { memory: 4096, disk: 8192, cpu: 200 } } })
+    return json(res, 200, {
+      attributes: {
+        name: serverName,
+        description: serverDescription,
+        identifier: SERVER_ID,
+        node: 'Mock Node 1',
+        sftp_details: { ip: '127.0.0.1', port: 2022 },
+        limits: { memory: 4096, disk: 8192, cpu: 200 },
+      },
+    })
+  }
+
+  if (p === '/api/client/account' && method === 'GET') {
+    return json(res, 200, { attributes: { username: 'mock-admin' } })
+  }
+
+  if (p === `${PREFIX}/settings/rename` && method === 'POST') {
+    const { name, description } = JSON.parse((await readBody(req)) || '{}')
+    serverName = name
+    serverDescription = description ?? ''
+    console.log('[ptero-mock] renamed server:', serverName)
+    return json(res, 204)
+  }
+
+  if (p === `${PREFIX}/settings/reinstall` && method === 'POST') {
+    console.log('[ptero-mock] reinstall triggered')
+    reinstalling = true
+    state = 'offline'
+    startedAt = null
+    setTimeout(() => {
+      reinstalling = false
+    }, 3000)
+    return json(res, 204)
   }
 
   if (p === `${PREFIX}/websocket` && method === 'GET') {

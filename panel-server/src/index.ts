@@ -9,8 +9,10 @@ import { databasesRoutes } from './routes/databases.js'
 import { filesRoutes } from './routes/files.js'
 import { healthRoutes } from './routes/health.js'
 import { networkRoutes } from './routes/network.js'
+import { playersRoutes } from './routes/players.js'
 import { powerRoutes } from './routes/power.js'
 import { schedulesRoutes } from './routes/schedules.js'
+import { settingsRoutes } from './routes/settings.js'
 import { startupRoutes } from './routes/startup.js'
 import { statsRoutes } from './routes/stats.js'
 import { statusRoutes } from './routes/status.js'
@@ -36,6 +38,8 @@ await app.register(backupsRoutes)
 await app.register(networkRoutes)
 await app.register(startupRoutes)
 await app.register(subusersRoutes)
+await app.register(settingsRoutes)
+await app.register(playersRoutes)
 
 try {
   // 127.0.0.1 only — nginx is the sole internet-facing entry point in production.

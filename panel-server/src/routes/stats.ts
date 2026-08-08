@@ -39,6 +39,7 @@ export async function statsRoutes(app: FastifyInstance) {
 
     return {
       cpuPercent: r.cpu_absolute,
+      cpuLimitPercent: limits.cpuLimitPercent,
       memory: { usedBytes: r.memory_bytes, totalBytes: limits.memoryBytes },
       disk: { usedBytes: r.disk_bytes, totalBytes: limits.diskBytes },
       network,
