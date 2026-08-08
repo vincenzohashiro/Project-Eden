@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 const ERROR_RE = /ERROR|SEVERE|WARN/i
 
@@ -26,11 +26,23 @@ function EdenConsolePanel({ status, consoleSocket }) {
   const [filter, setFilter] = useState('all')
   const [command, setCommand] = useState('')
   const logRef = useRef(null)
+  const stickToBottom = useRef(true)
 
   const visibleLines = useMemo(() => {
     if (filter !== 'errors') return lines
     return lines.filter((line) => line.kind === 'error' || ERROR_RE.test(line.text))
   }, [lines, filter])
+
+  useEffect(() => {
+    const el = logRef.current
+    if (el && stickToBottom.current) el.scrollTop = el.scrollHeight
+  }, [visibleLines])
+
+  const handleLogScroll = () => {
+    const el = logRef.current
+    if (!el) return
+    stickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 40
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -88,7 +100,7 @@ function EdenConsolePanel({ status, consoleSocket }) {
         </div>
       </div>
 
-      <div className="eden-console-log" ref={logRef}>
+      <div className="eden-console-log" ref={logRef} onScroll={handleLogScroll}>
         {visibleLines.length === 0 && <div className="eden-console-empty">No console output yet.</div>}
         {visibleLines.map((line) => (
           <div key={line.id} className={`eden-console-line eden-console-line-${line.kind}`}>

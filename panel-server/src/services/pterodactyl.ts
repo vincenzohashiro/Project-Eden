@@ -49,6 +49,10 @@ interface ServerDetailsResponse {
 interface ServerLimits {
   memoryBytes: number
   diskBytes: number
+  // Pterodactyl expresses CPU limit as a percentage of one core (100 = 1
+  // core, 200 = 2 cores, 0 = unlimited) — this is the egg's allocation, not
+  // the physical CPU model, which Pterodactyl's Client API doesn't expose.
+  cpuLimitPercent: number
 }
 
 const LIMITS_TTL_MS = 5 * 60_000
@@ -61,6 +65,7 @@ export async function getServerLimits(): Promise<ServerLimits> {
   const value: ServerLimits = {
     memoryBytes: data!.attributes.limits.memory * 1024 * 1024,
     diskBytes: data!.attributes.limits.disk * 1024 * 1024,
+    cpuLimitPercent: data!.attributes.limits.cpu,
   }
   limitsCache = { value, expiresAt: Date.now() + LIMITS_TTL_MS }
   return value

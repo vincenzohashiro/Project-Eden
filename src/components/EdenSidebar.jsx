@@ -12,6 +12,7 @@ const GENERAL_TABS = [
   { id: 'console', label: 'Console' },
   { id: 'overview', label: 'Overview' },
   { id: 'stats', label: 'Stats' },
+  { id: 'players', label: 'Players' },
 ]
 
 const SERVER_TABS = [
@@ -21,6 +22,7 @@ const SERVER_TABS = [
   { id: 'network', label: 'Network' },
   { id: 'startup', label: 'Startup' },
   { id: 'subusers', label: 'Subusers' },
+  { id: 'settings', label: 'Settings' },
 ]
 
 function EdenSidebar({ status, stats, pending, onStart, onStop, onRestart, onKill, activeTab, onSelectTab }) {

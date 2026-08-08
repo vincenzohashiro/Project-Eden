@@ -14,6 +14,6 @@ export async function fetchUserRole(userId: string): Promise<string | null> {
     .eq('id', userId)
     .single()
 
-  if (error || !data) return null
-  return data.role as string
+  if (error) return null
+  return data?.role ?? null
 }
