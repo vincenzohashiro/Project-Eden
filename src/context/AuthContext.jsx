@@ -68,7 +68,7 @@ export function AuthProvider({ children }) {
     return supabase.auth.signInWithOAuth({
       provider: 'discord',
       options: {
-        redirectTo: `${window.location.origin}${redirectPath}`,
+        redirectTo: `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, '')}${redirectPath}`,
         scopes: 'identify email',
       },
     })

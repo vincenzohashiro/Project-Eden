@@ -117,7 +117,7 @@ function AppChrome() {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <RouteTransition />
         <AppChrome />
       </BrowserRouter>
