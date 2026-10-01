@@ -103,6 +103,41 @@ const SMP_FEATURES = [
   ['community', 'Active Community'],
 ]
 
+// static hardware detailing shared by both hero panels: corner screws, an
+// edge ruler, a header rail and a patch of circuit traces in the empty
+// lower corner. Purely decorative.
+function PanelDecor() {
+  return (
+    <span className="lt-decor" aria-hidden="true">
+      <span className="lt-decor-screws" />
+      <span className="lt-decor-ruler" />
+      <span className="lt-decor-rail" />
+      <svg className="lt-decor-circuit" viewBox="0 0 360 140" preserveAspectRatio="xMinYMax meet">
+        <g className="lt-circuit-traces">
+          <path d="M0 120 H60 L80 100 H170 L190 80 H260" />
+          <path d="M0 132 H120 L136 116 H220 L232 104 H330" />
+          <path d="M40 140 V128 L52 116 H96 L112 100" />
+          <path d="M150 140 V124 L166 108 H200" />
+          <path d="M260 80 V58 L276 42 H340" />
+          <path d="M80 100 V70 L94 56 H150" />
+        </g>
+        <g className="lt-circuit-nodes">
+          <circle cx="260" cy="80" r="3" />
+          <circle cx="330" cy="104" r="3" />
+          <circle cx="112" cy="100" r="2.5" />
+          <circle cx="200" cy="108" r="2.5" />
+          <circle cx="340" cy="42" r="3" />
+          <circle cx="150" cy="56" r="2.5" />
+        </g>
+        <g className="lt-circuit-pads">
+          <rect x="296" y="96" width="16" height="16" />
+          <rect x="176" y="72" width="12" height="12" />
+        </g>
+      </svg>
+    </span>
+  )
+}
+
 function LandingPageTest() {
   const [status, setStatus] = useState(null)
 
@@ -127,6 +162,7 @@ function LandingPageTest() {
 
       <section className="lt-hero">
         <div className="lt-panel lt-panel-customs" id="customs">
+          <PanelDecor />
           <span className="lt-tag lt-tag-red">
             <span className="lt-tag-num">01</span>
             <span className="lt-tag-sep">&rsaquo;</span>
@@ -180,6 +216,7 @@ function LandingPageTest() {
         </div>
 
         <div className="lt-panel lt-panel-smp" id="smp">
+          <PanelDecor />
           <span className="lt-tag lt-tag-green">
             <span className="lt-tag-num">02</span>
             <span className="lt-tag-sep">&rsaquo;</span>

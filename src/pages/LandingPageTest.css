@@ -863,11 +863,6 @@
   --lt-edge-dim: rgba(146, 194, 62, 0.22);
 }
 
-.lt-panel > :not(.lt-thruster) {
-  position: relative;
-  z-index: 1;
-}
-
 /* clip-path shears the border off the cut corners - redraw those two
    diagonals so the frame reads as one continuous machined edge, and lay
    faint scanlines under the content */
@@ -1308,4 +1303,177 @@
 
 .hb-vignette {
   background: radial-gradient(ellipse 90% 85% at 50% 40%, transparent 60%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* =====================================================================
+   hero panel hardware: screws, edge ruler, header rail, circuit traces
+   ===================================================================== */
+
+.lt-panel > :not(.lt-thruster):not(.lt-decor) {
+  position: relative;
+  z-index: 1;
+}
+
+.lt-decor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.lt-decor > * {
+  position: absolute;
+}
+
+/* screw heads just inside each corner (the cut corners get theirs inset) */
+.lt-decor-screws {
+  --screw: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.28) 0 1px,
+    #2a3036 1.5px 3.2px,
+    rgba(0, 0, 0, 0.8) 3.6px 4.4px,
+    transparent 5px
+  );
+
+  inset: 8px;
+  background:
+    var(--screw) left 0 top 0 / 12px 12px no-repeat,
+    var(--screw) right calc(var(--lt-cut) - 2px) top 0 / 12px 12px no-repeat,
+    var(--screw) left calc(var(--lt-cut) - 2px) bottom 0 / 12px 12px no-repeat,
+    var(--screw) right 0 bottom 0 / 12px 12px no-repeat;
+}
+
+/* graduated ruler down the panel's outer edge */
+.lt-decor-ruler {
+  top: 22%;
+  bottom: 22%;
+  width: 9px;
+  background:
+    repeating-linear-gradient(180deg, var(--lt-edge-dim) 0 1px, transparent 1px 9px) left / 5px 100% no-repeat,
+    repeating-linear-gradient(180deg, var(--lt-edge) 0 1px, transparent 1px 45px) left / 9px 100% no-repeat;
+}
+
+.lt-panel-customs .lt-decor-ruler {
+  left: 10px;
+}
+
+.lt-panel-smp .lt-decor-ruler {
+  right: 10px;
+  transform: scaleX(-1);
+}
+
+/* dashed rail linking the section tag to the top-edge scale */
+.lt-decor-rail {
+  top: 43px;
+  left: 300px;
+  right: calc(var(--lt-cut) + 166px);
+  height: 5px;
+  background:
+    linear-gradient(var(--lt-edge), var(--lt-edge)) left center / 5px 5px no-repeat,
+    linear-gradient(var(--lt-edge), var(--lt-edge)) right center / 5px 5px no-repeat,
+    repeating-linear-gradient(90deg, var(--lt-edge-dim) 0 6px, transparent 6px 10px) center / calc(100% - 16px) 1px no-repeat;
+}
+
+/* circuit traces filling the empty lower corner behind the content */
+.lt-decor-circuit {
+  left: 18px;
+  bottom: 14px;
+  width: min(30%, 240px);
+  height: auto;
+  opacity: 0.4;
+}
+
+/* the SMP panel's lower area is already full (viewer + feature list) */
+.lt-panel-smp .lt-decor-circuit {
+  display: none;
+}
+
+.lt-circuit-traces path {
+  fill: none;
+  stroke: var(--lt-edge-dim);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+.lt-circuit-nodes circle {
+  fill: #050606;
+  stroke: var(--lt-edge);
+  stroke-width: 1.2;
+}
+
+.lt-circuit-pads rect {
+  fill: none;
+  stroke: var(--lt-edge-dim);
+  stroke-width: 1;
+}
+
+/* ---------- mobile-ready hero ---------- */
+
+@media (max-width: 1080px) {
+  .lt-decor-rail,
+  .lt-decor-circuit {
+    display: none;
+  }
+
+  /* the two model tiles sit side by side instead of stacking tall */
+  .lt-art-customs {
+    min-height: 0;
+  }
+
+  .lt-art-models {
+    flex-direction: row;
+  }
+
+  .lt-art-model {
+    height: 240px;
+    flex: 1 1 0;
+  }
+
+  /* status and features side by side under the viewer */
+  .lt-panel-status {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 520px) {
+  /* the top scale collides with the section tag at phone width */
+  .lt-panel::after {
+    display: none;
+  }
+
+  .lt-decor-ruler {
+    display: none;
+  }
+
+  .lt-art-model {
+    height: 190px;
+  }
+
+  .lt-art-model em {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  .lt-art-smp {
+    min-height: 300px;
+  }
+
+  .lt-panel-status {
+    gap: 16px;
+  }
+
+  .lt-panel-status .lt-status-block {
+    flex: 1 1 120px;
+    min-width: 0;
+  }
+
+  .lt-feature-list li {
+    font-size: 11.5px;
+  }
+
+  .lt-tagrow span {
+    padding: 6px 10px;
+  }
 }
