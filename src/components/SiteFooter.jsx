@@ -8,8 +8,8 @@ const VERIFIED_BUYERS = [
   'Lemoncraft',
   'Valthorne SMP',
   'Yakisova',
-  'Ellipsis SMP',
-  'Sovereign Developers',
+  'Ellipsis SMP Sovereign',
+  'Developers',
 ]
 
 
