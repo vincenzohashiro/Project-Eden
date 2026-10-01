@@ -9,9 +9,9 @@ const STATE_LABELS = {
 }
 
 function formatUptime(lastChangedAt) {
-  if (!lastChangedAt) return '—'
+  if (!lastChangedAt) return '-'
   const ms = Date.now() - new Date(lastChangedAt).getTime()
-  if (ms < 0) return '—'
+  if (ms < 0) return '-'
   const totalSeconds = Math.floor(ms / 1000)
   const hours = Math.floor(totalSeconds / 3600)
   const minutes = Math.floor((totalSeconds % 3600) / 60)
@@ -38,14 +38,14 @@ function EdenOverviewPanel({ status, stats }) {
       </div>
       <div className="eden-overview-row">
         <span>Uptime</span>
-        <span>{state === 'running' ? formatUptime(status.lastChangedAt) : '—'}</span>
+        <span>{state === 'running' ? formatUptime(status.lastChangedAt) : '-'}</span>
       </div>
       <div className="eden-overview-row">
         <span>CPU / Memory</span>
-        <span>{stats ? `${stats.cpuPercent.toFixed(0)}% · ${formatBytes(stats.memory.usedBytes)}` : '—'}</span>
+        <span>{stats ? `${stats.cpuPercent.toFixed(0)}% · ${formatBytes(stats.memory.usedBytes)}` : '-'}</span>
       </div>
       <div className="eden-overview-row">
-        <span>Players ({players ? `${players.online}/${players.max}` : '—'})</span>
+        <span>Players ({players ? `${players.online}/${players.max}` : '-'})</span>
         <span />
       </div>
       {players?.names?.length ? (

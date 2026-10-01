@@ -819,3 +819,493 @@
     right: 24px;
   }
 }
+
+/* =====================================================================
+   detail layer - machined-panel finish on top of the base layout above.
+   Nothing here moves or resizes content; it only adds surface, edge and
+   instrument detail.
+   ===================================================================== */
+
+/* ---------- page ambience: colour bleed from each world ---------- */
+
+.lt-hero {
+  position: relative;
+  isolation: isolate;
+}
+
+.lt-hero::before {
+  content: '';
+  position: absolute;
+  inset: -40px 0 0;
+  z-index: -1;
+  background:
+    radial-gradient(45% 60% at 22% 40%, rgba(255, 59, 59, 0.07), transparent 70%),
+    radial-gradient(45% 60% at 78% 40%, rgba(146, 194, 62, 0.06), transparent 70%);
+  -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent);
+  mask-image: linear-gradient(180deg, #000 55%, transparent);
+  pointer-events: none;
+}
+
+/* ---------- hero panels: closed chamfers, grain, instrument ticks ---------- */
+
+.lt-panel {
+  --lt-edge: rgba(255, 255, 255, 0.2);
+  --lt-edge-dim: rgba(255, 255, 255, 0.08);
+}
+
+.lt-panel-customs {
+  --lt-edge: rgba(255, 59, 59, 0.7);
+  --lt-edge-dim: rgba(255, 59, 59, 0.22);
+}
+
+.lt-panel-smp {
+  --lt-edge: rgba(146, 194, 62, 0.7);
+  --lt-edge-dim: rgba(146, 194, 62, 0.22);
+}
+
+.lt-panel > :not(.lt-thruster) {
+  position: relative;
+  z-index: 1;
+}
+
+/* clip-path shears the border off the cut corners - redraw those two
+   diagonals so the frame reads as one continuous machined edge, and lay
+   faint scanlines under the content */
+.lt-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top right, transparent calc(50% - 0.75px), var(--lt-edge) 0 calc(50% + 0.75px), transparent 0)
+      top right / var(--lt-cut) var(--lt-cut) no-repeat,
+    linear-gradient(to top right, transparent calc(50% - 0.75px), var(--lt-edge) 0 calc(50% + 0.75px), transparent 0)
+      bottom left / var(--lt-cut) var(--lt-cut) no-repeat,
+    var(--scanlines);
+}
+
+/* graduated scale along the top edge + a registration bracket on the
+   square top-left corner */
+.lt-panel::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: calc(var(--lt-cut) + 18px);
+  height: 12px;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(90deg, var(--lt-edge-dim) 0 1px, transparent 1px 8px) top right / 129px 5px no-repeat,
+    repeating-linear-gradient(90deg, var(--lt-edge) 0 1px, transparent 1px 32px) top right / 129px 9px no-repeat,
+    linear-gradient(var(--lt-edge), var(--lt-edge)) top left / 12px 1px no-repeat,
+    linear-gradient(var(--lt-edge), var(--lt-edge)) top left / 1px 12px no-repeat;
+}
+
+/* ---------- wordmarks: brushed-metal white, split-signal red ---------- */
+
+.lt-word-white {
+  background: linear-gradient(180deg, #ffffff 0%, #e6edf1 48%, #a9b6be 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.6));
+}
+
+.lt-word-red {
+  text-shadow:
+    -1.5px 0 rgba(70, 214, 255, 0.28),
+    1.5px 0 rgba(255, 0, 72, 0.45),
+    0 0 26px rgba(255, 59, 59, 0.5);
+}
+
+.lt-word-green {
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 0 26px rgba(146, 194, 62, 0.45);
+}
+
+/* ---------- tag pills: lit leading segment ---------- */
+
+.lt-tag {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.lt-tag-num {
+  padding-right: 9px;
+  border-right: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+}
+
+.lt-tag-sep {
+  display: none;
+}
+
+/* ---------- buttons: machined, light catching the top edge ---------- */
+
+.lt-btn {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.lt-btn:active {
+  transform: translateY(1px);
+}
+
+/* a single highlight pass when the pointer arrives */
+.lt-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.28) 50%, transparent 65%);
+  transform: translateX(-110%);
+  pointer-events: none;
+}
+
+.lt-btn:hover::after {
+  transform: translateX(110%);
+  transition: transform 0.7s ease;
+}
+
+.lt-btn-fill.lt-red {
+  background: linear-gradient(180deg, #ff5a5a 0%, #ff3b3b 55%, #e12a2a 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.18),
+    0 6px 18px -8px rgba(255, 59, 59, 0.8);
+}
+
+.lt-btn-fill.lt-red:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.18),
+    0 0 26px rgba(255, 59, 59, 0.55);
+}
+
+.lt-btn-fill.lt-green {
+  background: linear-gradient(180deg, #a8d554 0%, #92c23e 55%, #7caa2f 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.16),
+    0 6px 18px -8px rgba(146, 194, 62, 0.8);
+}
+
+.lt-btn-fill.lt-green:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.16),
+    0 0 26px rgba(146, 194, 62, 0.55);
+}
+
+.lt-btn-outline {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.lt-btn-outline.lt-red::after {
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 59, 59, 0.22) 50%, transparent 65%);
+}
+
+.lt-btn-outline.lt-green::after {
+  background: linear-gradient(105deg, transparent 35%, rgba(146, 194, 62, 0.22) 50%, transparent 65%);
+}
+
+/* ---------- capability chips ---------- */
+
+.lt-tagrow {
+  border-top: none;
+  background: linear-gradient(90deg, var(--lt-edge-dim), transparent 85%) top left / 100% 1px no-repeat;
+}
+
+.lt-tagrow span {
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* ---------- model display tiles: lit stage, corner brackets ---------- */
+
+.lt-art-customs {
+  background:
+    var(--scanlines),
+    linear-gradient(180deg, rgba(255, 59, 59, 0.04), rgba(255, 255, 255, 0.01));
+  border-radius: 8px;
+}
+
+.lt-art-model {
+  --bk: rgba(255, 120, 120, 0.75);
+
+  border-radius: 6px;
+  border-color: rgba(255, 59, 59, 0.22);
+  background:
+    linear-gradient(var(--bk), var(--bk)) 6px 6px / 10px 1px no-repeat,
+    linear-gradient(var(--bk), var(--bk)) 6px 6px / 1px 10px no-repeat,
+    linear-gradient(var(--bk), var(--bk)) right 6px top 6px / 10px 1px no-repeat,
+    linear-gradient(var(--bk), var(--bk)) right 6px top 6px / 1px 10px no-repeat,
+    linear-gradient(var(--bk), var(--bk)) left 6px bottom 6px / 10px 1px no-repeat,
+    linear-gradient(var(--bk), var(--bk)) left 6px bottom 6px / 1px 10px no-repeat,
+    linear-gradient(var(--bk), var(--bk)) right 6px bottom 6px / 10px 1px no-repeat,
+    linear-gradient(var(--bk), var(--bk)) right 6px bottom 6px / 1px 10px no-repeat,
+    radial-gradient(ellipse 55% 22% at 50% 84%, rgba(255, 59, 59, 0.22), transparent 70%),
+    radial-gradient(ellipse 70% 60% at 50% 40%, rgba(255, 59, 59, 0.06), transparent 75%),
+    linear-gradient(180deg, rgba(255, 59, 59, 0.03), rgba(0, 0, 0, 0.35));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), inset 0 -30px 40px -30px rgba(0, 0, 0, 0.8);
+}
+
+.lt-art-model img {
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.7));
+}
+
+.lt-art-model em::before,
+.lt-art-smp em::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin: 0 9px 1px 0;
+  vertical-align: middle;
+  background: currentColor;
+  transform: rotate(45deg);
+}
+
+.lt-art-model em {
+  color: var(--lt-red-soft);
+  opacity: 0.85;
+}
+
+/* ---------- SMP viewer: holographic floor grid ---------- */
+
+.lt-art-smp {
+  --bk: rgba(195, 232, 150, 0.7);
+
+  border-radius: 8px;
+  background:
+    linear-gradient(var(--bk), var(--bk)) 8px 8px / 12px 1px no-repeat,
+    linear-gradient(var(--bk), var(--bk)) 8px 8px / 1px 12px no-repeat,
+    linear-gradient(var(--bk), var(--bk)) right 8px top 8px / 12px 1px no-repeat,
+    linear-gradient(var(--bk), var(--bk)) right 8px top 8px / 1px 12px no-repeat,
+    linear-gradient(var(--bk), var(--bk)) right 8px bottom 8px / 12px 1px no-repeat,
+    linear-gradient(var(--bk), var(--bk)) right 8px bottom 8px / 1px 12px no-repeat,
+    linear-gradient(180deg, #050807 0 50%, rgba(5, 8, 7, 0) 100%),
+    repeating-linear-gradient(90deg, rgba(146, 194, 62, 0.14) 0 1px, transparent 1px 26px),
+    repeating-linear-gradient(0deg, rgba(146, 194, 62, 0.14) 0 1px, transparent 1px 22px),
+    radial-gradient(ellipse 50% 14% at 50% 86%, rgba(146, 194, 62, 0.28), transparent 70%),
+    #050807;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.7);
+}
+
+.lt-art-glow {
+  background:
+    var(--scanlines),
+    radial-gradient(circle at 50% 30%, rgba(146, 194, 62, 0.16), transparent 65%);
+}
+
+/* ---------- status column: rail + capacity meter ---------- */
+
+.lt-status-block {
+  padding-left: 12px;
+  background:
+    linear-gradient(var(--lt-edge), var(--lt-edge)) top left / 1px 14px no-repeat,
+    linear-gradient(var(--lt-edge-dim), var(--lt-edge-dim)) top left / 1px 100% no-repeat;
+}
+
+.lt-status-title {
+  text-shadow: 0 0 10px rgba(146, 194, 62, 0.35);
+}
+
+.lt-status-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.lt-capacity {
+  display: block;
+  width: 100%;
+  max-width: 132px;
+  height: 5px;
+  margin: 4px 0 3px;
+  background: repeating-linear-gradient(90deg, rgba(146, 194, 62, 0.16) 0 5px, transparent 5px 7px);
+}
+
+.lt-capacity > span {
+  display: block;
+  height: 100%;
+  background: repeating-linear-gradient(90deg, var(--lt-green) 0 5px, transparent 5px 7px);
+  filter: drop-shadow(0 0 3px rgba(146, 194, 62, 0.6));
+}
+
+.lt-feature-list li {
+  padding: 2px 0;
+}
+
+/* ---------- explore eden ---------- */
+
+.lt-explore {
+  position: relative;
+  border-top: none;
+  background:
+    linear-gradient(90deg, transparent, rgba(70, 214, 255, 0.35) 50%, transparent) top center / 60% 1px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)) top / 100% 1px no-repeat;
+}
+
+.lt-explore-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--lt-blue-soft);
+  opacity: 0.85;
+}
+
+.lt-explore-eyebrow::before,
+.lt-explore-eyebrow::after {
+  content: '';
+  width: 72px;
+  height: 7px;
+}
+
+.lt-explore-eyebrow::before {
+  background:
+    linear-gradient(var(--lt-blue), var(--lt-blue)) right center / 5px 5px no-repeat,
+    linear-gradient(90deg, transparent, rgba(70, 214, 255, 0.55)) left center / calc(100% - 12px) 1px no-repeat;
+}
+
+.lt-explore-eyebrow::after {
+  background:
+    linear-gradient(var(--lt-blue), var(--lt-blue)) left center / 5px 5px no-repeat,
+    linear-gradient(270deg, transparent, rgba(70, 214, 255, 0.55)) right center / calc(100% - 12px) 1px no-repeat;
+}
+
+.lt-card {
+  --card-cut: 18px;
+  --card-edge: rgba(255, 255, 255, 0.14);
+
+  position: relative;
+  border-radius: 4px;
+  background:
+    linear-gradient(to top right, transparent calc(50% - 0.75px), var(--card-edge) 0 calc(50% + 0.75px), transparent 0)
+      top right / var(--card-cut) var(--card-cut) no-repeat,
+    linear-gradient(180deg, rgba(70, 214, 255, 0.035), transparent 45%),
+    var(--noise) 0 0 / 140px 140px,
+    #07090b;
+  background-blend-mode: normal, normal, overlay, normal;
+  clip-path: polygon(0 0, calc(100% - var(--card-cut)) 0, 100% var(--card-cut), 100% 100%, 0 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* lit top rail that charges across on hover */
+.lt-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 22px;
+  width: 44px;
+  height: 2px;
+  background: var(--lt-blue);
+  box-shadow: 0 0 10px rgba(70, 214, 255, 0.7);
+  opacity: 0.55;
+  transition: width 0.35s ease, opacity 0.35s ease;
+}
+
+/* registration bracket, bottom-right */
+.lt-card::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 10px;
+  height: 10px;
+  border-right: 1px solid rgba(70, 214, 255, 0.4);
+  border-bottom: 1px solid rgba(70, 214, 255, 0.4);
+  transition: border-color 0.2s ease;
+}
+
+.lt-card:hover {
+  --card-edge: var(--lt-blue);
+}
+
+.lt-card:hover::before {
+  width: calc(100% - 44px - var(--card-cut));
+  opacity: 1;
+}
+
+.lt-card:hover::after {
+  border-color: var(--lt-blue);
+}
+
+.lt-card-icon {
+  border-radius: 6px;
+  background: radial-gradient(circle at 50% 30%, rgba(70, 214, 255, 0.2), rgba(70, 214, 255, 0.05) 70%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 14px rgba(70, 214, 255, 0.12);
+}
+
+.lt-thumb {
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.lt-card:hover .lt-thumb {
+  color: var(--lt-blue-soft);
+  border-color: rgba(70, 214, 255, 0.3);
+}
+
+.lt-card-photo {
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px rgba(70, 214, 255, 0.18);
+}
+
+.lt-card-link svg {
+  transition: transform 0.2s ease;
+}
+
+.lt-card:hover .lt-card-link svg {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lt-btn::after,
+  .lt-card::before {
+    transition: none;
+  }
+}
+
+/* =====================================================================
+   home backdrop: faint neutral grid + barely-there corner warmth.
+   Fixed behind everything; content sections sit above it at z-index 1.
+   ===================================================================== */
+
+.lt-hero,
+.lt-explore {
+  z-index: 1;
+}
+
+.home-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(50% 45% at 0% 0%, rgba(255, 59, 59, 0.05), transparent 70%),
+    radial-gradient(50% 45% at 100% 0%, rgba(146, 194, 62, 0.04), transparent 70%),
+    var(--void);
+}
+
+.hb-grid,
+.hb-vignette {
+  position: absolute;
+  inset: 0;
+}
+
+.hb-grid {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px) 0 0 / 64px 64px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px) 0 0 / 64px 64px;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.4) 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.4) 70%, transparent 100%);
+}
+
+.hb-vignette {
+  background: radial-gradient(ellipse 90% 85% at 50% 40%, transparent 60%, rgba(0, 0, 0, 0.55) 100%);
+}

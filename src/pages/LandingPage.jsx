@@ -46,7 +46,7 @@ function LandingPage() {
     <>
       {/* first screen: hero + explore, fit together in one viewport */}
       <div className="landing-fold">
-      {/* section 1: hero — Eden Specialized / Minecraft Server, two separate panels */}
+      {/* section 1: hero - Eden Specialized / Minecraft Server, two separate panels */}
       <section className="eden-hero">
         <Reveal direction="left" className="eden-hero-panel eden-hero-specialized">
           <div className="eden-hero-sp-body">
@@ -58,7 +58,7 @@ function LandingPage() {
 
               <div className="eden-hero-sp-row">
                 <p className="eden-hero-description">
-                  Premium custom Minecraft models — player skins, mob
+                  Premium custom Minecraft models: player skins, mob
                   reworks, and builds crafted to spec for your world.
                 </p>
 
@@ -267,10 +267,10 @@ function LandingPage() {
             </span>
           </Reveal>
           <Reveal direction="right" delay={120} className="specialized-copy">
-            <span className="eyebrow sp-eyebrow">PROJECT EDEN — SPECIALIZED</span>
+            <span className="eyebrow sp-eyebrow">PROJECT EDEN SPECIALIZED</span>
             <h2>Beyond the standard build</h2>
             <p>
-              Our bespoke commission arm — one-off custom player models, mob
+              Our bespoke commission arm: one-off custom player models, mob
               reworks, and structures built to spec for creators who need
               something the catalog doesn't cover yet.
             </p>
@@ -303,7 +303,7 @@ function LandingPage() {
             <span className="eyebrow">LIVE SHOWCASE</span>
             <h2>Minecraft Server</h2>
             <p>
-              A living, breathing colony — every model in the shop first has
+              A living, breathing colony where every model in the shop first has
               to survive here.
             </p>
             <Link to="/server" className="btn btn-primary btn-lg">
@@ -385,7 +385,7 @@ function LandingPage() {
                 EdenBot <span className="preview-tag">APP</span>
               </span>
               <span className="preview-msg">
-                ⚡ New commission slot just opened — first come, first served.
+                ⚡ New commission slot just opened. First come, first served.
               </span>
             </div>
             <span className="preview-time">2m ago</span>

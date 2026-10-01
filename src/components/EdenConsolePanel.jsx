@@ -3,9 +3,9 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 const ERROR_RE = /ERROR|SEVERE|WARN/i
 
 function formatUptime(lastChangedAt) {
-  if (!lastChangedAt) return '—'
+  if (!lastChangedAt) return '-'
   const ms = Date.now() - new Date(lastChangedAt).getTime()
-  if (ms < 0) return '—'
+  if (ms < 0) return '-'
   const totalSeconds = Math.floor(ms / 1000)
   const hours = Math.floor(totalSeconds / 3600)
   const minutes = Math.floor((totalSeconds % 3600) / 60)
@@ -73,7 +73,7 @@ function EdenConsolePanel({ status, consoleSocket }) {
         <button type="button" className="btn btn-ghost" onClick={reconnect}>
           Reconnect
         </button>
-        <span className="eden-uptime">Uptime {status?.state === 'running' ? formatUptime(status.lastChangedAt) : '—'}</span>
+        <span className="eden-uptime">Uptime {status?.state === 'running' ? formatUptime(status.lastChangedAt) : '-'}</span>
       </div>
 
       <div className="eden-console-toolbar">

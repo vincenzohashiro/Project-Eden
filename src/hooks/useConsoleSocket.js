@@ -51,7 +51,7 @@ export function useConsoleSocket({ enabled }) {
       } else if (message.type === 'log') {
         appendLines([makeLine('log', message.line)])
       }
-      // Wings' console is a raw stdin/stdout pipe, not RCON — sending a
+      // Wings' console is a raw stdin/stdout pipe, not RCON - sending a
       // command has no structured reply. Its output just arrives later as
       // ordinary 'log' lines; the typed command itself is echoed locally by
       // sendCommand() below, optimistically, the moment it's sent.

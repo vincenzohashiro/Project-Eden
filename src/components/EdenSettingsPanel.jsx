@@ -117,7 +117,7 @@ function EdenSettingsPanel() {
           <div className="eden-danger-zone">
             <div>
               <strong>Reinstall server</strong>
-              <p>Reruns the egg's install script against this server. Can be destructive — check the egg before running.</p>
+              <p>Reruns the egg's install script against this server. Can be destructive, so check the egg before running.</p>
             </div>
             <button type="button" className="eden-btn danger" disabled={reinstalling} onClick={handleReinstall}>
               {reinstalling ? 'Starting…' : 'Reinstall'}

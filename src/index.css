@@ -23,7 +23,14 @@ html {
   --moss-dark: #4a6b1e;
   --border: rgba(70, 214, 255, 0.16);
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  /* fine film grain, shared by every textured surface */
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  /* 1px CRT scanlines */
+  --scanlines: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 3px);
+
+  /* three loaded faces, same on every device: Exo 2 for reading, Orbitron
+     for display, Share Tech Mono for data and labels */
+  --sans: 'Exo 2', system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: 'Share Tech Mono', ui-monospace, Consolas, monospace;
   --display: 'Orbitron', var(--sans);
 
@@ -60,7 +67,7 @@ h2 {
   color: var(--text-h);
 }
 
-/* UI chrome shouldn't look like editable text — leave real copy (p, span
+/* UI chrome shouldn't look like editable text - leave real copy (p, span
    labels) selectable, but don't show a text-input cursor over nav links,
    buttons, and headings. */
 a,
@@ -79,6 +86,27 @@ p {
   margin: 0;
 }
 
+/* form controls don't inherit type by default and fall back to the
+   browser's own font */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
 code {
   font-family: var(--mono);
+}
+
+::selection {
+  color: #021015;
+  background: var(--neon);
+}
+
+/* one consistent keyboard focus ring across every interactive element */
+:focus-visible {
+  outline: 2px solid var(--neon);
+  outline-offset: 3px;
 }

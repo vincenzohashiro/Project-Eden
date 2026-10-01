@@ -2,16 +2,8 @@ import { Link } from 'react-router-dom'
 import logoImg from '../assets/ProjectEden2.png'
 import Reveal from './Reveal'
 
-// Placeholders until real Discord "Verified Buyers" role members and
-// partner links/logos are wired in.
-const VERIFIED_BUYERS = [
-  'NovaPixel_',
-  'ShadowCrafter92',
-  'EmberWolfe',
-  'Kryptic_Void',
-  'AshenRogue',
-  'LunarByte',
-]
+// Partner link/logo is still a placeholder until it's wired in.
+const VERIFIED_BUYERS = ['Azuri', 'Dreiwhite', 'Havi', 'Fernn_', 'Niño', 'Sikatu', 'Zenshin']
 
 const PARTNERS = [{ name: 'Valthorne SMP', url: '#' }]
 
@@ -44,8 +36,19 @@ const InfoIcon = () => (
   </svg>
 )
 
-const CHAR_TYPE_SECONDS = 0.07
-const TYPE_GAP_SECONDS = 0.15
+const CheckIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true">
+    <path d="M5 12.5 10 17 19 7" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+)
+
+// cursor-tracked glow: writes the pointer position into CSS vars that the
+// card's spotlight layer reads
+const trackPointer = (e) => {
+  const rect = e.currentTarget.getBoundingClientRect()
+  e.currentTarget.style.setProperty('--mx', `${e.clientX - rect.left}px`)
+  e.currentTarget.style.setProperty('--my', `${e.clientY - rect.top}px`)
+}
 
 const DiscordIcon = () => (
   <svg width="16" height="12" viewBox="0 0 71 55" fill="currentColor" aria-hidden="true">
@@ -54,28 +57,20 @@ const DiscordIcon = () => (
 )
 
 function SiteFooter() {
-  let cumulativeDelay = 0
-  const buyerTimings = VERIFIED_BUYERS.map((name, index) => {
-    const text = index === VERIFIED_BUYERS.length - 1 ? name : `${name}, `
-    const duration = Math.max(text.length * CHAR_TYPE_SECONDS, 0.3)
-    const timing = { text, delay: cumulativeDelay, duration }
-    cumulativeDelay += duration + TYPE_GAP_SECONDS
-    return timing
-  })
-
   return (
     <footer className="site-footer">
       <div className="site-footer-top">
         <div className="site-footer-row site-footer-row-primary">
-          <div className="site-footer-brand-card">
+          <div className="site-footer-brand-card" onPointerMove={trackPointer}>
+            <span className="site-footer-spotlight" aria-hidden="true" />
             <div className="site-footer-brand">
               <div className="site-footer-brand-row">
                 <span className="site-footer-logo">
+                  <span className="site-footer-logo-orbit" aria-hidden="true" />
                   <img src={logoImg} alt="" />
                 </span>
                 <span className="site-footer-brand-text">
                   <span className="site-footer-title">PROJECT EDEN</span>
-                  <span className="site-footer-brand-sub">プロジェクト・エデン</span>
                 </span>
               </div>
               <p className="site-footer-tagline">
@@ -119,7 +114,8 @@ function SiteFooter() {
             </div>
           </div>
 
-          <div className="site-footer-partners-card">
+          <div className="site-footer-partners-card" onPointerMove={trackPointer}>
+            <span className="site-footer-spotlight" aria-hidden="true" />
             <span className="site-footer-partners-title">Our Partners</span>
 
             <div className="site-footer-partners-block">
@@ -144,22 +140,15 @@ function SiteFooter() {
 
             <div className="site-footer-partners-block">
               <span className="site-footer-col-subtitle">Verified Buyers</span>
-              <Reveal className="site-footer-buyer-line" direction="up">
-                {buyerTimings.map(({ text, duration, delay }) => (
-                  <span
-                    key={text}
-                    className="site-footer-buyer-type"
-                    style={{
-                      '--type-width': `${text.length}ch`,
-                      animationDuration: `${duration}s`,
-                      animationDelay: `${delay}s`,
-                      animationTimingFunction: `steps(${text.length}, end)`,
-                    }}
-                  >
-                    {text}
-                  </span>
+              <Reveal as="ul" className="site-footer-buyers" direction="up">
+                {VERIFIED_BUYERS.map((name, index) => (
+                  <li key={name} className="site-footer-buyer" style={{ '--i': index }}>
+                    <span className="site-footer-buyer-check">
+                      <CheckIcon />
+                    </span>
+                    {name}
+                  </li>
                 ))}
-                <span className="site-footer-buyer-cursor" aria-hidden="true" />
               </Reveal>
             </div>
           </div>

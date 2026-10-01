@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-// Full-screen decorative flourish that plays over every route change —
+// Full-screen decorative flourish that plays over every route change -
 // including the homepage, which renders on its own separate branch in
 // App.jsx and otherwise gets no transition at all when navigating to/from it.
 function RouteTransition() {

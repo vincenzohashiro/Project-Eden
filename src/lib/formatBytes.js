@@ -1,5 +1,5 @@
 export function formatBytes(bytes) {
-  if (bytes == null || Number.isNaN(bytes)) return '—'
+  if (bytes == null || Number.isNaN(bytes)) return '-'
   const units = ['B', 'KB', 'MB', 'GB', 'TB']
   let value = bytes
   let unitIndex = 0

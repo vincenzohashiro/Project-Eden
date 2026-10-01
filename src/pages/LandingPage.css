@@ -994,7 +994,7 @@
   box-shadow: 0 0 20px rgba(255, 59, 59, 0.4);
 }
 
-/* -- 2b: server split (copy left, media right — mirrored) -- */
+/* -- 2b: server split (copy left, media right - mirrored) -- */
 
 .server-split {
   display: grid;

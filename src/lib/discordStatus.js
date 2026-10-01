@@ -1,6 +1,6 @@
 import { supabase } from './supabase'
 
-// Returns null when Supabase isn't configured yet, or the call fails —
+// Returns null when Supabase isn't configured yet, or the call fails -
 // callers should fall back to placeholder copy in that case.
 export async function fetchDiscordStatus() {
   if (!supabase) return null

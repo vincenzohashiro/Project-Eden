@@ -1,0 +1,340 @@
+.od-overlay {
+  --a: #92c23e;
+  --a-rgb: 146, 194, 62;
+  --a-ink: #0e1704;
+
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow-y: auto;
+  background: rgba(2, 3, 3, 0.72);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  animation: od-fade 0.2s ease both;
+}
+
+.od-overlay.accent-red {
+  --a: #ff3b3b;
+  --a-rgb: 255, 59, 59;
+  --a-ink: #2a0303;
+}
+
+.od-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  box-sizing: border-box;
+  padding: 28px 30px 26px;
+  background:
+    linear-gradient(var(--a), var(--a)) left 30px top 0 / 48px 2px no-repeat,
+    radial-gradient(circle at 0% 0%, rgba(var(--a-rgb), 0.1), transparent 55%),
+    #07090a;
+  border: 1px solid rgba(var(--a-rgb), 0.45);
+  border-radius: 8px;
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.9), 0 0 40px rgba(var(--a-rgb), 0.12);
+  animation: od-in 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.od-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 8px;
+  box-sizing: border-box;
+  color: var(--text-dim);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.od-close:hover {
+  color: var(--text-h);
+  border-color: rgba(var(--a-rgb), 0.6);
+}
+
+.od-close svg {
+  width: 100%;
+  height: 100%;
+}
+
+.od-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.od-kind {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--a);
+}
+
+.od-head h2 {
+  margin: 0;
+  padding-right: 36px;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.od-head p {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-dim);
+}
+
+.od-price {
+  margin-top: 4px;
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+.od-form,
+.od-state {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.od-state p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.od-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.od-field span {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+}
+
+.od-field input,
+.od-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text-h);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.od-field input:focus,
+.od-field textarea:focus {
+  outline: none;
+  border-color: var(--a);
+  box-shadow: 0 0 0 3px rgba(var(--a-rgb), 0.18);
+}
+
+.od-field-qty input {
+  max-width: 110px;
+}
+
+.od-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 12px 0 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.od-summary strong {
+  font-family: var(--display);
+  font-size: 17px;
+  color: var(--text-h);
+}
+
+.od-error {
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #ffb3b3;
+  background: rgba(255, 59, 59, 0.08);
+  border: 1px solid rgba(255, 59, 59, 0.35);
+  border-radius: 6px;
+}
+
+.od-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.od-btn-fill {
+  color: var(--a-ink);
+  background: var(--a);
+  border-color: var(--a);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 20px -10px rgba(var(--a-rgb), 0.9);
+}
+
+.od-btn-fill:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 0 24px rgba(var(--a-rgb), 0.5);
+}
+
+.od-btn-fill:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.od-btn-ghost {
+  color: var(--text-h);
+  background: rgba(var(--a-rgb), 0.06);
+  border-color: rgba(var(--a-rgb), 0.45);
+}
+
+.od-btn-ghost:hover {
+  background: rgba(var(--a-rgb), 0.14);
+}
+
+.od-submit {
+  width: 100%;
+}
+
+.od-fine {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-dim);
+}
+
+.od-success {
+  align-items: flex-start;
+}
+
+.od-success-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  box-sizing: border-box;
+  color: var(--a-ink);
+  background: var(--a);
+  border-radius: 50%;
+  box-shadow: 0 0 22px rgba(var(--a-rgb), 0.5);
+}
+
+.od-success-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.od-success-title {
+  font-family: var(--display);
+  font-size: 18px !important;
+  color: var(--text-h) !important;
+}
+
+.od-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@keyframes od-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes od-in {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+    scale: 0.98;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .od-overlay,
+  .od-dialog {
+    animation: none;
+  }
+}
+
+/* order status pill, shared by the server and orders pages */
+.order-status {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  border-radius: 999px;
+  color: #d6dde2;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.order-status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.order-status.status-awaiting_quote,
+.order-status.status-awaiting_payment {
+  color: #ffd27a;
+  background: rgba(255, 196, 77, 0.08);
+  border-color: rgba(255, 196, 77, 0.35);
+}
+
+.order-status.status-paid,
+.order-status.status-in_progress {
+  color: #8fe3ff;
+  background: rgba(70, 214, 255, 0.08);
+  border-color: rgba(70, 214, 255, 0.35);
+}
+
+.order-status.status-delivered {
+  color: #c3e896;
+  background: rgba(146, 194, 62, 0.1);
+  border-color: rgba(146, 194, 62, 0.4);
+}
+
+.order-status.status-cancelled {
+  color: #ff9a9a;
+  background: rgba(255, 59, 59, 0.07);
+  border-color: rgba(255, 59, 59, 0.3);
+}

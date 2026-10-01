@@ -212,12 +212,13 @@
 }
 
 .site-nav-brand-ring {
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 42px;
   height: 42px;
-  padding: 5px;
+  padding: 6px;
   flex-shrink: 0;
   overflow: hidden;
   border-radius: 50%;
@@ -360,6 +361,15 @@
 .site-nav-status.is-ok .site-nav-status-dot {
   background: var(--moss);
   box-shadow: 0 0 6px var(--moss);
+}
+
+.site-nav-status.is-idle {
+  color: var(--text-dim);
+}
+
+.site-nav-status.is-idle .site-nav-status-dot {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--text-dim);
 }
 
 .site-nav-status.is-error {
@@ -600,7 +610,7 @@
 }
 
 .shop-bg .term-emblem {
-  color: rgba(255, 59, 59, 0.16);
+  color: rgba(255, 59, 59, 0.05);
 }
 
 .shop-bg .term-blip {
@@ -1925,69 +1935,7 @@
   border-radius: 50%;
 }
 
-.site-footer-buyer-line {
-  font-family: var(--mono);
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--text-h);
-}
-
-.site-footer-buyer-type {
-  display: inline-block;
-  overflow: hidden;
-  white-space: pre;
-  vertical-align: bottom;
-  width: 0;
-  animation-name: footer-buyer-type;
-  animation-fill-mode: forwards;
-  animation-play-state: paused;
-}
-
-.site-footer-buyer-line.is-visible .site-footer-buyer-type {
-  animation-play-state: running;
-}
-
-@keyframes footer-buyer-type {
-  from {
-    width: 0;
-  }
-  to {
-    width: var(--type-width, 8ch);
-  }
-}
-
-.site-footer-buyer-cursor {
-  display: inline-block;
-  width: 2px;
-  height: 14px;
-  margin-left: 2px;
-  vertical-align: text-bottom;
-  background: var(--neon-soft);
-  animation: footer-cursor-blink 1s steps(1) infinite;
-}
-
-@keyframes footer-cursor-blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  50.01%,
-  100% {
-    opacity: 0;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .site-footer-buyer-type {
-    width: var(--type-width, 8ch);
-    animation: none;
-  }
-
-  .site-footer-buyer-cursor {
-    animation: none;
-    opacity: 0;
-  }
-
   .site-footer-partner-badge {
     animation: none;
   }
@@ -2090,7 +2038,7 @@
   to {
     opacity: 1;
     transform: none;
-    filter: blur(0);
+    filter: none;
   }
 }
 
@@ -2134,4 +2082,336 @@
     transform: none;
     transition: none;
   }
+}
+
+/* ---------- footer detail layer: closed chamfers, surface, rails ---------- */
+
+.site-footer {
+  border-top: none;
+  background:
+    linear-gradient(90deg, transparent, rgba(70, 214, 255, 0.4) 50%, transparent) top center / 50% 1px no-repeat,
+    linear-gradient(rgba(70, 214, 255, 0.12), rgba(70, 214, 255, 0.12)) top / 100% 1px no-repeat,
+    radial-gradient(60% 80% at 50% 0%, rgba(70, 214, 255, 0.04), transparent 70%),
+    var(--void);
+}
+
+.site-footer-brand-card,
+.site-footer-partners-card {
+  --fc-edge: rgba(70, 214, 255, 0.4);
+
+  position: relative;
+  isolation: isolate;
+}
+
+/* clip-path removes the border on the cut corners - redraw the diagonals */
+.site-footer-brand-card::before,
+.site-footer-partners-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.site-footer-brand-card::before {
+  background:
+    linear-gradient(to top right, transparent calc(50% - 0.75px), var(--fc-edge) 0 calc(50% + 0.75px), transparent 0)
+      top right / var(--footer-cut) var(--footer-cut) no-repeat,
+    linear-gradient(to top right, transparent calc(50% - 0.75px), var(--fc-edge) 0 calc(50% + 0.75px), transparent 0)
+      bottom left / var(--footer-cut) var(--footer-cut) no-repeat,
+    var(--scanlines),
+    linear-gradient(160deg, rgba(70, 214, 255, 0.045), transparent 45%);
+}
+
+.site-footer-partners-card::before {
+  background:
+    linear-gradient(to bottom right, transparent calc(50% - 0.75px), var(--fc-edge) 0 calc(50% + 0.75px), transparent 0)
+      top left / var(--footer-cut) var(--footer-cut) no-repeat,
+    linear-gradient(to bottom right, transparent calc(50% - 0.75px), var(--fc-edge) 0 calc(50% + 0.75px), transparent 0)
+      bottom right / var(--footer-cut) var(--footer-cut) no-repeat,
+    linear-gradient(rgba(70, 214, 255, 0.045) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(90deg, rgba(70, 214, 255, 0.045) 1px, transparent 1px) 0 0 / 28px 28px;
+  -webkit-mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, 0.35));
+  mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, 0.35));
+}
+
+/* instrument scale + lit segment along each card's top edge */
+.site-footer-brand-card::after,
+.site-footer-partners-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: 9px;
+  width: 120px;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--neon), var(--neon)) left top / 36px 2px no-repeat,
+    repeating-linear-gradient(90deg, rgba(70, 214, 255, 0.3) 0 1px, transparent 1px 8px) left 44px top / 76px 5px no-repeat;
+  filter: drop-shadow(0 0 4px rgba(70, 214, 255, 0.5));
+}
+
+.site-footer-brand-card::after {
+  left: 22px;
+}
+
+.site-footer-partners-card::after {
+  left: calc(var(--footer-cut) + 18px);
+}
+
+.site-footer-logo {
+  box-shadow: inset 0 0 8px rgba(70, 214, 255, 0.15);
+}
+
+.site-footer-social {
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* column headers sit on a full-width hairline with a lit accent segment */
+.site-footer-col-underline {
+  width: 100%;
+  height: 1px;
+  background:
+    linear-gradient(var(--col-accent), var(--col-accent)) left / 26px 2px no-repeat,
+    linear-gradient(90deg, rgba(var(--col-accent-rgb), 0.25), transparent 80%);
+  box-shadow: none;
+  filter: drop-shadow(0 0 4px rgba(var(--col-accent-rgb), 0.5));
+}
+
+.site-footer-col-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.site-footer-col-subtitle::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(70, 214, 255, 0.22), transparent);
+}
+
+.site-footer-partner-badge {
+  background: linear-gradient(180deg, rgba(70, 214, 255, 0.07), rgba(255, 255, 255, 0.015));
+}
+
+.site-footer-partner-badge-icon {
+  box-shadow: inset 0 0 0 1px rgba(70, 214, 255, 0.35);
+}
+
+.site-footer-bottom {
+  border-top: none;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.07)) top / 100% 1px no-repeat,
+    linear-gradient(var(--neon), var(--neon)) top left / 24px 1px no-repeat,
+    linear-gradient(var(--neon), var(--neon)) top right / 24px 1px no-repeat;
+}
+
+/* ---------- footer interaction layer ---------- */
+
+/* cursor-tracked spotlight (position fed by trackPointer in SiteFooter) */
+.site-footer-spotlight {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(70, 214, 255, 0.1), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.site-footer-brand-card,
+.site-footer-partners-card {
+  transition: border-color 0.3s ease;
+}
+
+.site-footer-brand-card:hover,
+.site-footer-partners-card:hover {
+  --fc-edge: var(--neon);
+
+  border-color: rgba(70, 214, 255, 0.4);
+}
+
+.site-footer-brand-card:hover .site-footer-spotlight,
+.site-footer-partners-card:hover .site-footer-spotlight {
+  opacity: 1;
+}
+
+/* ---------- brand header ---------- */
+
+.site-footer-brand-row {
+  align-items: center;
+  gap: 14px;
+  align-self: stretch;
+  padding-bottom: 16px;
+  background: linear-gradient(90deg, rgba(70, 214, 255, 0.3), rgba(70, 214, 255, 0.06) 60%, transparent) bottom left / 100% 1px no-repeat;
+}
+
+.site-footer-logo {
+  position: relative;
+  box-sizing: border-box;
+  width: 46px;
+  height: 46px;
+  padding: 6px;
+  overflow: visible;
+}
+
+/* dashed orbit that spins up while the card is hovered */
+.site-footer-logo-orbit {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1px dashed rgba(70, 214, 255, 0.35);
+  transition: border-color 0.3s ease, transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.site-footer-brand-card:hover .site-footer-logo-orbit {
+  border-color: rgba(70, 214, 255, 0.75);
+  transform: rotate(180deg);
+}
+
+.site-footer-brand-text {
+  gap: 0;
+}
+
+.site-footer-title {
+  font-size: 20px;
+  letter-spacing: 3px;
+  text-shadow: 0 0 12px rgba(70, 214, 255, 0.35);
+}
+
+/* ---------- discord button ---------- */
+
+.site-footer-social {
+  width: 38px;
+  height: 38px;
+}
+
+.site-footer-social:hover {
+  color: #fff;
+  border-color: #5865f2;
+  background: linear-gradient(180deg, rgba(88, 101, 242, 0.35), rgba(88, 101, 242, 0.15));
+  box-shadow: 0 0 16px rgba(88, 101, 242, 0.5);
+}
+
+.site-footer-social svg {
+  width: 18px;
+  height: 14px;
+}
+
+/* ---------- link columns ---------- */
+
+.site-footer-col-underline {
+  transition: background-size 0.35s ease;
+}
+
+.site-footer-col:hover .site-footer-col-underline {
+  background-size: 64px 2px, auto;
+}
+
+.site-footer-col a {
+  padding-bottom: 2px;
+  background: linear-gradient(var(--col-accent), var(--col-accent)) left bottom / 0 1px no-repeat;
+  transition: opacity 0.2s ease, transform 0.2s ease, background-size 0.3s ease;
+}
+
+.site-footer-col a:hover {
+  background-size: 100% 1px;
+}
+
+/* ---------- verified buyers ---------- */
+
+.site-footer-buyers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* the list itself stays put; its badges stagger in instead */
+.site-footer-buyers.reveal {
+  opacity: 1;
+  transform: none;
+}
+
+.site-footer-buyer {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px 5px 6px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.4px;
+  color: var(--text-h);
+  background: linear-gradient(180deg, rgba(70, 214, 255, 0.07), rgba(255, 255, 255, 0.015));
+  border: 1px solid rgba(70, 214, 255, 0.2);
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  cursor: default;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition-delay: calc(var(--i) * 70ms), calc(var(--i) * 70ms), 0s, 0s;
+}
+
+.site-footer-buyers.is-visible .site-footer-buyer {
+  opacity: 1;
+  transform: none;
+}
+
+.site-footer-buyers.is-visible .site-footer-buyer:hover {
+  border-color: var(--neon);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 0 14px rgba(70, 214, 255, 0.3);
+  transform: translateY(-2px);
+  transition-delay: 0s;
+}
+
+.site-footer-buyer-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 3px;
+  color: var(--neon);
+  background: rgba(70, 214, 255, 0.12);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(70, 214, 255, 0.4);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.site-footer-buyer-check svg {
+  width: 100%;
+  height: 100%;
+}
+
+.site-footer-buyer:hover .site-footer-buyer-check {
+  color: #021015;
+  background: var(--neon);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer-buyer {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .site-footer-logo-orbit,
+  .site-footer-col a,
+  .site-footer-col-underline {
+    transition: none;
+  }
+}
+
+/* the logo art sits on a black square - crop it round and screen-blend it
+   so the black drops out against the dark ring */
+.site-footer-logo img,
+.site-nav-brand-logo {
+  border-radius: 50%;
+  mix-blend-mode: screen;
 }

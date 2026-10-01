@@ -29,7 +29,6 @@ function SiteNav() {
         </span>
         <span className="site-nav-brand-text">
           <span className="site-nav-brand-title">PROJECT EDEN</span>
-          <span className="site-nav-brand-sub">プロジェクト・エデン</span>
         </span>
       </NavLink>
 
@@ -59,12 +58,19 @@ function SiteNav() {
           <NavLink to="/pricing" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Pricing
           </NavLink>
+          {user && (
+            <NavLink to="/orders" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+              Orders
+            </NavLink>
+          )}
           <a href={DISCORD_INVITE_URL} target="_blank" rel="noopener noreferrer">Discord</a>
         </div>
         <div className="site-nav-actions">
-          <Link to="/profile" className={`site-nav-status ${user ? 'is-ok' : 'is-error'}`}>
+          {/* signing in is optional (only needed to buy), so signed-out is a
+              neutral state, not an error */}
+          <Link to={user ? '/profile' : '/login'} className={`site-nav-status ${user ? 'is-ok' : 'is-idle'}`}>
             <span className="site-nav-status-dot" />
-            Status: {user ? 'Connected' : 'Error'}
+            {user ? 'Signed in' : 'Signed out'}
           </Link>
           {user ? (
             <a

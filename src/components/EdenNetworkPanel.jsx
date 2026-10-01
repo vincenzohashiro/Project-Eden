@@ -106,7 +106,7 @@ function EdenNetworkPanel() {
                       onBlur={() => handleNotesSave(a.id)}
                     />
                   </td>
-                  <td>{a.isDefault ? 'Yes' : '—'}</td>
+                  <td>{a.isDefault ? 'Yes' : '-'}</td>
                   <td>
                     <div className="eden-table-actions">
                       {!a.isDefault && (

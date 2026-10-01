@@ -51,7 +51,7 @@ function EdenFilesPanel() {
       return
     }
     if (!isTextLike(entry)) {
-      setError(`${entry.name} isn't a text file — download it instead.`)
+      setError(`${entry.name} isn't a text file. Download it instead.`)
       return
     }
     try {
@@ -219,7 +219,7 @@ function EdenFilesPanel() {
                       {entry.name}
                     </button>
                   </td>
-                  <td>{entry.isFile ? formatBytes(entry.size) : '—'}</td>
+                  <td>{entry.isFile ? formatBytes(entry.size) : '-'}</td>
                   <td>{new Date(entry.modifiedAt).toLocaleString()}</td>
                   <td>
                     <div className="eden-table-actions">

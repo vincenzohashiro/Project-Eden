@@ -13,6 +13,7 @@ import MinecraftServerPage from './pages/MinecraftServerPage'
 import ModelShopPage from './pages/ModelShopPage'
 import LoginPage from './pages/LoginPage'
 import ProfilePage from './pages/ProfilePage'
+import OrdersPage from './pages/OrdersPage'
 import EdenEnginePage from './pages/EdenEnginePage'
 import ComingSoonPage from './pages/ComingSoonPage'
 import './App.css'
@@ -21,6 +22,7 @@ const BACKDROPS = {
   '/server': ServerBackdrop,
   '/shop': ShopBackdrop,
   '/EdenEngine': ServerBackdrop,
+  '/orders': ServerBackdrop,
 }
 
 function AnimatedRoutes() {
@@ -35,7 +37,7 @@ function AnimatedRoutes() {
 
   return (
     <>
-      {/* rendered as a sibling of .page-transition, not inside it — that
+      {/* rendered as a sibling of .page-transition, not inside it - that
           element's mount animation uses filter, which would otherwise break
           position:fixed on the backdrop (creates a new containing block) */}
       {Backdrop && <Backdrop />}
@@ -46,6 +48,7 @@ function AnimatedRoutes() {
           <Route path="/shop" element={<ModelShopPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/orders" element={<OrdersPage />} />
           <Route path="/EdenEngine" element={<EdenEnginePage />} />
           <Route
             path="/portfolio"
@@ -96,7 +99,7 @@ function AnimatedRoutes() {
 function AppChrome() {
   const location = useLocation()
 
-  // home page owns its own nav/footer/backdrop — no shared chrome here
+  // home page owns its own nav/footer/backdrop - no shared chrome here
   if (location.pathname === '/') {
     return (
       <Routes location={location}>

@@ -37,7 +37,7 @@ function EdenPlayersPanel() {
       await action(name)
       refresh()
     } catch {
-      setError(`Action failed for ${name} — server may be offline or RCON unreachable.`)
+      setError(`Action failed for ${name}. The server may be offline or RCON unreachable.`)
     } finally {
       setPendingName(null)
     }

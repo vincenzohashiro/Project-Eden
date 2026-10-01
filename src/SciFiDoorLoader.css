@@ -21,7 +21,7 @@
 }
 
 /* full-bleed vignette + grain so the flat gradients read as a lit, shot
-   scene instead of a clean vector illustration — fades out once the
+   scene instead of a clean vector illustration - fades out once the
    doors start sliding so it doesn't darken the revealed page content */
 .door-loader::before {
   content: '';
@@ -198,7 +198,7 @@
   pointer-events: none;
 }
 
-/* hazard seam plating along the inner edge of each panel — old, grimy
+/* hazard seam plating along the inner edge of each panel - old, grimy
    caution tape rather than a fresh clean-printed stripe */
 .door-panel.left::after,
 .door-panel.right::after {
@@ -237,24 +237,22 @@
   transform: translateX(100%);
 }
 
-/* central locking bar — physically retracts before the panels slide */
+/* mag-lock arms - an energised bar spanning the seam, housed in a dark
+   channel; it collapses into the seal before the panels slide */
 .door-bolt {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 130px;
-  height: 34px;
+  width: 380px;
+  height: 14px;
   z-index: 3;
   transform: translate(-50%, -50%);
   background:
-    radial-gradient(circle at 14px 17px, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
-    radial-gradient(circle at 116px 17px, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
-    linear-gradient(180deg, var(--steel-hi) 0%, var(--steel-lo) 100%);
-  border-radius: 3px;
-  box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.6),
-    inset 0 -4px 8px rgba(0, 0, 0, 0.75),
-    0 0 20px rgba(0, 0, 0, 0.8);
+    linear-gradient(var(--lock-color), var(--lock-color)) center / 100% 2px no-repeat,
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px 12px) center / 100% 8px no-repeat,
+    linear-gradient(180deg, #2a3238 0%, #0b0e11 50%, #1a2026 100%);
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0 50%);
+  filter: drop-shadow(0 0 6px var(--lock-color));
   transition: opacity 0.3s ease 1.6s;
 }
 
@@ -267,7 +265,7 @@
   transition: opacity 0.2s ease;
 }
 
-/* lateral hiss — pressurized air venting sideways along the seam the
+/* lateral hiss - pressurized air venting sideways along the seam the
    instant the bolt lets go */
 .air-jet {
   position: absolute;
@@ -445,23 +443,6 @@
   pointer-events: none;
 }
 
-/* mirrors the right door panel's box and motion exactly, so the lock
-   iris rides along with it instead of fading in place */
-.lock-ring-anchor {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 50%;
-  z-index: 4;
-  transition: transform 2.4s cubic-bezier(0.83, 0, 0.2, 1);
-  will-change: transform;
-}
-
-.phase-open .lock-ring-anchor {
-  transform: translateX(100%);
-}
-
 .hud-corner {
   position: absolute;
   width: 34px;
@@ -496,111 +477,6 @@
   right: 28px;
   border-left: none;
   border-top: none;
-}
-
-/* mechanical lock iris — sweeps red while scanning, snaps green on unlock */
-.lock-ring {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translate(-50%, -50%);
-  width: 116px;
-  height: 116px;
-}
-
-/* toothed outer collar, like a hand-wheel or gear rim bolted around the iris */
-.lock-ring::before {
-  content: '';
-  position: absolute;
-  inset: -11px;
-  border-radius: 50%;
-  background: repeating-conic-gradient(
-    var(--steel-lo) 0deg 9deg,
-    var(--steel-hi) 9deg 18deg
-  );
-  -webkit-mask-image: radial-gradient(
-    circle,
-    transparent 0 57px,
-    black 58px 66px,
-    transparent 67px 69px
-  );
-  mask-image: radial-gradient(
-    circle,
-    transparent 0 57px,
-    black 58px 66px,
-    transparent 67px 69px
-  );
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
-}
-
-.lock-ring-track {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background:
-    var(--noise),
-    radial-gradient(circle at 50% 9%, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
-    radial-gradient(circle at 87% 28%, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
-    radial-gradient(circle at 87% 72%, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
-    radial-gradient(circle at 50% 91%, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
-    radial-gradient(circle at 13% 72%, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
-    radial-gradient(circle at 13% 28%, var(--rivet-hole) 0 3px, var(--rivet-glint) 3px 3.6px, transparent 4px),
-    linear-gradient(180deg, var(--steel-hi), var(--steel-lo));
-  background-blend-mode: overlay, normal, normal, normal, normal, normal, normal, normal;
-  background-size: 55px 55px, auto, auto, auto, auto, auto, auto, auto;
-  box-shadow:
-    inset 0 0 0 6px var(--steel-lo),
-    inset 0 0 0 7px rgba(0, 0, 0, 0.7),
-    inset 0 0 0 9px var(--steel-hi),
-    inset 0 0 0 10px rgba(0, 0, 0, 0.55),
-    inset 0 -8px 12px rgba(0, 0, 0, 0.75),
-    0 0 22px rgba(0, 0, 0, 0.6),
-    0 0 16px 1px var(--lock-color);
-  transition: box-shadow 0.35s ease;
-}
-
-.lock-needle-wrap {
-  position: absolute;
-  inset: 0;
-  animation-name: needle-rotate;
-  animation-timing-function: steps(11, end);
-  animation-fill-mode: forwards;
-}
-
-.lock-needle {
-  position: absolute;
-  top: 12px;
-  left: 50%;
-  width: 6px;
-  height: 38%;
-  border-radius: 3px;
-  background: var(--lock-color);
-  box-shadow: 0 0 10px 1px var(--lock-color);
-  transform: translateX(-50%);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.lock-core {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--lock-color);
-  box-shadow:
-    0 0 0 3px var(--steel-lo),
-    0 0 0 4px rgba(0, 0, 0, 0.7),
-    0 0 0 6px var(--steel-hi),
-    0 0 0 7px rgba(0, 0, 0, 0.5),
-    inset 0 1px 2px rgba(0, 0, 0, 0.5),
-    0 0 14px 2px var(--lock-color);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.phase-unlock .lock-core {
-  animation: lock-pulse 0.5s ease-out;
 }
 
 .door-flash {
@@ -659,27 +535,6 @@
   }
 }
 
-@keyframes needle-rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(180deg);
-  }
-}
-
-@keyframes lock-pulse {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  40% {
-    transform: translate(-50%, -50%) scale(1.6);
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-
 @keyframes bolt-retract {
   0% {
     transform: translate(-50%, -50%) scaleX(1);
@@ -727,5 +582,391 @@
   }
   100% {
     opacity: 0;
+  }
+}
+
+/* ---------- detail layer: bolted frame plates + live hatch readouts ---------- */
+
+/* bolt heads pinning the frame plate at each corner */
+.door-bolts {
+  --bolt: radial-gradient(
+    circle,
+    #4a545c 0 2px,
+    #1b2026 2.5px 4.5px,
+    rgba(255, 255, 255, 0.07) 5px 5.6px,
+    rgba(0, 0, 0, 0.7) 6px 7px,
+    transparent 7.5px
+  );
+
+  position: absolute;
+  inset: 22px;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    var(--bolt) top left / 16px 16px no-repeat,
+    var(--bolt) top right / 16px 16px no-repeat,
+    var(--bolt) bottom left / 16px 16px no-repeat,
+    var(--bolt) bottom right / 16px 16px no-repeat;
+}
+
+/* the hatch reads as a dormant CRT panel: glass, scanlines, a faint
+   lock-coloured wash rising from the bottom edge */
+.door-hatch::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse 80% 55% at 50% 100%, color-mix(in srgb, var(--lock-color) 14%, transparent), transparent 70%),
+    linear-gradient(160deg, rgba(120, 160, 180, 0.05), transparent 40%);
+}
+
+/* graduated scale above the progress bar */
+.door-hatch::after {
+  content: '';
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: calc(24% + 18px);
+  height: 7px;
+  background:
+    repeating-linear-gradient(90deg, rgba(160, 185, 200, 0.3) 0 1px, transparent 1px calc(100% / 22)) top / 100% 4px no-repeat,
+    linear-gradient(rgba(160, 185, 200, 0.16), rgba(160, 185, 200, 0.16)) bottom / 100% 1px no-repeat;
+}
+
+/* scan progress - fills in step with the seal ring (same 11 steps, same
+   duration) and turns green on unlock. The segment mask sits on the track,
+   so the solid fill always lands on whole segments. */
+.hatch-meter {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 24%;
+  height: 10px;
+  background: rgba(160, 185, 200, 0.1);
+  -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 calc(100% / 11 - 3px), transparent 0 calc(100% / 11));
+  mask-image: repeating-linear-gradient(90deg, #000 0 calc(100% / 11 - 3px), transparent 0 calc(100% / 11));
+}
+
+.hatch-meter-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: var(--lock-color);
+  animation-name: hatch-meter-fill;
+  animation-timing-function: steps(11, end);
+  animation-fill-mode: forwards;
+  transition: background-color 0.3s ease;
+}
+
+@keyframes hatch-meter-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* status lamps: chase while scanning, hold solid once unlocked */
+.hatch-leds {
+  position: absolute;
+  top: 18%;
+  left: 12%;
+  display: flex;
+  gap: 8px;
+}
+
+.hatch-leds i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--lock-color) 25%, #111);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7);
+  animation: hatch-led 0.9s steps(1) infinite;
+}
+
+.hatch-leds i:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.hatch-leds i:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+.phase-unlock .hatch-leds i,
+.phase-open .hatch-leds i {
+  animation: none;
+  background: var(--lock-color);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7), 0 0 8px var(--lock-color);
+}
+
+@keyframes hatch-led {
+  0%,
+  33% {
+    background: var(--lock-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7), 0 0 8px var(--lock-color);
+  }
+  34%,
+  100% {
+    background: color-mix(in srgb, var(--lock-color) 25%, #111);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* rim light catching the top edge of each door */
+.door-bolts::after {
+  content: '';
+  position: absolute;
+  left: -22px;
+  right: -22px;
+  top: -22px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 220, 230, 0.22) 50%, transparent);
+}
+
+/* ---------- holographic seal (centre lock) ---------- */
+
+/* each anchor mirrors its door's box and motion, so its half of the seal
+   rides out with that panel */
+.seal-anchor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 4;
+  transition: transform 2.4s cubic-bezier(0.83, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.seal-anchor.left {
+  left: 0;
+}
+
+.seal-anchor.right {
+  left: 50%;
+}
+
+.phase-open .seal-anchor.left {
+  transform: translateX(-100%);
+}
+
+.phase-open .seal-anchor.right {
+  transform: translateX(100%);
+}
+
+.seal {
+  --oct: polygon(29% 0, 71% 0, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0 71%, 0 29%);
+
+  position: absolute;
+  top: 50%;
+  width: 168px;
+  height: 168px;
+  transform: translate(-50%, -50%);
+}
+
+/* while scanning, the right copy draws the whole seal and the left copy
+   stays hidden, so there's no seam through the middle; both copies run
+   the same animations in lockstep, so swapping to two clipped halves the
+   moment the doors part is seamless */
+.seal-anchor.left .seal {
+  left: 100%;
+  visibility: hidden;
+}
+
+.seal-anchor.right .seal {
+  left: 0;
+}
+
+.phase-open .seal-anchor.left .seal {
+  visibility: visible;
+  clip-path: inset(0 50% 0 0);
+}
+
+.phase-open .seal-anchor.right .seal {
+  clip-path: inset(0 0 0 50%);
+}
+
+/* machined octagonal housing with an inset lit trace */
+.seal-plate {
+  position: absolute;
+  inset: 0;
+  clip-path: var(--oct);
+  background:
+    var(--noise) 0 0 / 80px 80px,
+    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.1), transparent 55%),
+    linear-gradient(180deg, #2c353c 0%, #12171b 55%, #07090b 100%);
+  background-blend-mode: overlay, normal, normal;
+}
+
+.seal-plate::before,
+.seal-plate::after {
+  content: '';
+  position: absolute;
+  clip-path: var(--oct);
+}
+
+.seal-plate::before {
+  inset: 7px;
+  background: var(--lock-color);
+  opacity: 0.55;
+  transition: background-color 0.35s ease;
+}
+
+.seal-plate::after {
+  inset: 8px;
+  background:
+    radial-gradient(circle, color-mix(in srgb, var(--lock-color) 9%, transparent) 0 45%, transparent 70%),
+    linear-gradient(180deg, #11161a, #050708);
+}
+
+.seal-svg {
+  position: absolute;
+  inset: 4px;
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  overflow: visible;
+}
+
+.seal-svg * {
+  transition: stroke 0.3s ease, fill 0.3s ease, opacity 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.seal-ticks,
+.seal-arcs,
+.seal-iris {
+  transform-box: view-box;
+  transform-origin: 100px 100px;
+}
+
+.seal-ticks {
+  stroke: rgba(180, 205, 215, 0.45);
+  animation: seal-spin 24s linear infinite;
+}
+
+.seal-arcs {
+  stroke: var(--lock-color);
+  opacity: 0.7;
+  filter: drop-shadow(0 0 3px var(--lock-color));
+  animation: seal-spin 9s linear infinite reverse;
+}
+
+.seal-track {
+  stroke: rgba(180, 205, 215, 0.1);
+}
+
+.seal-progress {
+  stroke: var(--lock-color);
+  filter: drop-shadow(0 0 4px var(--lock-color));
+  animation-name: seal-progress;
+  animation-timing-function: steps(11, end);
+  animation-fill-mode: forwards;
+}
+
+.seal-core-bg {
+  fill: #040607;
+}
+
+.seal-iris {
+  stroke: var(--lock-color);
+  opacity: 0.45;
+}
+
+.seal-iris.a {
+  animation: seal-spin 6s linear infinite;
+}
+
+.seal-iris.b {
+  animation: seal-spin 4s linear infinite reverse;
+}
+
+.seal-beam {
+  fill: var(--lock-color);
+  opacity: 0.55;
+  filter: blur(1.5px);
+  animation: seal-beam 1.3s ease-in-out infinite alternate;
+}
+
+.seal-core-rim {
+  stroke: var(--lock-color);
+  opacity: 0.8;
+}
+
+.seal-hex {
+  fill: color-mix(in srgb, var(--lock-color) 18%, #050708);
+  stroke: var(--lock-color);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.seal-dot {
+  fill: var(--lock-color);
+  filter: drop-shadow(0 0 5px var(--lock-color));
+}
+
+/* unlock: ring completes, outer rings kick outward and dim, the beam
+   cuts out and the core flares */
+.phase-unlock .seal-progress,
+.phase-open .seal-progress {
+  stroke-dashoffset: 0;
+}
+
+.phase-unlock .seal-ticks,
+.phase-open .seal-ticks {
+  opacity: 0.25;
+}
+
+.phase-unlock .seal-arcs,
+.phase-open .seal-arcs {
+  animation-duration: 1.2s;
+}
+
+.phase-unlock .seal-beam,
+.phase-open .seal-beam {
+  opacity: 0;
+}
+
+.phase-unlock .seal-iris,
+.phase-open .seal-iris {
+  opacity: 0.9;
+}
+
+.phase-unlock .seal-hex {
+  animation: seal-flare 0.5s ease-out;
+}
+
+@keyframes seal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes seal-progress {
+  from {
+    stroke-dashoffset: var(--ring-c);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes seal-beam {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(87px);
+  }
+}
+
+@keyframes seal-flare {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.45);
+  }
+  100% {
+    transform: scale(1);
   }
 }

@@ -29,7 +29,7 @@ import './EdenEnginePage.css'
 const STATS_HISTORY_LIMIT = 30
 
 // Pterodactyl's CPU limit is a percentage of one core (100 = 1 core, 0 =
-// unlimited) — not the CPU's brand/model, which the Client API doesn't expose.
+// unlimited) - not the CPU's brand/model, which the Client API doesn't expose.
 function formatCpuLimit(cpuLimitPercent) {
   if (!cpuLimitPercent) return 'Unlimited'
   const cores = cpuLimitPercent / 100
@@ -114,7 +114,7 @@ function EdenEnginePage() {
       const result = await run()
       if (result?.state) setStatus((prev) => ({ ...prev, state: result.state }))
     } catch (err) {
-      setActionError(err.status === 409 ? 'Already in that state.' : 'Action failed — try again.')
+      setActionError(err.status === 409 ? 'Already in that state.' : 'Action failed. Try again.')
     } finally {
       setPending(null)
       refreshStatus()
@@ -142,25 +142,25 @@ function EdenEnginePage() {
             <div className="eden-stats-row">
               <EdenStatCard
                 label="CPU"
-                value={stats ? `${stats.cpuPercent.toFixed(0)}%` : '—'}
+                value={stats ? `${stats.cpuPercent.toFixed(0)}%` : '-'}
                 subValue={stats ? formatCpuLimit(stats.cpuLimitPercent) : null}
                 percent={stats ? cpuPercentOfLimit(stats) : null}
               />
               <EdenStatCard
                 label="Memory"
-                value={stats ? formatBytes(stats.memory.usedBytes) : '—'}
+                value={stats ? formatBytes(stats.memory.usedBytes) : '-'}
                 subValue={stats ? `of ${formatBytes(stats.memory.totalBytes)}` : null}
                 percent={stats ? (stats.memory.usedBytes / stats.memory.totalBytes) * 100 : null}
               />
               <EdenStatCard
                 label="Disk"
-                value={stats ? formatBytes(stats.disk.usedBytes) : '—'}
+                value={stats ? formatBytes(stats.disk.usedBytes) : '-'}
                 subValue={stats ? `of ${formatBytes(stats.disk.totalBytes)}` : null}
                 percent={stats ? (stats.disk.usedBytes / stats.disk.totalBytes) * 100 : null}
               />
               <EdenStatCard
                 label="Network"
-                value={stats ? `↓ ${formatBytes(stats.network.rxBytesPerSec)}/s` : '—'}
+                value={stats ? `↓ ${formatBytes(stats.network.rxBytesPerSec)}/s` : '-'}
                 subValue={stats ? `↑ ${formatBytes(stats.network.txBytesPerSec)}/s` : null}
               />
             </div>
@@ -176,7 +176,7 @@ function EdenEnginePage() {
             <EdenStatCard
               large
               label="CPU"
-              value={stats ? `${stats.cpuPercent.toFixed(0)}%` : '—'}
+              value={stats ? `${stats.cpuPercent.toFixed(0)}%` : '-'}
               subValue={stats ? formatCpuLimit(stats.cpuLimitPercent) : null}
               percent={stats ? cpuPercentOfLimit(stats) : null}
               history={statsHistory.map((s) => s.cpuPercent)}
@@ -184,7 +184,7 @@ function EdenEnginePage() {
             <EdenStatCard
               large
               label="Memory"
-              value={stats ? formatBytes(stats.memory.usedBytes) : '—'}
+              value={stats ? formatBytes(stats.memory.usedBytes) : '-'}
               subValue={stats ? `of ${formatBytes(stats.memory.totalBytes)}` : null}
               percent={stats ? (stats.memory.usedBytes / stats.memory.totalBytes) * 100 : null}
               history={statsHistory.map((s) => s.memory.usedBytes)}
@@ -192,14 +192,14 @@ function EdenEnginePage() {
             <EdenStatCard
               large
               label="Disk"
-              value={stats ? formatBytes(stats.disk.usedBytes) : '—'}
+              value={stats ? formatBytes(stats.disk.usedBytes) : '-'}
               subValue={stats ? `of ${formatBytes(stats.disk.totalBytes)}` : null}
               percent={stats ? (stats.disk.usedBytes / stats.disk.totalBytes) * 100 : null}
             />
             <EdenStatCard
               large
               label="Network"
-              value={stats ? `↓ ${formatBytes(stats.network.rxBytesPerSec)}/s` : '—'}
+              value={stats ? `↓ ${formatBytes(stats.network.rxBytesPerSec)}/s` : '-'}
               subValue={stats ? `↑ ${formatBytes(stats.network.txBytesPerSec)}/s` : null}
               history={statsHistory.map((s) => s.network.rxBytesPerSec)}
             />

@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import smasherSkin from '../assets/smasher.png'
+import cityArt from '../assets/ModelShop.png'
 import SkinViewer3D from '../components/SkinViewer3D'
+import Reveal from '../components/Reveal'
+import OrderDialog from '../components/OrderDialog'
+import { FALLBACK_CATALOG, commissionKey } from '../lib/store'
 import './ModelShopPage.css'
 
 const PickaxeIcon = () => (
@@ -95,15 +101,23 @@ const TeddyIcon = () => (
   </svg>
 )
 
-const ChevronLeftIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-    <path d="M15 5 8 12l7 7" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-)
-
 const ChevronRightIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
     <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+)
+
+const RotateLeftIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+    <path d="M4.5 9.5A8 8 0 1 1 6 17.2" strokeLinecap="round" />
+    <path d="M4 4.5v5h5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+)
+
+const RotateRightIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+    <path d="M19.5 9.5A8 8 0 1 0 18 17.2" strokeLinecap="round" />
+    <path d="M20 4.5v5h-5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 )
 
@@ -163,7 +177,7 @@ const FEATURED_ITEMS = [
 
 const SKIN_ACCENTS = ['red', 'crimson', 'rose']
 
-// smasher.png is the only real skin texture we have right now — every slot
+// smasher.png is the only real skin texture we have right now - every slot
 // reuses it as a placeholder so the texture -> model pipeline is visible
 // end to end. Swap in real per-skin textures once they exist.
 const SKIN_CATALOGUE = Array.from({ length: 24 }, (_, i) => ({
@@ -198,7 +212,7 @@ const CATEGORIES = [
     label: 'Furnitures',
     Icon: CouchIcon,
     accent: 'red',
-    description: 'Functional furniture models to fill out builds — seating, storage, and decor.',
+    description: 'Functional furniture models to fill out builds: seating, storage, and decor.',
   },
   {
     label: 'Plushies',
@@ -208,56 +222,181 @@ const CATEGORIES = [
   },
 ]
 
-function ShopCard({ item, index, onSelect }) {
-  const { label, Icon, accent } = item
+const DISCORD_INVITE_URL = 'https://discord.gg/mEhgkyUxTF'
+
+const ORDER_STEPS = [
+  {
+    title: 'Open a ticket',
+    body: 'Tell us what you want built in our Discord. Reference images help.',
+  },
+  {
+    title: 'Approve the design',
+    body: "We share previews as the model takes shape and revise until it's right.",
+  },
+  {
+    title: 'Get your pack',
+    body: 'You receive a resource pack with CustomModelData, ready to drop into your server.',
+  },
+]
+
+// pointer position in px, for cursor-following glows
+const trackPointer = (e) => {
+  const rect = e.currentTarget.getBoundingClientRect()
+  e.currentTarget.style.setProperty('--mx', `${e.clientX - rect.left}px`)
+  e.currentTarget.style.setProperty('--my', `${e.clientY - rect.top}px`)
+}
+
+// pointer offset from centre in -0.5..0.5, for tilt / parallax
+const trackOffset = (e) => {
+  const rect = e.currentTarget.getBoundingClientRect()
+  e.currentTarget.style.setProperty('--px', ((e.clientX - rect.left) / rect.width - 0.5).toFixed(3))
+  e.currentTarget.style.setProperty('--py', ((e.clientY - rect.top) / rect.height - 0.5).toFixed(3))
+}
+
+const resetOffset = (e) => {
+  e.currentTarget.style.setProperty('--px', 0)
+  e.currentTarget.style.setProperty('--py', 0)
+}
+
+// 8x8 face crop from a 64x64 skin texture
+function SkinFace({ texture, className = '', style }) {
   return (
-    <button
-      type="button"
-      className={`shop-card accent-${accent}`}
-      onClick={() => onSelect(item, index)}
-    >
-      <span className="shop-card-icon">
-        <Icon />
-      </span>
-      <span className="shop-card-label">{label}</span>
-      <span className="shop-card-underline" />
-    </button>
+    <span
+      className={`shop-face ${className}`}
+      style={{ '--skin-url': `url(${texture})`, ...style }}
+      aria-hidden="true"
+    />
   )
 }
 
-function ShopRow({ items, onSelect }) {
-  const trackRef = useRef(null)
+function FeaturedSelector({ items, onOpen }) {
+  const [active, setActive] = useState(0)
+  const item = items[active]
+  const { Icon } = item
 
-  const scrollByAmount = (dir) => {
-    trackRef.current?.scrollBy({ left: dir * 260, behavior: 'smooth' })
+  // roving focus: arrow keys move between tabs and select them
+  const onKeyDown = (e) => {
+    const keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }
+    if (!(e.key in keys)) return
+    e.preventDefault()
+    const next = (active + keys[e.key] + items.length) % items.length
+    setActive(next)
+    document.getElementById(`featured-tab-${next}`)?.focus()
   }
 
   return (
-    <div className="shop-carousel">
-      <button
-        type="button"
-        className="shop-arrow left"
-        onClick={() => scrollByAmount(-1)}
-        aria-label="Scroll left"
+    <Reveal className="shop-featured" direction="fade">
+      <div
+        className="shop-featured-list"
+        role="tablist"
+        aria-label="Featured items"
+        aria-orientation="vertical"
+        onKeyDown={onKeyDown}
       >
-        <ChevronLeftIcon />
-      </button>
-
-      <div className="shop-card-row" ref={trackRef}>
-        {items.map((item, index) => (
-          <ShopCard key={item.label} item={item} index={index} onSelect={onSelect} />
+        {items.map((entry, index) => (
+          <button
+            key={entry.label}
+            id={`featured-tab-${index}`}
+            type="button"
+            role="tab"
+            aria-selected={index === active}
+            aria-controls="featured-panel"
+            tabIndex={index === active ? 0 : -1}
+            className={`shop-featured-tab accent-${entry.accent}${index === active ? ' is-active' : ''}`}
+            style={{ '--i': index }}
+            onClick={() => setActive(index)}
+          >
+            <span className="shop-featured-tab-icon">
+              <entry.Icon />
+            </span>
+            <span className="shop-featured-tab-label">{entry.label}</span>
+            <span className="shop-featured-tab-chevron">
+              <ChevronRightIcon />
+            </span>
+          </button>
         ))}
       </div>
 
+      <div
+        key={item.label}
+        id="featured-panel"
+        role="tabpanel"
+        aria-labelledby={`featured-tab-${active}`}
+        className={`shop-spotlight accent-${item.accent}`}
+      >
+        <div className="shop-spotlight-art" aria-hidden="true" onPointerMove={trackOffset} onPointerLeave={resetOffset}>
+          <span className="shop-spotlight-ring r1" />
+          <span className="shop-spotlight-ring r2" />
+          <span className="shop-spotlight-ring r3" />
+          <span className="shop-spotlight-icon">
+            <Icon />
+          </span>
+        </div>
+
+        <div className="shop-spotlight-copy">
+          <h3>{item.label}</h3>
+          <p>{item.description}</p>
+          <button type="button" className="shop-btn shop-btn-fill" onClick={() => onOpen(item, active)}>
+            View details
+            <ChevronRightIcon />
+          </button>
+        </div>
+      </div>
+    </Reveal>
+  )
+}
+
+function CategoryBento({ categories, onOpen }) {
+  const [skins, ...rest] = categories
+
+  return (
+    <Reveal className="shop-bento" direction="fade">
       <button
         type="button"
-        className="shop-arrow right"
-        onClick={() => scrollByAmount(1)}
-        aria-label="Scroll right"
+        className={`shop-tile shop-tile-feature accent-${skins.accent}`}
+        style={{ '--i': 0 }}
+        onPointerMove={trackPointer}
+        onClick={() => onOpen(skins, 0)}
       >
-        <ChevronRightIcon />
+        <span className="shop-tile-faces" aria-hidden="true">
+          {skins.items.slice(0, 18).map((skin, i) => (
+            <SkinFace key={skin.label} texture={skin.texture} style={{ '--i': i }} />
+          ))}
+        </span>
+        <span className="shop-tile-body">
+          <span className="shop-tile-icon">
+            <skins.Icon />
+          </span>
+          <span className="shop-tile-label">{skins.label}</span>
+          <span className="shop-tile-desc">{skins.description}</span>
+          <span className="shop-tile-go">
+            Browse {skins.items.length} skins
+            <ChevronRightIcon />
+          </span>
+        </span>
       </button>
-    </div>
+
+      {rest.map((category, i) => (
+        <button
+          key={category.label}
+          type="button"
+          className={`shop-tile accent-${category.accent}`}
+          style={{ '--i': i + 1 }}
+          onPointerMove={trackPointer}
+          onClick={() => onOpen(category, i + 1)}
+        >
+          <span className="shop-tile-icon">
+            <category.Icon />
+          </span>
+          <span className="shop-tile-label">{category.label}</span>
+          <span className="shop-tile-desc">{category.description}</span>
+          <span className="shop-tile-go">
+            View
+            <ChevronRightIcon />
+          </span>
+        </button>
+      ))}
+    </Reveal>
   )
 }
 
@@ -297,7 +436,7 @@ function useDragRotate(sensitivity = 0.6) {
   }
 }
 
-function ShopItemModal({ item, index, onClose }) {
+function ShopItemModal({ item, index, onClose, onOrder }) {
   const { rotation, dragging, handlers } = useDragRotate()
 
   if (!item) return null
@@ -359,6 +498,11 @@ function ShopItemModal({ item, index, onClose }) {
             <span className="shop-modal-label">Description</span>
             <span className="shop-modal-underline small" />
             <p className="shop-modal-desc">{description}</p>
+
+            <button type="button" className="shop-btn shop-btn-fill shop-modal-order" onClick={() => onOrder(item)}>
+              Order this
+              <ChevronRightIcon />
+            </button>
 
             <div className="shop-modal-actions">
               <button type="button" className="shop-modal-action" aria-label="Share">
@@ -449,6 +593,42 @@ function ModelShopPage() {
     }
   }, [anyModalOpen, catalogue, catalogueItem])
 
+  const { hash } = useLocation()
+  const [params, setParams] = useSearchParams()
+  const [ordering, setOrdering] = useState(null)
+  const heroViewer = useRef(null)
+
+  // the router resets scroll on navigation after this effect runs, so defer
+  // the jump to a #section link (e.g. "How to Order" from the home page)
+  useEffect(() => {
+    if (!hash) return undefined
+    const t = setTimeout(() => {
+      document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 80)
+    return () => clearTimeout(t)
+  }, [hash])
+
+  // every Models-page item orders as a commission; skins share one category
+  const handleOrder = (item) => {
+    const key = item.texture ? 'com-minecraft-skins' : commissionKey(item.label)
+    const entry = FALLBACK_CATALOG.find((c) => c.key === key)
+    if (!entry) return
+    setSelected(null)
+    setCatalogueItem(null)
+    setCatalogue(null)
+    setOrdering(entry)
+  }
+
+  // returning from Discord sign-in with ?buy=<key> reopens that order
+  useEffect(() => {
+    const key = params.get('buy')
+    if (!key) return
+    const entry = FALLBACK_CATALOG.find((c) => c.key === key)
+    if (entry) setOrdering(entry)
+    params.delete('buy')
+    setParams(params, { replace: true })
+  }, [params, setParams])
+
   const handleSelect = (item, index) => {
     if (item.items) setCatalogue({ item })
     else setSelected({ item, index })
@@ -456,79 +636,139 @@ function ModelShopPage() {
 
   return (
     <div className="shop-page">
-      <div className="shop-frame">
-        <span className="shop-frame-tag">01</span>
-
-        <section className="shop-section">
-          <span className="shop-eyebrow">Specialized Models</span>
-          <div className="shop-heading">
-            <span className="shop-heading-line" />
-            <span className="shop-heading-dot" />
-            <h2>
-              FEATURED <em>ITEMS</em>
-            </h2>
-            <span className="shop-heading-dot" />
-            <span className="shop-heading-line" />
+      <header className="shop-hero" onPointerMove={trackOffset} onPointerLeave={resetOffset}>
+        <img className="shop-hero-art" src={cityArt} alt="" />
+        <div className="shop-hero-copy">
+          <span className="shop-kicker">Eden Specialized</span>
+          <h1>
+            Specialized
+            <br />
+            Models
+          </h1>
+          <p>
+            Custom item models, skins, and furniture, built to spec for your server and
+            delivered as a ready-to-use resource pack.
+          </p>
+          <div className="shop-hero-actions">
+            <a href={DISCORD_INVITE_URL} target="_blank" rel="noopener noreferrer" className="shop-btn shop-btn-fill">
+              Start a Project
+            </a>
+            <a href="#how-to-order" className="shop-btn shop-btn-ghost">
+              How to Order
+            </a>
           </div>
-
-          <ShopRow items={FEATURED_ITEMS} onSelect={handleSelect} />
-        </section>
-
-        <div className="shop-divider">
-          <span className="shop-heading-line wide" />
-          <span className="shop-heading-dot" />
-          <div className="shop-divider-copy">
-            <h2>BROWSE BY CATEGORY</h2>
-            <span>Custom Items Creation</span>
-          </div>
-          <span className="shop-heading-dot" />
-          <span className="shop-heading-line wide" />
         </div>
+        <div className="shop-hero-stage">
+          <span className="shop-hero-pad" aria-hidden="true" />
+          <SkinViewer3D texture={smasherSkin} className="shop-hero-skin" idle apiRef={heroViewer} />
 
-        <section className="shop-section">
-          <ShopRow items={CATEGORIES} onSelect={handleSelect} />
-        </section>
+          {/* rotate affordances: click to turn, or drag the model directly */}
+          <button
+            type="button"
+            className="shop-rotate-btn left"
+            aria-label="Rotate model left"
+            onClick={() => heroViewer.current?.rotate(-90)}
+          >
+            <RotateLeftIcon />
+          </button>
+          <button
+            type="button"
+            className="shop-rotate-btn right"
+            aria-label="Rotate model right"
+            onClick={() => heroViewer.current?.rotate(90)}
+          >
+            <RotateRightIcon />
+          </button>
+          <div className="shop-orbit-hint" aria-hidden="true">
+            <svg viewBox="0 0 300 70" fill="none">
+              <path className="shop-orbit-arc" d="M28 22 C 60 62, 240 62, 272 22" />
+              <path className="shop-orbit-head" d="M20 30 L28 22 L38 26" />
+              <path className="shop-orbit-head" d="M262 26 L272 22 L280 30" />
+            </svg>
+            <span>Drag to rotate</span>
+          </div>
+        </div>
+      </header>
+
+      <section className="shop-block" aria-labelledby="featured-title">
+        <div className="shop-block-head">
+          <h2 id="featured-title">Featured Items</h2>
+          <p>The lines we build most often. Pick one to see what goes into it.</p>
+        </div>
+        <FeaturedSelector items={FEATURED_ITEMS} onOpen={handleSelect} />
+      </section>
+
+      <section className="shop-block" aria-labelledby="category-title">
+        <div className="shop-block-head">
+          <h2 id="category-title">Browse by Category</h2>
+          <p>Custom items creation, from a single skin to a full furniture set.</p>
+        </div>
+        <CategoryBento categories={CATEGORIES} onOpen={handleSelect} />
+      </section>
+
+      <Reveal as="section" className="shop-order" direction="fade" id="how-to-order" aria-labelledby="order-title">
+        <div className="shop-order-steps">
+          <h2 id="order-title">How to Order</h2>
+          <ol>
+            {ORDER_STEPS.map((step, index) => (
+              <li key={step.title} style={{ '--i': index }}>
+                <span className="shop-step-num">{index + 1}</span>
+                <div>
+                  <h3>{step.title}</h3>
+                  <p>{step.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
 
         <div className="shop-cta">
-          <div className="shop-cta-copy">
-            <h3>
-              Ready to make
-              <br />
-              your <em>ideas</em>
-              <br />
-              come to life?
-            </h3>
-          </div>
-          <a href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer" className="shop-cta-btn">
-            <span>Start a Project</span>
-            <em>&#8656; Now! &#8658;</em>
+          <h3>
+            Ready to make your <em>ideas</em> come to life?
+          </h3>
+          <a href={DISCORD_INVITE_URL} target="_blank" rel="noopener noreferrer" className="shop-btn shop-btn-fill shop-btn-lg">
+            Start a Project
+            <ChevronRightIcon />
           </a>
         </div>
-      </div>
+      </Reveal>
 
-      {selected && (
-        <ShopItemModal
-          item={selected.item}
-          index={selected.index}
-          onClose={() => setSelected(null)}
-        />
-      )}
+      {ordering && <OrderDialog item={ordering} accent="red" onClose={() => setOrdering(null)} />}
 
-      {catalogue && (
-        <ShopCatalogueModal
-          category={catalogue.item}
-          onClose={() => setCatalogue(null)}
-          onSelectItem={(item, index) => setCatalogueItem({ item, index })}
-        />
-      )}
+      {/* portaled to <body> so the overlay is fixed to the viewport and
+          layered above the nav - inside .page-transition its fixed
+          positioning resolves against the animated wrapper instead */}
+      {anyModalOpen &&
+        createPortal(
+          <div className="shop-portal">
+            {selected && (
+              <ShopItemModal
+                item={selected.item}
+                index={selected.index}
+                onClose={() => setSelected(null)}
+              onOrder={handleOrder}
+              />
+            )}
 
-      {catalogueItem && (
-        <ShopItemModal
-          item={catalogueItem.item}
-          index={catalogueItem.index}
-          onClose={() => setCatalogueItem(null)}
-        />
-      )}
+            {catalogue && (
+              <ShopCatalogueModal
+                category={catalogue.item}
+                onClose={() => setCatalogue(null)}
+                onSelectItem={(item, index) => setCatalogueItem({ item, index })}
+              />
+            )}
+
+            {catalogueItem && (
+              <ShopItemModal
+                item={catalogueItem.item}
+                index={catalogueItem.index}
+                onClose={() => setCatalogueItem(null)}
+              onOrder={handleOrder}
+              />
+            )}
+          </div>,
+          document.body,
+        )}
     </div>
   )
 }

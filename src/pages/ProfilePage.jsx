@@ -24,7 +24,7 @@ function ProfilePage() {
   const initials = displayName.slice(0, 2).toUpperCase()
   const memberSince = profile?.created_at
     ? new Date(profile.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
-    : '—'
+    : '-'
 
   const handleLogout = async () => {
     await logout()

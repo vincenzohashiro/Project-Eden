@@ -8,6 +8,8 @@ import { fetchDiscordStatus } from '../lib/discordStatus'
 import SiteNav from '../components/SiteNav'
 import SiteFooter from '../components/SiteFooter'
 import SkinViewer3D from '../components/SkinViewer3D'
+import HomeBackdrop from '../components/HomeBackdrop'
+import { SERVER_LOADER, SERVER_VERSION } from '../lib/serverStatus'
 import './LandingPageTest.css'
 
 const CartIcon = () => (
@@ -120,6 +122,7 @@ function LandingPageTest() {
 
   return (
     <div className="lt-page">
+      <HomeBackdrop />
       <SiteNav />
 
       <section className="lt-hero">
@@ -147,7 +150,7 @@ function LandingPageTest() {
                   <CartIcon />
                   Browse Models
                 </Link>
-                <Link to="/shop" className="lt-btn lt-btn-outline lt-red">
+                <Link to="/shop#how-to-order" className="lt-btn lt-btn-outline lt-red">
                   <DocIcon />
                   How to Order
                 </Link>
@@ -196,10 +199,10 @@ function LandingPageTest() {
               </p>
 
               <div className="lt-actions">
-                <a href="https://discord.gg/mEhgkyUxTF" target="_blank" rel="noopener noreferrer" className="lt-btn lt-btn-fill lt-green">
+                <Link to="/server" className="lt-btn lt-btn-fill lt-green">
                   <ArrowIcon />
                   Join Server
-                </a>
+                </Link>
                 <Link to="/server" className="lt-btn lt-btn-outline lt-green">
                   <ListIcon />
                   View Features
@@ -220,10 +223,13 @@ function LandingPageTest() {
                   <span className="status-dot" /> Online
                 </span>
                 <span className="lt-status-value">{players} / {maxPlayers}</span>
+                <span className="lt-capacity" aria-hidden="true">
+                  <span style={{ width: `${Math.min(players / maxPlayers, 1) * 100}%` }} />
+                </span>
                 <span className="lt-status-label">Players Online</span>
                 <span className="lt-status-value">Eden City</span>
                 <span className="lt-status-label">Map</span>
-                <span className="lt-status-value">1.20.4</span>
+                <span className="lt-status-value">{SERVER_VERSION} {SERVER_LOADER}</span>
                 <span className="lt-status-label">Version</span>
               </div>
 

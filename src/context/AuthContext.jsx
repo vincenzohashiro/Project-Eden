@@ -21,7 +21,7 @@ export function AuthProvider({ children }) {
       return data
     }
 
-    // First login — create the profile row.
+    // First login - create the profile row.
     // full_name = Discord global display name, name = Discord @username
     const rawName = u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || 'Colonist'
     const username = rawName.replace(/#\d+$/, '').trim() || 'Colonist'

@@ -46,19 +46,19 @@ function EdenSidebar({ status, stats, pending, onStart, onStop, onRestart, onKil
         <div className="eden-quick-stats">
           <div className="eden-quick-stat">
             <span>CPU</span>
-            <strong>{stats ? `${stats.cpuPercent.toFixed(0)}%` : '—'}</strong>
+            <strong>{stats ? `${stats.cpuPercent.toFixed(0)}%` : '-'}</strong>
           </div>
           <div className="eden-quick-stat">
             <span>RAM</span>
-            <strong>{stats ? formatBytes(stats.memory.usedBytes) : '—'}</strong>
+            <strong>{stats ? formatBytes(stats.memory.usedBytes) : '-'}</strong>
           </div>
           <div className="eden-quick-stat">
             <span>Disk</span>
-            <strong>{stats ? formatBytes(stats.disk.usedBytes) : '—'}</strong>
+            <strong>{stats ? formatBytes(stats.disk.usedBytes) : '-'}</strong>
           </div>
           <div className="eden-quick-stat">
             <span>Players</span>
-            <strong>{stats?.players ? `${stats.players.online}/${stats.players.max}` : '—'}</strong>
+            <strong>{stats?.players ? `${stats.players.online}/${stats.players.max}` : '-'}</strong>
           </div>
         </div>
 

@@ -108,7 +108,7 @@ function EdenSchedulesPanel() {
             <div className="eden-panel-header">
               <span>
                 {s.name} <span className="eden-text-dim">({cronSummary(s.cron)})</span>
-                {!s.isActive && <span className="eden-text-dim"> — inactive</span>}
+                {!s.isActive && <span className="eden-text-dim"> (inactive)</span>}
               </span>
               <div className="eden-table-actions">
                 <button type="button" disabled={pendingId === s.id} onClick={() => handleExecute(s.id)}>
@@ -125,7 +125,7 @@ function EdenSchedulesPanel() {
                 {s.tasks.map((t) => (
                   <li key={t.id} className="eden-form-row">
                     <span>
-                      {t.action}: {t.payload || '—'}
+                      {t.action}: {t.payload || '-'}
                     </span>
                     <button type="button" className="danger" onClick={() => handleDeleteTask(s.id, t.id)}>
                       Remove
