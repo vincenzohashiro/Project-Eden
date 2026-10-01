@@ -2,10 +2,16 @@ import { Link } from 'react-router-dom'
 import logoImg from '../assets/ProjectEden2.png'
 import Reveal from './Reveal'
 
-// Partner link/logo is still a placeholder until it's wired in.
-const VERIFIED_BUYERS = ['Azuri', 'Dreiwhite', 'Havi', 'Fernn_', 'Niño', 'Sikatu', 'Zenshin']
+const VERIFIED_BUYERS = [
+  'Hiraya SMP',
+  'Paksiw SMP',
+  'Lemoncraft',
+  'Valthorne SMP',
+  'Yakisova',
+  'Ellipsis SMP',
+  'Sovereign Developers',
+]
 
-const PARTNERS = [{ name: 'Valthorne SMP', url: '#' }]
 
 const ShopIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -116,27 +122,7 @@ function SiteFooter() {
 
           <div className="site-footer-partners-card" onPointerMove={trackPointer}>
             <span className="site-footer-spotlight" aria-hidden="true" />
-            <span className="site-footer-partners-title">Our Partners</span>
-
-            <div className="site-footer-partners-block">
-              <span className="site-footer-col-subtitle">Partner Servers</span>
-              <div className="site-footer-partner-badges">
-                {PARTNERS.map((partner) => (
-                  <a
-                    key={partner.name}
-                    href={partner.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="site-footer-partner-badge"
-                  >
-                    <span className="site-footer-partner-badge-icon">
-                      {partner.name.charAt(0)}
-                    </span>
-                    {partner.name}
-                  </a>
-                ))}
-              </div>
-            </div>
+            <span className="site-footer-partners-title">Our Clients</span>
 
             <div className="site-footer-partners-block">
               <span className="site-footer-col-subtitle">Verified Buyers</span>
