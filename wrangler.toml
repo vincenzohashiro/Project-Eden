@@ -4,7 +4,8 @@ workers_dev = true
 
 routes = [
   { pattern = "project-eden.online", custom_domain = true },
-  { pattern = "www.project-eden.online", custom_domain = true },
+  # re-add once the old www CNAME (Vercel) is deleted in Cloudflare DNS:
+  # { pattern = "www.project-eden.online", custom_domain = true },
 ]
 
 [assets]
