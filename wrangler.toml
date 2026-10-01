@@ -1,5 +1,6 @@
 name = "project-eden-online"
 compatibility_date = "2026-09-30"
+workers_dev = true
 
 routes = [
   { pattern = "project-eden.online", custom_domain = true },
