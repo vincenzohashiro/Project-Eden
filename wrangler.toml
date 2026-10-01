@@ -1,0 +1,13 @@
+name = "project-eden-online"
+compatibility_date = "2026-09-30"
+
+[assets]
+directory = "./dist"
+# Serve index.html for client-side routes like /profile
+not_found_handling = "single-page-application"
+
+# Uncomment once project-eden.online is an active zone in this Cloudflare account
+# routes = [
+#   { pattern = "project-eden.online", custom_domain = true },
+#   { pattern = "www.project-eden.online", custom_domain = true },
+# ]
