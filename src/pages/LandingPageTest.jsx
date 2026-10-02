@@ -94,7 +94,7 @@ const FEATURE_ICONS = {
   community: ListIcon,
 }
 
-const SMP_FEATURES = [
+const SERVER_FEATURES = [
   ['economy', 'Economy'],
   ['quests', 'Quests'],
   ['items', 'Custom Items'],
@@ -215,22 +215,23 @@ function LandingPageTest() {
           </div>
         </div>
 
-        <div className="lt-panel lt-panel-smp" id="smp">
+        <div className="lt-panel lt-panel-server" id="server">
           <PanelDecor />
           <span className="lt-tag lt-tag-green">
             <span className="lt-tag-num">02</span>
             <span className="lt-tag-sep">&rsaquo;</span>
-            PROJECT EDEN SMP
+            EDEN SERVER
           </span>
 
-          <div className="lt-panel-body lt-panel-body-smp">
+          <div className="lt-panel-body lt-panel-body-server">
             <div className="lt-panel-copy">
               <h1 className="lt-wordmark">
-                <span className="lt-word-green">Eden SMP</span>
+                <span className="lt-word-white">Eden</span>
+                <span className="lt-word-green">Server</span>
               </h1>
               <p className="lt-subhead">Experience The Models In-Game</p>
               <p className="lt-desc">
-                Join our cyberpunk Minecraft SMP where custom items come to
+                Join our cyberpunk Minecraft server where custom items come to
                 life. Build. Explore. Fight. Thrive.
               </p>
 
@@ -246,7 +247,7 @@ function LandingPageTest() {
               </div>
             </div>
 
-            <div className="lt-panel-art lt-art-smp">
+            <div className="lt-panel-art lt-art-server">
               <SkinViewer3D texture={smasherSkin} className="lt-art-skin" />
               <div className="lt-art-glow" />
               <em>In-Game</em>
@@ -272,7 +273,7 @@ function LandingPageTest() {
               <div className="lt-status-block">
                 <span className="lt-status-title">Server Features</span>
                 <ul className="lt-feature-list">
-                  {SMP_FEATURES.map(([key, label]) => {
+                  {SERVER_FEATURES.map(([key, label]) => {
                     const Icon = FEATURE_ICONS[key]
                     return (
                       <li key={key}>

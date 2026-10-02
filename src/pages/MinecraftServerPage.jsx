@@ -466,7 +466,7 @@ function MinecraftServerPage() {
         <div className="srv-block-head srv-block-head-row">
           <div>
             <h2 id="store-title">Store</h2>
-            <p>Ranks and in-game cosmetics for Eden SMP. Sign in with Discord to order.</p>
+            <p>Ranks and in-game cosmetics for Eden Server. Sign in with Discord to order.</p>
           </div>
           <div
             className="srv-tabs"
@@ -505,7 +505,7 @@ function MinecraftServerPage() {
         </div>
 
         {/* custom models, skins and commissions are sold on Eden Specialized;
-            Eden SMP is where players use them */}
+            Eden Server is where players use them */}
         <p className="srv-store-foot">
           Looking for custom models or skins? Those are made on{' '}
           <Link to="/shop">Eden Specialized</Link>, then show up here in-game.

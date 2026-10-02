@@ -79,8 +79,17 @@
   align-items: stretch;
 }
 
-.lt-panel-body-smp {
+.lt-panel-body-server {
   grid-template-columns: 4fr 5fr 3fr;
+}
+
+/* "Server" is the widest wordmark word; size it to its narrow column */
+.lt-panel-body-server .lt-panel-copy {
+  container-type: inline-size;
+}
+
+.lt-panel-body-server .lt-wordmark {
+  font-size: min(clamp(34px, 3.6vw, 50px), 16.5cqi);
 }
 
 .lt-panel-copy {
@@ -357,9 +366,9 @@
   color: var(--text-dim);
 }
 
-/* ---------- 02 project eden smp: green + hovering thrusters ---------- */
+/* ---------- 02 eden server: green + hovering thrusters ---------- */
 
-.lt-panel-smp {
+.lt-panel-server {
   background-image:
     /* sharp cores: left, right, top, bottom */
     linear-gradient(
@@ -400,10 +409,10 @@
   border-color: rgba(146, 194, 62, 0.4);
   box-shadow: inset 0 0 60px rgba(146, 194, 62, 0.03);
   padding-bottom: 34px;
-  animation: lt-smp-float 4.2s ease-in-out infinite;
+  animation: lt-server-float 4.2s ease-in-out infinite;
 }
 
-@keyframes lt-smp-float {
+@keyframes lt-server-float {
   0%,
   100% {
     transform: translateY(0) rotate(0deg);
@@ -414,7 +423,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lt-panel-smp {
+  .lt-panel-server {
     animation: none;
   }
 }
@@ -451,7 +460,7 @@
   border-color: var(--lt-green);
 }
 
-.lt-art-smp {
+.lt-art-server {
   border: 1px solid rgba(146, 194, 62, 0.3);
 }
 
@@ -467,7 +476,7 @@
   pointer-events: none;
 }
 
-.lt-art-smp em {
+.lt-art-server em {
   position: relative;
   align-self: flex-start;
   margin: auto 0 0 0;
@@ -757,7 +766,7 @@
 
 @media (max-width: 1080px) {
   .lt-panel-body,
-  .lt-panel-body-smp {
+  .lt-panel-body-server {
     grid-template-columns: 1fr;
   }
 
@@ -858,7 +867,7 @@
   --lt-edge-dim: rgba(255, 59, 59, 0.22);
 }
 
-.lt-panel-smp {
+.lt-panel-server {
   --lt-edge: rgba(146, 194, 62, 0.7);
   --lt-edge-dim: rgba(146, 194, 62, 0.22);
 }
@@ -1054,7 +1063,7 @@
 }
 
 .lt-art-model em::before,
-.lt-art-smp em::before {
+.lt-art-server em::before {
   content: '';
   display: inline-block;
   width: 5px;
@@ -1070,9 +1079,9 @@
   opacity: 0.85;
 }
 
-/* ---------- SMP viewer: holographic floor grid ---------- */
+/* ---------- server viewer: holographic floor grid ---------- */
 
-.lt-art-smp {
+.lt-art-server {
   --bk: rgba(195, 232, 150, 0.7);
 
   border-radius: 8px;
@@ -1357,7 +1366,7 @@
   left: 10px;
 }
 
-.lt-panel-smp .lt-decor-ruler {
+.lt-panel-server .lt-decor-ruler {
   right: 10px;
   transform: scaleX(-1);
 }
@@ -1383,8 +1392,8 @@
   opacity: 0.4;
 }
 
-/* the SMP panel's lower area is already full (viewer + feature list) */
-.lt-panel-smp .lt-decor-circuit {
+/* the server panel's lower area is already full (viewer + feature list) */
+.lt-panel-server .lt-decor-circuit {
   display: none;
 }
 
@@ -1456,7 +1465,7 @@
     letter-spacing: 1px;
   }
 
-  .lt-art-smp {
+  .lt-art-server {
     min-height: 300px;
   }
 

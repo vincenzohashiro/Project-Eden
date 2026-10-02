@@ -24,7 +24,7 @@ function AboutPage() {
         <h1>About us</h1>
         <p>
           Two worlds, one connection. Eden Specialized builds custom Minecraft models, skins, and
-          resource pack assets, and Eden SMP is the server where you can see them in action.
+          resource pack assets, and Eden Server is where you can see them in action.
         </p>
       </header>
 
