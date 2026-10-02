@@ -1261,6 +1261,12 @@ button.adm-stat:hover::before,
   }
 }
 
+@media (max-width: 420px) {
+  .adm-pipeline-legend {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .adm-flow-plot rect,
   .adm-detail-grid,

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import OrderDialog from '../components/OrderDialog'
 import Reveal from '../components/Reveal'
@@ -355,10 +355,21 @@ function OrdersPreview({ user, onSignIn }) {
 function MinecraftServerPage() {
   const { user, loginWithDiscord } = useAuth()
   const [params, setParams] = useSearchParams()
+  const { hash } = useLocation()
   const [status, setStatus] = useState(undefined)
   const [catalog, setCatalog] = useState([])
   const [tab, setTab] = useState('rank')
   const [buying, setBuying] = useState(null)
+
+  // the router resets scroll after this effect, so defer #section jumps
+  // (e.g. the nav's Features link)
+  useEffect(() => {
+    if (!hash) return undefined
+    const t = setTimeout(() => {
+      document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 80)
+    return () => clearTimeout(t)
+  }, [hash])
 
   useEffect(() => {
     let active = true
@@ -429,7 +440,7 @@ function MinecraftServerPage() {
         <ServerListPreview status={status} />
       </Reveal>
 
-      <Reveal as="section" className="srv-block" direction="fade" aria-labelledby="features-title">
+      <Reveal as="section" className="srv-block" direction="fade" id="features" aria-labelledby="features-title">
         <div className="srv-block-head">
           <h2 id="features-title">On the server</h2>
           <p>What a session on Project Eden looks like.</p>

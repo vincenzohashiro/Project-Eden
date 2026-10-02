@@ -1432,3 +1432,9 @@
     transition: none;
   }
 }
+
+/* #features (nav link) and #store jumps land below the fixed nav */
+#features,
+#store {
+  scroll-margin-top: calc(var(--nav-height) + 20px);
+}

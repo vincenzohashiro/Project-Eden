@@ -9,6 +9,8 @@ function SiteNav() {
   const { user, profile } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
+  // Features is a section of the Server page, so it owns the highlight there
+  const onFeatures = location.pathname === '/server' && location.hash === '#features'
 
   useEffect(() => {
     setMenuOpen(false)
@@ -52,12 +54,12 @@ function SiteNav() {
           <NavLink to="/shop" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Models
           </NavLink>
-          <NavLink to="/server" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+          <NavLink to="/server" className={({ isActive }) => (isActive && !onFeatures ? 'active' : undefined)}>
             Server
           </NavLink>
-          <NavLink to="/qa" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            FAQ
-          </NavLink>
+          <Link to="/server#features" className={onFeatures ? 'active' : undefined}>
+            Features
+          </Link>
           {user && (
             <NavLink to="/orders" className={({ isActive }) => (isActive ? 'active' : undefined)}>
               Orders
