@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import OrderDialog from '../components/OrderDialog'
 import Reveal from '../components/Reveal'
+import logoImg from '../assets/ProjectEden2.png'
 import { SERVER_ADDRESS, SERVER_LOADER, SERVER_VERSION, fetchServerStatus } from '../lib/serverStatus'
 import {
   ORDER_STATUSES,
@@ -91,8 +92,56 @@ const JOIN_STEPS = [
 const STORE_TABS = [
   { key: 'rank', label: 'Ranks' },
   { key: 'cosmetic', label: 'Cosmetics' },
-  { key: 'commission', label: 'Specialized' },
 ]
+
+// pointer position in px, for cursor-following glows on cards
+const trackPointer = (e) => {
+  const rect = e.currentTarget.getBoundingClientRect()
+  e.currentTarget.style.setProperty('--mx', `${e.clientX - rect.left}px`)
+  e.currentTarget.style.setProperty('--my', `${e.clientY - rect.top}px`)
+}
+
+// pointer offset from centre (-0.5..0.5) for the hero parallax
+const trackOffset = (e) => {
+  const rect = e.currentTarget.getBoundingClientRect()
+  e.currentTarget.style.setProperty('--px', ((e.clientX - rect.left) / rect.width - 0.5).toFixed(3))
+  e.currentTarget.style.setProperty('--py', ((e.clientY - rect.top) / rect.height - 0.5).toFixed(3))
+}
+
+const resetOffset = (e) => {
+  e.currentTarget.style.setProperty('--px', 0)
+  e.currentTarget.style.setProperty('--py', 0)
+}
+
+const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+// eases a number from its previous value to `value` whenever it changes
+function useCountUp(value, duration = 900) {
+  const [shown, setShown] = useState(value ?? 0)
+  const from = useRef(0)
+
+  useEffect(() => {
+    if (value == null) return undefined
+    if (reducedMotion()) {
+      setShown(value)
+      from.current = value
+      return undefined
+    }
+    let raf = 0
+    const start = performance.now()
+    const a = from.current
+    const step = (now) => {
+      const t = Math.min((now - start) / duration, 1)
+      setShown(Math.round(a + (value - a) * (1 - (1 - t) ** 3)))
+      if (t < 1) raf = requestAnimationFrame(step)
+      else from.current = value
+    }
+    raf = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(raf)
+  }, [value, duration])
+
+  return shown
+}
 
 function AddressBar() {
   const [copied, setCopied] = useState(false)
@@ -110,11 +159,20 @@ function AddressBar() {
   return (
     <div className={`srv-address${copied ? ' is-copied' : ''}`}>
       <span className="srv-address-label">Server address</span>
-      <code>{SERVER_ADDRESS}</code>
+      <code>
+        <span className="srv-address-text" style={{ '--chars': SERVER_ADDRESS.length }}>
+          {SERVER_ADDRESS}
+        </span>
+        <span className="srv-address-caret" aria-hidden="true" />
+      </code>
       <button type="button" onClick={copy} aria-label={`Copy server address ${SERVER_ADDRESS}`}>
         {copied ? <CheckIcon /> : <CopyIcon />}
         <span aria-live="polite">{copied ? 'Copied' : 'Copy'}</span>
+        <span className="srv-copy-burst" aria-hidden="true" />
       </button>
+      <span className="srv-address-hint" aria-hidden={!copied}>
+        Now open Multiplayer, choose Add Server, and paste it in.
+      </span>
     </div>
   )
 }
@@ -123,6 +181,7 @@ function StatusConsole({ status }) {
   const known = status !== undefined && status !== null
   const online = known && status.online
   const pct = online && status.maxPlayers ? Math.min(status.players / status.maxPlayers, 1) * 100 : 0
+  const players = useCountUp(online ? status.players : null)
 
   let state = 'Checking…'
   if (status === null) state = 'Status unavailable'
@@ -133,12 +192,14 @@ function StatusConsole({ status }) {
       <div className="srv-console-head">
         <span className="srv-console-dot" />
         <span>{state}</span>
+        <span className="srv-console-live">Live</span>
       </div>
+      <span className="srv-console-scan" aria-hidden="true" />
 
       <dl className="srv-console-rows">
         <div>
           <dt>Players</dt>
-          <dd>{online && status.players != null ? `${status.players} / ${status.maxPlayers}` : '-'}</dd>
+          <dd>{online && status.players != null ? `${players} / ${status.maxPlayers}` : '-'}</dd>
         </div>
         <div className="srv-console-meter" aria-hidden="true">
           <span style={{ width: `${pct}%` }} />
@@ -162,10 +223,44 @@ function StatusConsole({ status }) {
   )
 }
 
+// how the server appears in Minecraft's Multiplayer list, with live data
+function ServerListPreview({ status }) {
+  const online = Boolean(status?.online)
+  const players = useCountUp(online ? status.players : null)
+
+  return (
+    <div className={`srv-mclist${online ? ' is-online' : ''}`}>
+      <span className="srv-mclist-caption">How it shows up in your server list</span>
+      <div className="srv-mclist-row">
+        <img className="srv-mclist-icon" src={logoImg} alt="" />
+        <div className="srv-mclist-body">
+          <div className="srv-mclist-top">
+            <strong>Project Eden</strong>
+            <span className="srv-mclist-count">
+              {online && status.players != null ? `${players}/${status.maxPlayers}` : '???'}
+            </span>
+            <span className="srv-mclist-ping" aria-label={online ? 'Good connection' : 'No connection'}>
+              <i />
+              <i />
+              <i />
+              <i />
+              <i />
+            </span>
+          </div>
+          <p>{online && status.motd ? status.motd : `${SERVER_ADDRESS} · Java ${SERVER_VERSION}`}</p>
+        </div>
+        <span className="srv-mclist-join" aria-hidden="true">
+          Join Server
+        </span>
+      </div>
+    </div>
+  )
+}
+
 function StoreCard({ item, onBuy }) {
   const isRank = item.kind === 'rank'
   return (
-    <article className={`srv-item kind-${item.kind}`}>
+    <article className={`srv-item kind-${item.kind}`} onPointerMove={trackPointer}>
       <div className="srv-item-top">
         <h3>{item.name}</h3>
         <span className="srv-item-price">{formatPrice(item.price_cents)}</span>
@@ -211,8 +306,8 @@ function OrdersPreview({ user, onSignIn }) {
     return (
       <div className="srv-track-empty">
         <ol className="srv-pipeline" aria-label="How an order moves">
-          {ORDER_STATUSES.filter((s) => s.key !== 'cancelled' && s.key !== 'awaiting_quote').map((s) => (
-            <li key={s.key}>
+          {ORDER_STATUSES.filter((s) => s.key !== 'cancelled' && s.key !== 'awaiting_quote').map((s, i) => (
+            <li key={s.key} style={{ '--i': i }}>
               <span className="srv-pipeline-dot" />
               {s.label}
             </li>
@@ -267,10 +362,13 @@ function MinecraftServerPage() {
 
   useEffect(() => {
     let active = true
-    fetchServerStatus().then((s) => active && setStatus(s))
+    const poll = () => fetchServerStatus().then((s) => active && setStatus(s))
+    poll()
+    const timer = setInterval(poll, 60000)
     fetchCatalog().then((items) => active && setCatalog(items))
     return () => {
       active = false
+      clearInterval(timer)
     }
   }, [])
 
@@ -278,7 +376,7 @@ function MinecraftServerPage() {
   useEffect(() => {
     const key = params.get('buy')
     if (!key || !catalog.length) return
-    const item = catalog.find((i) => i.key === key)
+    const item = catalog.find((i) => i.key === key && i.kind !== 'commission')
     if (item) {
       setTab(item.kind)
       setBuying(item)
@@ -291,7 +389,7 @@ function MinecraftServerPage() {
 
   return (
     <div className="srv-page">
-      <header className="srv-hero">
+      <header className="srv-hero" onPointerMove={trackOffset} onPointerLeave={resetOffset}>
         <div className="srv-hero-copy">
           <span className="srv-kicker">Project Eden SMP</span>
           <h1>
@@ -321,13 +419,14 @@ function MinecraftServerPage() {
         </div>
         <ol className="srv-steps">
           {JOIN_STEPS.map(([title, body], i) => (
-            <li key={title} style={{ '--i': i }}>
+            <li key={title} style={{ '--i': i }} onPointerMove={trackPointer}>
               <span className="srv-step-num">{i + 1}</span>
               <h3>{title}</h3>
               <p>{body}</p>
             </li>
           ))}
         </ol>
+        <ServerListPreview status={status} />
       </Reveal>
 
       <Reveal as="section" className="srv-block" direction="fade" aria-labelledby="features-title">
@@ -337,7 +436,7 @@ function MinecraftServerPage() {
         </div>
         <ul className="srv-features">
           {FEATURES.map(([key, title, body], i) => (
-            <li key={key} style={{ '--i': i }}>
+            <li key={key} style={{ '--i': i }} onPointerMove={trackPointer}>
               <span className="srv-feature-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
                   {FEATURE_ICONS[key]}
@@ -356,9 +455,15 @@ function MinecraftServerPage() {
         <div className="srv-block-head srv-block-head-row">
           <div>
             <h2 id="store-title">Store</h2>
-            <p>Ranks, cosmetics, and Eden Specialized commissions. Sign in with Discord to order.</p>
+            <p>Ranks and in-game cosmetics for Eden SMP. Sign in with Discord to order.</p>
           </div>
-          <div className="srv-tabs" role="tablist" aria-label="Store sections">
+          <div
+            className="srv-tabs"
+            role="tablist"
+            aria-label="Store sections"
+            style={{ '--tab': STORE_TABS.findIndex((t) => t.key === tab), '--tabs': STORE_TABS.length }}
+          >
+            <span className="srv-tabs-pill" aria-hidden="true" />
             {STORE_TABS.map((t) => (
               <button
                 key={t.key}
@@ -388,11 +493,12 @@ function MinecraftServerPage() {
           ))}
         </div>
 
-        {tab === 'commission' && (
-          <p className="srv-store-foot">
-            Want to see examples first? Browse the <Link to="/shop">Models page</Link>.
-          </p>
-        )}
+        {/* custom models, skins and commissions are sold on Eden Specialized;
+            Eden SMP is where players use them */}
+        <p className="srv-store-foot">
+          Looking for custom models or skins? Those are made on{' '}
+          <Link to="/shop">Eden Specialized</Link>, then show up here in-game.
+        </p>
       </Reveal>
 
       <Reveal as="section" className="srv-block srv-track" direction="fade" aria-labelledby="track-title">

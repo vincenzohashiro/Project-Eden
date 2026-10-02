@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext'
 const DISCORD_INVITE_URL = 'https://discord.gg/mEhgkyUxTF'
 
 function SiteNav() {
-  const { user } = useAuth()
+  const { user, profile } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
 
@@ -55,12 +55,17 @@ function SiteNav() {
           <NavLink to="/server" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Server
           </NavLink>
-          <NavLink to="/pricing" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Pricing
+          <NavLink to="/qa" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+            FAQ
           </NavLink>
           {user && (
             <NavLink to="/orders" className={({ isActive }) => (isActive ? 'active' : undefined)}>
               Orders
+            </NavLink>
+          )}
+          {profile?.role === 'admin' && (
+            <NavLink to="/admin" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+              Admin
             </NavLink>
           )}
           <a href={DISCORD_INVITE_URL} target="_blank" rel="noopener noreferrer">Discord</a>

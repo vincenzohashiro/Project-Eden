@@ -186,7 +186,7 @@ function LandingPageTest() {
                   <CartIcon />
                   Browse Models
                 </Link>
-                <Link to="/shop#how-to-order" className="lt-btn lt-btn-outline lt-red">
+                <Link to="/qa#how-to-order" className="lt-btn lt-btn-outline lt-red">
                   <DocIcon />
                   How to Order
                 </Link>
@@ -226,7 +226,6 @@ function LandingPageTest() {
           <div className="lt-panel-body lt-panel-body-smp">
             <div className="lt-panel-copy">
               <h1 className="lt-wordmark">
-                <span className="lt-word-white">Project</span>
                 <span className="lt-word-green">Eden SMP</span>
               </h1>
               <p className="lt-subhead">Experience The Models In-Game</p>

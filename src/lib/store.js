@@ -124,6 +124,38 @@ export async function updateOrderStatus(orderId, status, staffNote) {
   if (error) throw new Error(error.message)
 }
 
+// line total in cents, or null while the order is still waiting on a quote
+export const orderTotal = (order) => (order.price_cents == null ? null : order.price_cents * order.quantity)
+
+// Admin panel: every order (newest first) with its timeline and the buyer's
+// profile. orders.user_id points at auth.users, so profiles are joined here.
+export async function fetchAdminOrders() {
+  if (!supabase) return []
+  const { data, error } = await supabase
+    .from('orders')
+    .select(ORDER_FIELDS)
+    .order('created_at', { ascending: false })
+    .limit(1000)
+  if (error) throw new Error(error.message)
+
+  const ids = [...new Set(data.map((o) => o.user_id))]
+  const { data: profiles } = ids.length
+    ? await supabase.from('profiles').select('id, username, discord_username, avatar_url').in('id', ids)
+    : { data: [] }
+  const byId = Object.fromEntries((profiles ?? []).map((p) => [p.id, p]))
+  return data.map((o) => ({ ...o, profile: byId[o.user_id] ?? null }))
+}
+
+// status, quoted unit price (cents) and staff note in one update; the
+// database trigger logs a timeline event when the status changes
+export async function updateOrder(orderId, { status, priceCents, staffNote }) {
+  if (!supabase) return
+  const patch = { status, staff_note: staffNote?.trim() || null }
+  if (priceCents !== undefined) patch.price_cents = priceCents
+  const { error } = await supabase.from('orders').update(patch).eq('id', orderId)
+  if (error) throw new Error(error.message)
+}
+
 // calls onChange whenever any order (or its timeline) visible to this session
 // changes; returns an unsubscribe function
 export function subscribeToOrders(onChange) {

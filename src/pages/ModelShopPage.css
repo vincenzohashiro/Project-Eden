@@ -763,6 +763,29 @@
   background: linear-gradient(180deg, rgba(var(--shop-red-rgb), 0.5), rgba(var(--shop-red-rgb), 0.1));
 }
 
+.shop-order-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 14px 62px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #ff8a8a;
+}
+
+.shop-order-more svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+.shop-order-more:hover svg {
+  transform: translateX(3px);
+}
+
 .shop-step-num {
   display: grid;
   place-items: center;

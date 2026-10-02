@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { useLocation, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import smasherSkin from '../assets/smasher.png'
 import cityArt from '../assets/ModelShop.png'
 import SkinViewer3D from '../components/SkinViewer3D'
 import Reveal from '../components/Reveal'
 import OrderDialog from '../components/OrderDialog'
+import QuoteGate from '../components/QuoteGate'
 import { FALLBACK_CATALOG, commissionKey } from '../lib/store'
 import './ModelShopPage.css'
 
@@ -222,20 +223,19 @@ const CATEGORIES = [
   },
 ]
 
-const DISCORD_INVITE_URL = 'https://discord.gg/mEhgkyUxTF'
-
+// condensed from the full process on the FAQ page (/qa#how-to-order)
 const ORDER_STEPS = [
   {
     title: 'Open a ticket',
-    body: 'Tell us what you want built in our Discord. Reference images help.',
+    body: 'Create a ticket in #ticket-support with the item type, a style reference, and your Paper / Spigot version.',
   },
   {
-    title: 'Approve the design',
-    body: "We share previews as the model takes shape and revise until it's right.",
+    title: 'Receive your quote',
+    body: 'We send an estimated price and turnaround. Work starts once you approve it.',
   },
   {
-    title: 'Get your pack',
-    body: 'You receive a resource pack with CustomModelData, ready to drop into your server.',
+    title: 'Get your files',
+    body: 'You receive the model or texture, resource pack integration, and installation instructions.',
   },
 ]
 
@@ -596,6 +596,7 @@ function ModelShopPage() {
   const { hash } = useLocation()
   const [params, setParams] = useSearchParams()
   const [ordering, setOrdering] = useState(null)
+  const [gateOpen, setGateOpen] = useState(false)
   const heroViewer = useRef(null)
 
   // the router resets scroll on navigation after this effect runs, so defer
@@ -650,12 +651,12 @@ function ModelShopPage() {
             delivered as a ready-to-use resource pack.
           </p>
           <div className="shop-hero-actions">
-            <a href={DISCORD_INVITE_URL} target="_blank" rel="noopener noreferrer" className="shop-btn shop-btn-fill">
+            <button type="button" className="shop-btn shop-btn-fill" onClick={() => setGateOpen(true)}>
               Start a Project
-            </a>
-            <a href="#how-to-order" className="shop-btn shop-btn-ghost">
+            </button>
+            <Link to="/qa#how-to-order" className="shop-btn shop-btn-ghost">
               How to Order
-            </a>
+            </Link>
           </div>
         </div>
         <div className="shop-hero-stage">
@@ -720,18 +721,24 @@ function ModelShopPage() {
               </li>
             ))}
           </ol>
+          <Link to="/qa" className="shop-order-more">
+            Pricing, turnaround, and terms in the FAQ
+            <ChevronRightIcon />
+          </Link>
         </div>
 
         <div className="shop-cta">
           <h3>
             Ready to make your <em>ideas</em> come to life?
           </h3>
-          <a href={DISCORD_INVITE_URL} target="_blank" rel="noopener noreferrer" className="shop-btn shop-btn-fill shop-btn-lg">
+          <button type="button" className="shop-btn shop-btn-fill shop-btn-lg" onClick={() => setGateOpen(true)}>
             Start a Project
             <ChevronRightIcon />
-          </a>
+          </button>
         </div>
       </Reveal>
+
+      {gateOpen && <QuoteGate onClose={() => setGateOpen(false)} />}
 
       {ordering && <OrderDialog item={ordering} accent="red" onClose={() => setOrdering(null)} />}
 

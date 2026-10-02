@@ -14,6 +14,9 @@ import ModelShopPage from './pages/ModelShopPage'
 import LoginPage from './pages/LoginPage'
 import ProfilePage from './pages/ProfilePage'
 import OrdersPage from './pages/OrdersPage'
+import FaqPage from './pages/FaqPage'
+import AboutPage from './pages/AboutPage'
+import AdminPage from './pages/AdminPage'
 import EdenEnginePage from './pages/EdenEnginePage'
 import ComingSoonPage from './pages/ComingSoonPage'
 import './App.css'
@@ -23,6 +26,8 @@ const BACKDROPS = {
   '/shop': ShopBackdrop,
   '/EdenEngine': ServerBackdrop,
   '/orders': ServerBackdrop,
+  '/admin': ServerBackdrop,
+  '/qa': ShopBackdrop,
 }
 
 function AnimatedRoutes() {
@@ -80,16 +85,9 @@ function AnimatedRoutes() {
               />
             }
           />
-          <Route
-            path="/qa"
-            element={
-              <ComingSoonPage
-                eyebrow="Q&A"
-                title="COMING SOON"
-                body="Frequently asked questions are being written up."
-              />
-            }
-          />
+          <Route path="/qa" element={<FaqPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </div>
     </>

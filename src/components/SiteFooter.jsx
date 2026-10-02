@@ -116,6 +116,7 @@ function SiteFooter() {
                 <span className="site-footer-col-underline" />
                 <Link to="/reviews">Reviews</Link>
                 <Link to="/qa">FAQ</Link>
+                <Link to="/about">About Us</Link>
               </div>
             </div>
           </div>
