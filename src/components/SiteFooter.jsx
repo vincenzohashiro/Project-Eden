@@ -95,7 +95,7 @@ function SiteFooter() {
                 </span>
                 <span className="site-footer-col-underline" />
                 <Link to="/shop">Model Shop</Link>
-                <Link to="/pricing">Pricing</Link>
+                <Link to="/qa#pricing">Pricing</Link>
               </div>
 
               <div className="site-footer-col site-footer-col-community">

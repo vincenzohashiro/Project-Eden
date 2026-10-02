@@ -12,6 +12,7 @@ import {
   updateOrder,
 } from '../lib/store'
 import { makeDemoOrders } from '../lib/demoOrders'
+import MediaManager from '../components/MediaManager'
 import '../components/OrderDialog.css'
 import './AdminPage.css'
 
@@ -451,6 +452,7 @@ function AdminPage() {
   const [orders, setOrders] = useState(() => (DEMO ? makeDemoOrders() : null))
   const [error, setError] = useState('')
   const [now, setNow] = useState(() => Date.now())
+  const [tab, setTab] = useState('orders')
   const [rangeKey, setRangeKey] = useState('30d')
   const [group, setGroup] = useState('all')
   const [kind, setKind] = useState('all')
@@ -581,6 +583,8 @@ function AdminPage() {
     )
   } else if (!isAdmin) {
     body = <p className="adm-notice">This panel is for Project Eden staff only.</p>
+  } else if (tab === 'images') {
+    body = <MediaManager demo={DEMO} />
   } else if (orders === null) {
     body = <p className="adm-muted">Loading orders…</p>
   } else {
@@ -722,20 +726,40 @@ function AdminPage() {
       <header className="adm-head">
         <div>
           <span className="adm-kicker">Staff panel</span>
-          <h1>Orders dashboard</h1>
-          <p>Every order coming in, in progress, and completed. Updates live.</p>
+          <h1>{tab === 'images' ? 'Site images' : 'Orders dashboard'}</h1>
+          <p>
+            {tab === 'images'
+              ? 'Upload, arrange and remove the images shown on the website.'
+              : 'Every order coming in, in progress, and completed. Updates live.'}
+          </p>
         </div>
-        {isAdmin && orders && (
-          <div className="adm-range" role="group" aria-label="Date range">
-            {RANGES.map((r) => (
-              <button key={r.key} type="button" className={rangeKey === r.key ? 'is-active' : ''} onClick={() => setRangeKey(r.key)}>
-                {r.label}
-              </button>
-            ))}
+        {isAdmin && (
+          <div className="adm-head-tools">
+            <div className="adm-tabs" role="tablist" aria-label="Panel sections">
+              {[
+                ['orders', 'Orders'],
+                ['images', 'Images'],
+              ].map(([key, label]) => (
+                <button key={key} type="button" role="tab" aria-selected={tab === key} className={tab === key ? 'is-active' : ''} onClick={() => setTab(key)}>
+                  {label}
+                </button>
+              ))}
+            </div>
+            {tab === 'orders' && orders && (
+              <div className="adm-range" role="group" aria-label="Date range">
+                {RANGES.map((r) => (
+                  <button key={r.key} type="button" className={rangeKey === r.key ? 'is-active' : ''} onClick={() => setRangeKey(r.key)}>
+                    {r.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </header>
-      {DEMO && <p className="adm-demo">Preview data: Supabase isn&apos;t configured locally, so these are sample orders. Changes aren&apos;t saved.</p>}
+      {DEMO && tab === 'orders' && (
+        <p className="adm-demo">Preview data: Supabase isn&apos;t configured locally, so these are sample orders. Changes aren&apos;t saved.</p>
+      )}
       {error && <p className="adm-error">{error}</p>}
       {body}
     </div>

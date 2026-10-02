@@ -323,227 +323,6 @@
   color: var(--shop-ink-dim);
 }
 
-/* ---------- featured: list + spotlight ---------- */
-
-.shop-featured {
-  display: grid;
-  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
-  gap: 18px;
-}
-
-.shop-featured-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.shop-featured-tab {
-  display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) 16px;
-  align-items: center;
-  gap: 14px;
-  padding: 11px 14px;
-  font-family: var(--display);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  text-align: left;
-  color: var(--text);
-  cursor: pointer;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(0, 0, 0, 0.25));
-  border: 1px solid rgba(var(--a-rgb), 0.18);
-  border-radius: 6px;
-  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
-}
-
-.shop-featured-tab-icon {
-  display: flex;
-  width: 40px;
-  height: 40px;
-  padding: 8px;
-  box-sizing: border-box;
-  color: var(--a);
-  background: rgba(var(--a-rgb), 0.06);
-  border: 1px solid rgba(var(--a-rgb), 0.28);
-  border-radius: 6px;
-}
-
-.shop-featured-tab-icon svg,
-.shop-featured-tab-chevron svg {
-  width: 100%;
-  height: 100%;
-}
-
-.shop-featured-tab-chevron {
-  display: flex;
-  width: 16px;
-  height: 16px;
-  color: var(--text-dim);
-  opacity: 0.4;
-  transition: transform 0.2s ease, opacity 0.2s ease, color 0.2s ease;
-}
-
-.shop-featured-tab:hover {
-  color: var(--text-h);
-  border-color: rgba(var(--a-rgb), 0.45);
-}
-
-.shop-featured-tab:hover .shop-featured-tab-chevron {
-  opacity: 0.8;
-  transform: translateX(2px);
-}
-
-.shop-featured-tab.is-active {
-  color: var(--text-h);
-  background: linear-gradient(90deg, rgba(var(--a-rgb), 0.16), rgba(var(--a-rgb), 0.03) 70%);
-  border-color: rgba(var(--a-rgb), 0.7);
-  box-shadow: inset 3px 0 0 var(--a), 0 0 20px rgba(var(--a-rgb), 0.12);
-}
-
-.shop-featured-tab.is-active .shop-featured-tab-icon {
-  background: rgba(var(--a-rgb), 0.16);
-  border-color: rgba(var(--a-rgb), 0.6);
-  box-shadow: 0 0 12px rgba(var(--a-rgb), 0.35);
-}
-
-.shop-featured-tab.is-active .shop-featured-tab-chevron {
-  opacity: 1;
-  color: var(--a);
-}
-
-.shop-spotlight {
-  --cut: 22px;
-
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(180px, 250px) minmax(0, 1fr);
-  align-items: center;
-  gap: 44px;
-  min-height: 340px;
-  padding: 32px 44px;
-  box-sizing: border-box;
-  background:
-    linear-gradient(to top right, transparent calc(50% - 0.75px), rgba(var(--a-rgb), 0.7) 0 calc(50% + 0.75px), transparent 0)
-      top right / var(--cut) var(--cut) no-repeat,
-    radial-gradient(circle at 24% 50%, rgba(var(--a-rgb), 0.16), transparent 45%),
-    linear-gradient(rgba(var(--a-rgb), 0.045) 1px, transparent 1px) 0 0 / 30px 30px,
-    linear-gradient(90deg, rgba(var(--a-rgb), 0.045) 1px, transparent 1px) 0 0 / 30px 30px,
-    #070102;
-  border: 1px solid rgba(var(--a-rgb), 0.4);
-  border-radius: 6px;
-  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
-}
-
-.shop-spotlight-art {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 100%;
-  aspect-ratio: 1;
-}
-
-.shop-spotlight-ring {
-  position: absolute;
-  border-radius: 50%;
-}
-
-.shop-spotlight-ring.r1 {
-  inset: 0;
-  border: 1px dashed rgba(var(--a-rgb), 0.35);
-  animation: shop-ring-settle 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-
-.shop-spotlight-ring.r2 {
-  inset: 13%;
-  border: 1px solid rgba(var(--a-rgb), 0.22);
-  background:
-    linear-gradient(rgba(var(--a-rgb), 0.5), rgba(var(--a-rgb), 0.5)) top center / 1px 10px no-repeat,
-    linear-gradient(rgba(var(--a-rgb), 0.5), rgba(var(--a-rgb), 0.5)) bottom center / 1px 10px no-repeat,
-    linear-gradient(rgba(var(--a-rgb), 0.5), rgba(var(--a-rgb), 0.5)) left center / 10px 1px no-repeat,
-    linear-gradient(rgba(var(--a-rgb), 0.5), rgba(var(--a-rgb), 0.5)) right center / 10px 1px no-repeat;
-}
-
-.shop-spotlight-ring.r3 {
-  inset: 27%;
-  border: 1px solid rgba(var(--a-rgb), 0.55);
-  background: radial-gradient(circle, rgba(var(--a-rgb), 0.2), rgba(var(--a-rgb), 0.04) 70%);
-  box-shadow: 0 0 30px rgba(var(--a-rgb), 0.25), inset 0 0 20px rgba(var(--a-rgb), 0.2);
-}
-
-.shop-spotlight-icon {
-  position: relative;
-  width: 34%;
-  aspect-ratio: 1;
-  color: var(--a);
-  filter: drop-shadow(0 0 12px rgba(var(--a-rgb), 0.7));
-  animation: shop-icon-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-
-.shop-spotlight-icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-.shop-spotlight-copy {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
-  animation: shop-copy-in 0.4s ease both;
-}
-
-.shop-spotlight-copy h3 {
-  margin: 0;
-  font-family: var(--display);
-  font-size: clamp(28px, 3.2vw, 42px);
-  font-weight: 900;
-  color: var(--text-h);
-  text-shadow: 0 0 24px rgba(var(--a-rgb), 0.3);
-}
-
-.shop-spotlight-copy p {
-  max-width: 44ch;
-  margin-bottom: 8px;
-  font-size: 15px;
-  line-height: 1.65;
-  color: var(--shop-ink-dim);
-}
-
-@keyframes shop-ring-settle {
-  from {
-    rotate: -60deg;
-    scale: 0.92;
-    opacity: 0;
-  }
-  to {
-    rotate: 0deg;
-    scale: 1;
-    opacity: 1;
-  }
-}
-
-@keyframes shop-icon-in {
-  from {
-    scale: 0.7;
-    opacity: 0;
-  }
-  to {
-    scale: 1;
-    opacity: 1;
-  }
-}
-
-@keyframes shop-copy-in {
-  from {
-    translate: 0 8px;
-    opacity: 0;
-  }
-  to {
-    translate: 0 0;
-    opacity: 1;
-  }
-}
-
 /* ---------- category bento ---------- */
 
 .shop-bento {
@@ -895,22 +674,6 @@
     min-height: 340px;
   }
 
-  .shop-featured {
-    grid-template-columns: 1fr;
-  }
-
-  .shop-featured-list {
-    flex-direction: row;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scrollbar-width: thin;
-  }
-
-  .shop-featured-tab {
-    flex: 0 0 auto;
-    min-width: 168px;
-  }
-
   .shop-bento {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -939,17 +702,6 @@
     min-height: 300px;
   }
 
-  .shop-spotlight {
-    grid-template-columns: 1fr;
-    gap: 18px;
-    padding: 26px 22px;
-  }
-
-  .shop-spotlight-art {
-    width: 170px;
-    justify-self: center;
-  }
-
   .shop-bento {
     grid-template-columns: 1fr;
   }
@@ -970,11 +722,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .shop-spotlight-ring.r1,
-  .shop-spotlight-icon,
-  .shop-spotlight-copy {
-    animation: none;
-  }
 
   .shop-tile,
   .shop-tile::before,
@@ -1074,42 +821,6 @@
   translate: calc(var(--px, 0) * 10px) 0;
 }
 
-/* ---------- featured: tabs slide in, spotlight rises, art tilts to the pointer ---------- */
-
-.shop-featured:not(.is-visible) .shop-featured-tab,
-.shop-featured:not(.is-visible) .shop-spotlight {
-  opacity: 0;
-}
-
-.shop-featured.is-visible .shop-featured-tab {
-  animation: shop-slide 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  animation-delay: calc(var(--i) * 70ms);
-}
-
-.shop-featured.is-visible .shop-spotlight {
-  animation: shop-rise 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both;
-}
-
-.shop-spotlight-art {
-  perspective: 700px;
-}
-
-.shop-spotlight-art > * {
-  transform: rotateX(calc(var(--py, 0) * -24deg)) rotateY(calc(var(--px, 0) * 24deg));
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-/* inner layers travel further than outer ones, so the reticle reads as depth */
-.shop-spotlight-art .shop-spotlight-ring.r3 {
-  translate: calc(var(--px, 0) * 10px) calc(var(--py, 0) * 10px);
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), translate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.shop-spotlight-art .shop-spotlight-icon {
-  translate: calc(var(--px, 0) * 18px) calc(var(--py, 0) * 18px);
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), translate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
 /* ---------- bento: tiles cascade in, faces fill as a wave, glow follows pointer ---------- */
 
 .shop-bento:not(.is-visible) .shop-tile,
@@ -1207,8 +918,6 @@
 @media (prefers-reduced-motion: reduce) {
   .shop-hero-copy > *,
   .shop-hero-art,
-  .shop-featured-tab,
-  .shop-spotlight,
   .shop-tile,
   .shop-face,
   .shop-order-steps li,
@@ -1218,8 +927,7 @@
   }
 
   .shop-hero-art,
-  .shop-hero-pad,
-  .shop-spotlight-art > * {
+  .shop-hero-pad {
     transform: none;
     translate: none;
     transition: none;

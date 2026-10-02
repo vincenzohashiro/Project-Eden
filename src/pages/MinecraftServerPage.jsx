@@ -391,7 +391,7 @@ function MinecraftServerPage() {
     <div className="srv-page">
       <header className="srv-hero" onPointerMove={trackOffset} onPointerLeave={resetOffset}>
         <div className="srv-hero-copy">
-          <span className="srv-kicker">Project Eden SMP</span>
+          <span className="srv-kicker">Project Eden</span>
           <h1>
             Join the
             <br />

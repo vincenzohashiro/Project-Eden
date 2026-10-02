@@ -7,49 +7,9 @@ import SkinViewer3D from '../components/SkinViewer3D'
 import Reveal from '../components/Reveal'
 import OrderDialog from '../components/OrderDialog'
 import QuoteGate from '../components/QuoteGate'
+import FeaturedGallery from '../components/FeaturedGallery'
 import { FALLBACK_CATALOG, commissionKey } from '../lib/store'
 import './ModelShopPage.css'
-
-const PickaxeIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
-    <path d="M4 6c4-3 12-3 16 0-3 1.5-5 3.6-6.4 6.4L11 10 4 6z" strokeLinejoin="round" />
-    <path d="M11 10 4 20" strokeLinecap="round" />
-  </svg>
-)
-
-const GliderIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
-    <path d="M3 7c3-2.4 15-2.4 18 0" strokeLinecap="round" />
-    <path d="M4 7l8 12M20 7l-8 12" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-)
-
-const ScytheIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
-    <path d="M17 3c2.4 1.6 2.4 5.6-.4 7.4-2 1.3-4 .9-5.2.3" strokeLinecap="round" />
-    <path d="M12.6 10.4 5 21" strokeLinecap="round" />
-    <path d="M9.5 14.5h3" strokeLinecap="round" />
-  </svg>
-)
-
-const HammerIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
-    <rect x="2.5" y="6" width="7" height="6" rx="1" />
-    <rect x="14.5" y="6" width="7" height="6" rx="1" />
-    <rect x="10" y="4" width="4" height="17" rx="1" />
-  </svg>
-)
-
-const CharacterIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
-    <rect x="9" y="3" width="6" height="6" rx="1" />
-    <rect x="8" y="10" width="8" height="7" rx="1" />
-    <rect x="3" y="10" width="4" height="8" rx="1" />
-    <rect x="17" y="10" width="4" height="8" rx="1" />
-    <rect x="8" y="18" width="3" height="4" rx="1" />
-    <rect x="13" y="18" width="3" height="4" rx="1" />
-  </svg>
-)
 
 const SkinIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
@@ -143,39 +103,6 @@ const HeartIcon = () => (
   </svg>
 )
 
-const FEATURED_ITEMS = [
-  {
-    label: 'Tools',
-    Icon: PickaxeIcon,
-    accent: 'red',
-    description: 'Precision-crafted pickaxes, hoes, and shears built for utility without sacrificing style.',
-  },
-  {
-    label: 'Gliders',
-    Icon: GliderIcon,
-    accent: 'crimson',
-    description: 'Custom elytra reskins that turn every glide across the colony into a statement.',
-  },
-  {
-    label: 'Weapons',
-    Icon: ScytheIcon,
-    accent: 'rose',
-    description: 'Blades, scythes, and sidearms modeled for the server\'s combat and boss events.',
-  },
-  {
-    label: 'Building',
-    Icon: HammerIcon,
-    accent: 'red',
-    description: 'Custom tool and block models built to speed up large-scale construction projects.',
-  },
-  {
-    label: 'Characters',
-    Icon: CharacterIcon,
-    accent: 'crimson',
-    description: 'Fully rigged humanoid and mob models ready to drop into your world.',
-  },
-]
-
 const SKIN_ACCENTS = ['red', 'crimson', 'rose']
 
 // smasher.png is the only real skin texture we have right now - every slot
@@ -266,83 +193,6 @@ function SkinFace({ texture, className = '', style }) {
       style={{ '--skin-url': `url(${texture})`, ...style }}
       aria-hidden="true"
     />
-  )
-}
-
-function FeaturedSelector({ items, onOpen }) {
-  const [active, setActive] = useState(0)
-  const item = items[active]
-  const { Icon } = item
-
-  // roving focus: arrow keys move between tabs and select them
-  const onKeyDown = (e) => {
-    const keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }
-    if (!(e.key in keys)) return
-    e.preventDefault()
-    const next = (active + keys[e.key] + items.length) % items.length
-    setActive(next)
-    document.getElementById(`featured-tab-${next}`)?.focus()
-  }
-
-  return (
-    <Reveal className="shop-featured" direction="fade">
-      <div
-        className="shop-featured-list"
-        role="tablist"
-        aria-label="Featured items"
-        aria-orientation="vertical"
-        onKeyDown={onKeyDown}
-      >
-        {items.map((entry, index) => (
-          <button
-            key={entry.label}
-            id={`featured-tab-${index}`}
-            type="button"
-            role="tab"
-            aria-selected={index === active}
-            aria-controls="featured-panel"
-            tabIndex={index === active ? 0 : -1}
-            className={`shop-featured-tab accent-${entry.accent}${index === active ? ' is-active' : ''}`}
-            style={{ '--i': index }}
-            onClick={() => setActive(index)}
-          >
-            <span className="shop-featured-tab-icon">
-              <entry.Icon />
-            </span>
-            <span className="shop-featured-tab-label">{entry.label}</span>
-            <span className="shop-featured-tab-chevron">
-              <ChevronRightIcon />
-            </span>
-          </button>
-        ))}
-      </div>
-
-      <div
-        key={item.label}
-        id="featured-panel"
-        role="tabpanel"
-        aria-labelledby={`featured-tab-${active}`}
-        className={`shop-spotlight accent-${item.accent}`}
-      >
-        <div className="shop-spotlight-art" aria-hidden="true" onPointerMove={trackOffset} onPointerLeave={resetOffset}>
-          <span className="shop-spotlight-ring r1" />
-          <span className="shop-spotlight-ring r2" />
-          <span className="shop-spotlight-ring r3" />
-          <span className="shop-spotlight-icon">
-            <Icon />
-          </span>
-        </div>
-
-        <div className="shop-spotlight-copy">
-          <h3>{item.label}</h3>
-          <p>{item.description}</p>
-          <button type="button" className="shop-btn shop-btn-fill" onClick={() => onOpen(item, active)}>
-            View details
-            <ChevronRightIcon />
-          </button>
-        </div>
-      </div>
-    </Reveal>
   )
 }
 
@@ -694,9 +544,9 @@ function ModelShopPage() {
       <section className="shop-block" aria-labelledby="featured-title">
         <div className="shop-block-head">
           <h2 id="featured-title">Featured Items</h2>
-          <p>The lines we build most often. Pick one to see what goes into it.</p>
+          <p>Recent models from our workshop.</p>
         </div>
-        <FeaturedSelector items={FEATURED_ITEMS} onOpen={handleSelect} />
+        <FeaturedGallery />
       </section>
 
       <section className="shop-block" aria-labelledby="category-title">

@@ -68,29 +68,17 @@ function SiteNav() {
               Admin
             </NavLink>
           )}
-          <a href={DISCORD_INVITE_URL} target="_blank" rel="noopener noreferrer">Discord</a>
         </div>
         <div className="site-nav-actions">
           {/* signing in is optional (only needed to buy), so signed-out is a
               neutral state, not an error */}
           <Link to={user ? '/profile' : '/login'} className={`site-nav-status ${user ? 'is-ok' : 'is-idle'}`}>
             <span className="site-nav-status-dot" />
-            {user ? 'Signed in' : 'Signed out'}
+            {user ? 'Signed in' : 'Sign in'}
           </Link>
-          {user ? (
-            <a
-              href={DISCORD_INVITE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="site-nav-join"
-            >
-              Join Discord
-            </a>
-          ) : (
-            <Link to="/login" className="site-nav-join">
-              Sign In
-            </Link>
-          )}
+          <a href={DISCORD_INVITE_URL} target="_blank" rel="noopener noreferrer" className="site-nav-join">
+            Join Discord
+          </a>
         </div>
       </div>
     </nav>
